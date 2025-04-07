@@ -1,14 +1,14 @@
 NAME = minishell
 
-SRCS = srcs/
+LIBFT = libft/libft.a
 
-OBJS = {SRCS:.c=.o}
+SRCS = srcs/main.c
+
+OBJS = $(SRCS:.c=.o)
 
 CC = cc
 
 CFLAGS = -Wall -Wextra -Werror
-
-all: $(NAME)
 
 $(LIBFT):
 	make -s -C libft
@@ -19,6 +19,8 @@ $(LIBFT):
 ${NAME}: $(LIBFT) $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) \
 		-I libft/includes -I includes -L libft -lft
+
+all: $(NAME)
 
 clean:
 	rm -f $(OBJS)
