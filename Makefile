@@ -4,7 +4,7 @@ LIBFT = libft/libft.a
 
 SRCS = srcs/main.c
 
-OBJS = $(SRCS:.c=.o)
+OBJS = $(SRCS:.c=objs/.o)
 
 CC = cc
 
