@@ -18,7 +18,7 @@ $(LIBFT):
 
 ${NAME}: $(LIBFT) $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) \
-		-I libft/includes -I includes -L libft -lft
+		-I libft -I include -L libft -lft
 
 all: $(NAME)
 
