@@ -6,11 +6,11 @@
 /*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:07:23 by alisseye          #+#    #+#             */
-/*   Updated: 2025/04/07 13:08:00 by alisseye         ###   ########.fr       */
+/*   Updated: 2025/10/02 15:57:36 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	main(void)
+int	main(int argc, char **argv, char **envp)
 {
 	return (0);
 }
