@@ -2,9 +2,9 @@ NAME = minishell
 
 LIBFT = libft/libft.a
 
-SRCS = srcs/main.c
+SRCS = src/main.c
 
-OBJS = $(SRCS:.c=objs/.o)
+OBJS = $(SRCS:.c=.o)
 
 CC = cc
 
