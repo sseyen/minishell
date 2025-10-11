@@ -6,7 +6,7 @@
 /*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:07:23 by alisseye          #+#    #+#             */
-/*   Updated: 2025/10/11 20:31:51 by alisseye         ###   ########.fr       */
+/*   Updated: 2025/10/11 20:33:08 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	minishell_loop(t_shell_state *state)
 			exit_minishell(state, state->last_exit_code);
 		if (*line)
 			add_history(line);
-		if (handle_input(line, state) != 0)
+		if (handle_line(line, state) != 0)
 		{
 			free(line);
 			exit_minishell(state, 1);
