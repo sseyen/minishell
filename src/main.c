@@ -6,20 +6,39 @@
 /*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:07:23 by alisseye          #+#    #+#             */
-/*   Updated: 2025/10/11 19:29:39 by alisseye         ###   ########.fr       */
+/*   Updated: 2025/10/11 20:14:38 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+void	exit_minishell(t_shell_state *state, int exit_code)
+{
+	size_t	i;
+
+	if (state)
+	{
+		if (state->envp)
+			free_env(state->envp);
+		if (state->first_node)
+			free_tree(state->first_node);
+	}
+	exit(exit_code);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
-	char	**envp_copy;
+	char			**envp_copy;
+	t_shell_state	state;
 
 	(void)argc;
 	(void)argv;
+	state.envp = NULL;
+	state.first_node = NULL;
+	state.token_tree = NULL;
+	state.last_exit_code = 0;
 	envp_copy = init_env(envp);
-	print_env(envp_copy);
-	printf("\n\n-----\n\n");
+	if (!envp_copy)
+		exit_minishell(&state, 1);
 	return (0);
 }

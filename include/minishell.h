@@ -6,7 +6,7 @@
 /*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:07:18 by alisseye          #+#    #+#             */
-/*   Updated: 2025/10/11 19:15:22 by alisseye         ###   ########.fr       */
+/*   Updated: 2025/10/11 20:15:02 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ typedef struct s_node
 
 typedef struct s_shell_state // Общая структура для отслеживания состояния шела
 {
-	t_node		*token_list;
+	t_node		*token_tree;
 	t_node		*first_node;
 	char		**envp;
 	int			last_exit_code;
@@ -122,5 +122,6 @@ typedef struct s_shell_state // Общая структура для отсле�
 // env
 char	**init_env(char **envp);
 void	print_env(char **envp);
+void	free_env(char **envp);
 
 #endif
