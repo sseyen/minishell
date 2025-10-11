@@ -6,7 +6,7 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/09 16:34:42 by danslav1e         #+#    #+#             */
-/*   Updated: 2025/10/09 18:03:34 by danslav1e        ###   ########.fr       */
+/*   Updated: 2025/10/09 23:10:45 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ bool is_built_in(t_node *node)
         return (true);
     else if (ft_strncmp(node->argv[0], "exit", 5) == 0)
         return (true);
-    return (0);
+    return (false);
 }
 
 void execute_built_in(t_node *node, t_shell_state *state)
@@ -44,7 +44,7 @@ void execute_built_in(t_node *node, t_shell_state *state)
     else if (ft_strncmp(node->argv[0], "cd", 3) == 0)
         state->last_exit_code = built_in_cd(node);
     else if (ft_strncmp(node->argv[0], "pwd", 4) == 0)
-        state->last_exit_code = built_in_pwd(node);
+        state->last_exit_code = built_in_pwd();
     else if (ft_strncmp(node->argv[0], "export", 7) == 0)
         state->last_exit_code = built_in_export(node);
     else if (ft_strncmp(node->argv[0], "unset", 6) == 0)
@@ -77,4 +77,3 @@ void execute_ast(t_node *node, t_shell_state *state)
     else if (node->type == NODE_AND)
         execute_and(node, state);
 }
-

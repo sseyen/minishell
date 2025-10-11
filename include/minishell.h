@@ -6,7 +6,7 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:07:18 by alisseye          #+#    #+#             */
-/*   Updated: 2025/10/08 21:40:36 by danslav1e        ###   ########.fr       */
+/*   Updated: 2025/10/10 20:54:22 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,9 @@
 # include <stdbool.h>
 # include <string.h>
 # include <sys/stat.h>
+
+# define SUCCESS 0
+# define FAILURE 1
 
 typedef struct s_env_var
 {
@@ -124,5 +127,8 @@ typedef struct s_shell_state // Общая структура для отсле�
 	t_node		*first_node;
 	int			last_exit_code;
 }					t_shell_state;
+
+int error_msg_cmd(const char *msg, const char* problem, const char* error, int rnb);
+void error_msg(const char *msg, const char* problem);
 
 #endif
