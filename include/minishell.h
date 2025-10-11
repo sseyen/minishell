@@ -6,7 +6,7 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:07:18 by alisseye          #+#    #+#             */
-/*   Updated: 2025/10/08 21:40:36 by danslav1e        ###   ########.fr       */
+/*   Updated: 2025/10/11 15:13:19 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,6 @@
 # include <stdbool.h>
 # include <string.h>
 # include <sys/stat.h>
-
-typedef struct s_env_var
-{
-	char			*key;
-	char			*value;
-}					t_env_var;
 
 typedef enum e_token_type
 {
@@ -120,7 +114,7 @@ typedef struct s_node
 typedef struct s_shell_state // Общая структура для отслеживания состояния шела
 {
 	t_node		*token_list;
-	t_env_var	*envp;
+	char		**envp;
 	t_node		*first_node;
 	int			last_exit_code;
 }					t_shell_state;
