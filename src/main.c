@@ -6,7 +6,7 @@
 /*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:07:23 by alisseye          #+#    #+#             */
-/*   Updated: 2025/10/11 20:19:55 by alisseye         ###   ########.fr       */
+/*   Updated: 2025/10/11 20:28:48 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,27 @@ void	exit_minishell(t_shell_state *state, int exit_code)
 	exit(exit_code);
 }
 
+int	minishell_loop(t_shell_state *state)
+{
+	char	*input;
+
+	while (1)
+	{
+		input = readline("minishell$ ");
+		if (!input)
+			exit_minishell(state, state->last_exit_code);
+		if (input[0] != '\0')
+			add_history(input);
+		if (parse_and_execute(input, state) != 0)
+		{
+			free(input);
+			exit_minishell(state, 1);
+		}
+		free(input);
+	}
+	return (0);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	char			**envp_copy;
@@ -41,5 +62,5 @@ int	main(int argc, char **argv, char **envp)
 	if (!envp_copy)
 		exit_minishell(&state, 1);
 	state.envp = envp_copy;
-	return (0);
+	return (minishell_loop(&state));
 }
