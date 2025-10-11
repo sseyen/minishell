@@ -6,7 +6,7 @@
 /*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:07:23 by alisseye          #+#    #+#             */
-/*   Updated: 2025/10/11 20:14:38 by alisseye         ###   ########.fr       */
+/*   Updated: 2025/10/11 20:19:55 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,5 +40,6 @@ int	main(int argc, char **argv, char **envp)
 	envp_copy = init_env(envp);
 	if (!envp_copy)
 		exit_minishell(&state, 1);
+	state.envp = envp_copy;
 	return (0);
 }
