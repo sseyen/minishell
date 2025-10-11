@@ -6,7 +6,7 @@
 /*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:07:23 by alisseye          #+#    #+#             */
-/*   Updated: 2025/10/11 20:28:48 by alisseye         ###   ########.fr       */
+/*   Updated: 2025/10/11 20:31:51 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,21 +28,21 @@ void	exit_minishell(t_shell_state *state, int exit_code)
 
 int	minishell_loop(t_shell_state *state)
 {
-	char	*input;
+	char	*line;
 
 	while (1)
 	{
-		input = readline("minishell$ ");
-		if (!input)
+		line = readline("minishell$ ");
+		if (!line)
 			exit_minishell(state, state->last_exit_code);
-		if (input[0] != '\0')
-			add_history(input);
-		if (parse_and_execute(input, state) != 0)
+		if (*line)
+			add_history(line);
+		if (handle_input(line, state) != 0)
 		{
-			free(input);
+			free(line);
 			exit_minishell(state, 1);
 		}
-		free(input);
+		free(line);
 	}
 	return (0);
 }
