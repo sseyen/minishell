@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
+/*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:07:18 by alisseye          #+#    #+#             */
-/*   Updated: 2025/10/08 21:40:36 by danslav1e        ###   ########.fr       */
+/*   Updated: 2025/10/11 19:15:22 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,12 +51,6 @@
 # include <string.h>
 # include <sys/stat.h>
 
-typedef struct s_env_var
-{
-	char			*key;
-	char			*value;
-}					t_env_var;
-
 typedef enum e_token_type
 {
 	TOKEN_WORD,
@@ -93,7 +87,7 @@ typedef struct s_redirect
 	t_redirect_type	type;
 	char			*target;
 	int				heredoc_fd; // готовый fd для чтения heredoc (подготовлен заранее) (я пока что хз для чего конкретно он нужен, но gpt настаивает на его добавлении)
-	bool heredoc_quoted; 		// делимитер был в кавычках ->тело heredoc НЕ расширять bool to_expand;
+	bool			heredoc_quoted; // делимитер был в кавычках ->тело heredoc НЕ расширять bool to_expand;
 }					t_redirect;
 
 typedef enum e_node_type
@@ -109,9 +103,9 @@ typedef struct s_node
 {
 	t_node_type		type;
 	char			**argv;
-	size_t argc; // Количество аргументов
+	size_t			argc; // Количество аргументов
 	t_redirect		*redirects;
-	size_t redirects_count; // Количество редиректов
+	size_t			redirects_count; // Количество редиректов
 	struct s_node	*left;
 	struct s_node	*right;
 	struct s_node	*child;
@@ -120,9 +114,13 @@ typedef struct s_node
 typedef struct s_shell_state // Общая структура для отслеживания состояния шела
 {
 	t_node		*token_list;
-	t_env_var	*envp;
 	t_node		*first_node;
+	char		**envp;
 	int			last_exit_code;
 }					t_shell_state;
+
+// env
+char	**init_env(char **envp);
+void	print_env(char **envp);
 
 #endif
