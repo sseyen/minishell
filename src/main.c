@@ -6,7 +6,7 @@
 /*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:07:23 by alisseye          #+#    #+#             */
-/*   Updated: 2025/10/11 20:33:08 by alisseye         ###   ########.fr       */
+/*   Updated: 2025/10/11 20:39:16 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,10 @@ int	minishell_loop(t_shell_state *state)
 		if (*line)
 			add_history(line);
 		if (handle_line(line, state) != 0)
-		{
-			free(line);
-			exit_minishell(state, 1);
-		}
+			state->last_exit_code = 1;
 		free(line);
 	}
-	return (0);
+	return (state->last_exit_code);
 }
 
 int	main(int argc, char **argv, char **envp)
