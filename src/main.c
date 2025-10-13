@@ -6,7 +6,7 @@
 /*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:07:23 by alisseye          #+#    #+#             */
-/*   Updated: 2025/10/11 20:39:16 by alisseye         ###   ########.fr       */
+/*   Updated: 2025/10/13 17:36:24 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,42 @@ void	exit_minishell(t_shell_state *state, int exit_code)
 			free_tree(state->first_node);
 	}
 	exit(exit_code);
+}
+
+int	parse_line(char *line, t_shell_state *state)
+{
+	t_token	*tokens;
+
+	if (tokenize(line, tokens) != 0)
+		return (1);
+	if (build_tree(tokens, &(state->first_node)) != 0)
+	{
+		if (state->token_tree)
+			free_tree(state->token_tree);
+		state->token_tree = NULL;
+		return (1);
+	}
+	state->token_tree = NULL;
+	return (0);
+}
+
+int	handle_line(char *line, t_shell_state *state)
+{
+	if (parse_line(line, state) != 0)
+	{
+		if (state->first_node)
+			free_tree(state->first_node);
+		state->first_node = NULL;
+		state->token_tree = NULL;
+		return (1);
+	}
+	if (state->first_node)
+		execute_tree(state);
+	if (state->first_node)
+		free_tree(state);
+	state->first_node = NULL;
+	state->token_tree = NULL;
+	return (0);
 }
 
 int	minishell_loop(t_shell_state *state)
