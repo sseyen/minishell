@@ -6,7 +6,7 @@
 /*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:07:18 by alisseye          #+#    #+#             */
-/*   Updated: 2025/10/11 20:15:02 by alisseye         ###   ########.fr       */
+/*   Updated: 2025/10/20 21:54:48 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ typedef struct s_token
 	t_token_type	type;
 	char			*value;
 	bool			to_expand;
+	bool			quoted;
 }					t_token;
 
 typedef enum e_redirect_type
@@ -123,5 +124,12 @@ typedef struct s_shell_state // Общая структура для отсле�
 char	**init_env(char **envp);
 void	print_env(char **envp);
 void	free_env(char **envp);
+
+// lexer
+int		tokenize(char *line, t_token **tokens);
+
+// utils
+int		is_whitespace(int c);
+bool	is_operator_char(char c);
 
 #endif
