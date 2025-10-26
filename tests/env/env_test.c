@@ -6,27 +6,22 @@
 /*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/11 18:55:57 by alisseye          #+#    #+#             */
-/*   Updated: 2025/10/11 19:36:07 by alisseye         ###   ########.fr       */
+/*   Updated: 2025/10/26 05:34:12 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "test.h"
 
-void	run_test(int argc, char **argv, char **envp)
-{
-	(void)argc;
-	(void)argv;
-	(void)envp; // test: get value by key...
-}
-
-int	main(int argc, char **argv, char **envp)
+int	test_init_env(int argc, char **argv, char **envp)
 {
 	char	**envp_copy;
 
+	(void)argv;
+	(void)argc;
 	envp_copy = init_env(envp);
-	if (argc == 1)
-		print_env(envp_copy);
-	else
-		run_test(argc, argv, envp_copy);
+	if (envp_copy == NULL)
+		return (1);
+	print_env(envp_copy);
+	free_env(envp_copy);
 	return (0);
 }

@@ -1,18 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   is_whitespace.c                                    :+:      :+:    :+:   */
+/*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/20 21:46:59 by alisseye          #+#    #+#             */
-/*   Updated: 2025/10/26 06:07:58 by alisseye         ###   ########.fr       */
+/*   Created: 2025/10/26 04:23:37 by alisseye          #+#    #+#             */
+/*   Updated: 2025/10/26 05:31:55 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#ifndef LEXER_H
+# define LEXER_H
 
-int	is_whitespace(int c)
+# include "minishell.h"
+
+typedef enum e_quote_type
 {
-	return ((c >= 9 && c <= 13) || c == 32);
-}
+	NO_QUOTE,
+	SINGLE_QUOTE,
+	DOUBLE_QUOTE,
+}		t_quote_type;
+
+void	skip_whitespaces(char *line, size_t *i);
+size_t	count_word(char *line, size_t *i);
+size_t	count_tokens(char *line);
+
+#endif

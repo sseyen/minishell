@@ -1,18 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   is_whitespace.c                                    :+:      :+:    :+:   */
+/*   test.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/20 21:46:59 by alisseye          #+#    #+#             */
-/*   Updated: 2025/10/26 06:07:58 by alisseye         ###   ########.fr       */
+/*   Created: 2025/10/26 05:19:38 by alisseye          #+#    #+#             */
+/*   Updated: 2025/10/26 05:51:59 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#ifndef TEST_H
+# define TEST_H
 
-int	is_whitespace(int c)
-{
-	return ((c >= 9 && c <= 13) || c == 32);
-}
+# include "minishell.h"
+# include "lexer.h"
+
+int	test_init_env(int argc, char **argv, char **envp);
+int	test_count_tokens(int argc, char **argv);
+
+#endif
