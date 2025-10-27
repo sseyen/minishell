@@ -6,20 +6,19 @@
 /*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 17:30:59 by alisseye          #+#    #+#             */
-/*   Updated: 2025/10/26 06:07:17 by alisseye         ###   ########.fr       */
+/*   Updated: 2025/10/27 12:46:23 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 
-size_t	count_word(char *line, size_t *i)
+size_t	parse_word(char *line, size_t *i)
 {
 	size_t			j;
 	t_quote_type	in_quotes;
 
 	j = 0;
 	in_quotes = NO_QUOTE;
-	printf("Counting word starting at index %zu: '%s'\n", *i, &line[*i]);
 	while (line[*i] \
 		&& ((!is_whitespace(line[*i]) && !is_operator_char(line[*i])) \
 		|| in_quotes == SINGLE_QUOTE || in_quotes == DOUBLE_QUOTE))
@@ -38,7 +37,7 @@ size_t	count_word(char *line, size_t *i)
 	return (j);
 }
 
-size_t	count_operator(char *line, size_t *i)
+size_t	parse_operator(char *line, size_t *i)
 {
 	size_t	j;
 
@@ -69,13 +68,19 @@ size_t	count_tokens(char *line)
 	while (line[i])
 	{
 		skip_whitespaces(line, &i);
-		if (count_word(&line[i], &i) != 0)
+		if (!line[i])
+			break ;
+		if (parse_word(line, &i) != 0)
 		{
 			count++;
 			continue ;
 		}
-		if (count_operator(&line[i], &i) != 0)
+		if (parse_operator(line, &i) != 0)
+		{
 			count++;
+			continue ;
+		}
+		i++;
 	}
 	return (count);
 }

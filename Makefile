@@ -58,7 +58,7 @@ $(TEST_OBJS_DIR)/%.o: %.c
 clean_test:
 	rm -f $(TEST_OBJS)
 	rm -rf $(TEST_OBJS_DIR)
-	rm -f $(TEST_NAME)
+	rm -f $(TEST)
 
 # CLEAN / REBUILD
 
