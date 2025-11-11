@@ -6,7 +6,7 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:07:18 by alisseye          #+#    #+#             */
-/*   Updated: 2025/11/11 16:44:15 by danslav1e        ###   ########.fr       */
+/*   Updated: 2025/11/11 22:59:56 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,9 +106,9 @@ typedef struct s_node
 {
 	t_node_type		type;
 	char			**argv;
-	size_t argc; // Количество аргументов
+	size_t			argc; // Количество аргументов
 	t_redirect		*redirects;
-	size_t redirects_count; // Количество редиректов
+	size_t			redirects_count; // Количество редиректов
 	struct s_node	*left;
 	struct s_node	*right;
 	struct s_node	*child;
@@ -162,5 +162,10 @@ int					built_in_pwd(t_node *node);
 // built_in_unset.c
 void				remove_var(int index, t_shell_state *state);
 int					built_in_unset(t_node *node, t_shell_state *state);
+
+// env
+char	**init_env(char **envp);
+void	print_env(char **envp);
+void	free_env(char **envp);
 
 #endif
