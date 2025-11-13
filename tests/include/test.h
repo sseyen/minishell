@@ -6,7 +6,7 @@
 /*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 05:19:38 by alisseye          #+#    #+#             */
-/*   Updated: 2025/10/26 05:51:59 by alisseye         ###   ########.fr       */
+/*   Updated: 2025/11/12 12:45:18 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,5 +18,6 @@
 
 int	test_init_env(int argc, char **argv, char **envp);
 int	test_count_tokens(int argc, char **argv);
+int	test_fill_tokens(int argc, char **argv);
 
 #endif

@@ -38,9 +38,13 @@ TEST_OBJS_DIR = obj/tests
 TEST_SRCS = $(TEST_DIR)/main_test.c \
 			$(TEST_DIR)/env/env_test.c \
 			$(TEST_DIR)/lexer/count_tokens_test.c \
+			$(TEST_DIR)/lexer/fill_tokens_test.c \
 			$(SRCS_DIR)/env/env.c \
 			$(SRCS_DIR)/lexer/lexer.c \
 			${SRCS_DIR}/lexer/lexer_utils.c \
+			${SRCS_DIR}/lexer/token.c \
+			${SRCS_DIR}/lexer/token_utils.c \
+			${SRCS_DIR}/lexer/parse.c \
 			${SRCS_DIR}/utils/is_operator_char.c \
 			${SRCS_DIR}/utils/is_whitespace.c
 

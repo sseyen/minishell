@@ -6,102 +6,65 @@
 /*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 17:30:59 by alisseye          #+#    #+#             */
-/*   Updated: 2025/10/27 12:46:23 by alisseye         ###   ########.fr       */
+/*   Updated: 2025/11/13 15:15:24 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 
-size_t	parse_word(char *line, size_t *i)
+void	free_tokens(t_token *tokens)
 {
-	size_t			j;
-	t_quote_type	in_quotes;
-
-	j = 0;
-	in_quotes = NO_QUOTE;
-	while (line[*i] \
-		&& ((!is_whitespace(line[*i]) && !is_operator_char(line[*i])) \
-		|| in_quotes == SINGLE_QUOTE || in_quotes == DOUBLE_QUOTE))
-	{
-		if (in_quotes == NO_QUOTE && line[*i] == '"')
-			in_quotes = DOUBLE_QUOTE;
-		else if (in_quotes == NO_QUOTE && line[*i] == '\'')
-			in_quotes = SINGLE_QUOTE;
-		else if (in_quotes == DOUBLE_QUOTE && line[*i] == '"')
-			in_quotes = NO_QUOTE;
-		else if (in_quotes == SINGLE_QUOTE && line[*i] == '\'')
-			in_quotes = NO_QUOTE;
-		j++;
-		(*i)++;
-	}
-	return (j);
-}
-
-size_t	parse_operator(char *line, size_t *i)
-{
-	size_t	j;
-
-	j = 0;
-	while (line[*i] && is_operator_char(line[*i]))
-	{
-		if (j >= 1 && line[*i] != line[*i - 1])
-			break ;
-		j++;
-		(*i)++;
-	}
-	return (j);
-}
-
-void	skip_whitespaces(char *line, size_t *i)
-{
-	while (line[*i] && is_whitespace(line[*i]))
-		(*i)++;
-}
-
-size_t	count_tokens(char *line)
-{
-	size_t	count;
 	size_t	i;
 
-	count = 0;
+	if (!tokens)
+		return ;
 	i = 0;
+	while (tokens[i].type != TOKEN_ERROR && tokens[i].type != TOKEN_EOF)
+	{
+		if (tokens[i].value)
+			free(tokens[i].value);
+		i++;
+	}
+	free(tokens);
+}
+
+int	fill_tokens(char *line, t_token *tokens)
+{
+	size_t	i;
+	size_t	tok_index;
+
+	i = 0;
+	tok_index = 0;
 	while (line[i])
 	{
 		skip_whitespaces(line, &i);
 		if (!line[i])
 			break ;
-		if (parse_word(line, &i) != 0)
+		if (create_token(line, &i, &tokens[tok_index]) != 0)
 		{
-			count++;
-			continue ;
+			free_tokens(tokens);
+			return (1);
 		}
-		if (parse_operator(line, &i) != 0)
-		{
-			count++;
-			continue ;
-		}
-		i++;
+		tok_index++;
 	}
-	return (count);
+	return (0);
 }
 
 int	tokenize(char *line, t_token **tokens)
 {
-	size_t	count;
+	size_t			count;
 
 	count = count_tokens(line);
-	(void)tokens;
-	(void)count;
-	// *tokens = malloc(sizeof(t_token) * (count + 1));
-	// if (!*tokens)
-	// 	return (1);
-	// (*tokens)[count] = (t_token){0};
-	// if (fill_tokens(line, *tokens) != 0)
-	// {
-	// 	free(*tokens);
-	// 	*tokens = NULL;
-	// 	return (1);
-	// }
+	*tokens = malloc(sizeof(t_token) * (count + 1));
+	if (!*tokens)
+		return (1);
+	set_token(&(*tokens)[count], (t_token_data){TOKEN_EOF, NULL, false, false});
+	if (fill_tokens(line, *tokens) != 0)
+	{
+		free(*tokens);
+		*tokens = NULL;
+		return (1);
+	}
 	// expand_tokens(*tokens);
 	return (0);
 }

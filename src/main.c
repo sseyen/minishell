@@ -6,7 +6,7 @@
 /*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:07:23 by alisseye          #+#    #+#             */
-/*   Updated: 2025/10/26 02:48:41 by alisseye         ###   ########.fr       */
+/*   Updated: 2025/11/12 12:45:42 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ void	exit_minishell(t_shell_state *state, int exit_code)
 	{
 		if (state->envp)
 			free_env(state->envp);
-		if (state->first_node)
-			free_tree(state->first_node);
+		if (state->token_tree)
+			free_tree(state->token_tree);
 	}
 	exit(exit_code);
 }
@@ -32,19 +32,17 @@ int	handle_line(char *line, t_shell_state *state)
 
 	if (tokenize(line, &tokens) != 0)
 		return (1);
-	if (build_tree(tokens, state->first_node) != 0)
+	if (build_tree(tokens, state->token_tree) != 0)
 	{
-		if (state->first_node)
-			free_tree(state->first_node);
-		state->first_node = NULL;
+		if (state->token_tree)
+			free_tree(state->token_tree);
 		state->token_tree = NULL;
 		return (1);
 	}
-	if (state->first_node)
+	if (state->token_tree)
 		execute_tree(state);
-	if (state->first_node)
-		free_tree(state);
-	state->first_node = NULL;
+	if (state->token_tree)
+		free_tree(state->token_tree);
 	state->token_tree = NULL;
 	return (0);
 }
@@ -73,7 +71,6 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	state.envp = NULL;
-	state.first_node = NULL;
 	state.token_tree = NULL;
 	state.last_exit_code = 0;
 	envp_copy = init_env(envp);
