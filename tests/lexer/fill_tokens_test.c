@@ -6,7 +6,7 @@
 /*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/11 14:07:05 by alisseye          #+#    #+#             */
-/*   Updated: 2025/11/13 15:09:14 by alisseye         ###   ########.fr       */
+/*   Updated: 2025/11/13 15:21:00 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	test_fill_tokens(int argc, char **argv)
 	tokens = malloc(sizeof(t_token) * (token_count + 1));
 	if (!tokens)
 		return (printf("Memory allocation failed\n"), 1);
-	set_token(&tokens[token_count],\
+	set_token(&tokens[token_count], \
 				(t_token_data){TOKEN_EOF, NULL, false, false});
 	if (fill_tokens(argv[2], tokens) != 0)
 	{
