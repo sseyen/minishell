@@ -6,29 +6,34 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/10 16:41:08 by danslav1e         #+#    #+#             */
-/*   Updated: 2025/11/06 20:11:52 by danslav1e        ###   ########.fr       */
+/*   Updated: 2025/11/15 01:07:23 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int built_in_env(t_node *node, t_shell_state *state)
+/**
+ * @brief
+ * Built-in 'env' command.
+ * Prints all environment variables that have a value (i.e., contain an '=').
+ * Per the subject, it does not accept any arguments or options.
+ */
+int	built_in_env(t_node *node, t_shell_state *state)
 {
-    int i;
+	int	i;
 
-    if (node->argc != 1)
-        return (FAILURE); //add error message
-    if (!state->envp)
-        return (SUCCESS);
-    i = 0;
-    while (state->envp[i])
-    {
-        // printf("%s\n", state->envp[i++]); //for testing purposes
-        if (ft_strchr(state->envp[i], "="))
-            ft_putendl_fd(state->envp[i++], STDOUT_FILENO);
-    }
-        
-    return (SUCCESS);
+	if (node->argc != 1)
+		return (error_msg("env", NULL, "too many arguments", FAILURE));
+	if (!state->envp)
+		return (SUCCESS);
+	i = 0;
+	while (state->envp[i])
+	{
+		if (ft_strchr(state->envp[i], "="))
+			ft_putendl_fd(state->envp[i], STDOUT_FILENO);
+		i++;
+	}
+	return (SUCCESS);
 }
 
 // int main(int argc, char **argv, char **envp)
