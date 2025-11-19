@@ -6,7 +6,7 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:07:18 by alisseye          #+#    #+#             */
-/*   Updated: 2025/11/19 21:04:12 by danslav1e        ###   ########.fr       */
+/*   Updated: 2025/11/20 00:41:07 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,10 +214,14 @@ void				create_left_child(t_shell_state *state, t_node *node,
 						int fd[2]);
 void				create_right_child(t_shell_state *state, t_node *node,
 						int fd[2]);
+void				execute_pipe(t_node *node, t_shell_state *state);
+
+// pipe_utils.c
 void				handle_fork_error(t_shell_state *state, int fd[2]);
 void				wait_child_processes(t_shell_state *state, pid_t left,
 						pid_t right, int fd[2]);
-void				execute_pipe(t_node *node, t_shell_state *state);
+void				kill_first_process(t_shell_state *state, int fd[2],
+						pid_t left);
 
 // redirects
 

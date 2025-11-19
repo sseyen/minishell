@@ -6,7 +6,7 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 22:00:15 by danslav1e         #+#    #+#             */
-/*   Updated: 2025/11/19 21:01:54 by danslav1e        ###   ########.fr       */
+/*   Updated: 2025/11/19 23:54:31 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	create_redirect_fd(t_redirect *redir)
 		fd = redir->heredoc_fd;
 	if (fd == -1)
 	{
-		error_msg(redir->target, NULL, strerror(errno), 1);
+		error_msg(redir->target, NULL, strerror(errno), FAILURE);
 	}
 	return (fd);
 }

@@ -6,7 +6,7 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 21:01:15 by danslav1e         #+#    #+#             */
-/*   Updated: 2025/11/19 21:01:20 by danslav1e        ###   ########.fr       */
+/*   Updated: 2025/11/20 00:10:58 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ int	print_method(char **env_copy, char *equal_sign, int i)
 		ft_putstr_fd(env_copy[i], STDOUT_FILENO);
 		ft_putstr_fd("\n", STDOUT_FILENO);
 	}
+	return (SUCCESS);
 }
 
 /**
