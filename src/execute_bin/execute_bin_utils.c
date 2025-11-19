@@ -1,20 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execute_bin_util.c                                 :+:      :+:    :+:   */
+/*   execute_bin_utils.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/11 18:23:58 by danslav1e         #+#    #+#             */
-/*   Updated: 2025/11/11 18:26:18 by danslav1e        ###   ########.fr       */
+/*   Updated: 2025/11/19 19:03:25 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-/*
-** Освобождает память из-под массива строк (результат ft_split).
-*/
+/**
+ * @brief
+ * Frees a null-terminated array of strings (e.g., from ft_split).
+ *
+ * @param arr
+ * The array to free.
+ */
 void	free_split_array(char **arr)
 {
 	int	i;
@@ -30,11 +34,24 @@ void	free_split_array(char **arr)
 	free(arr);
 }
 
-/*
-** Ищет переменную в envp (например, "PATH") и
-** возвращает ее значение (строку *после* знака '=').
-** Возвращает NULL, если не найдено.
-*/
+/**
+ * @brief
+ * Finds a variable in envp (e.g., "PATH") and returns
+ * a pointer to its value (the string *after* the '=').
+ *
+ * @param key
+ * The variable name (e.g., "PATH", "HOME").
+ * @param state
+ * The shell state containing `envp`.
+ *
+ * @return
+ * A pointer to the value string (e.g., "/usr/bin:...")
+ * or NULL if not found.
+ *
+ * @note
+ * **DO NOT FREE** a non-NULL return value.
+ * It is a pointer directly into `state->envp`.
+ */
 char	*find_env_var_value(char *key, t_shell_state *state)
 {
 	int		i;
@@ -52,8 +69,6 @@ char	*find_env_var_value(char *key, t_shell_state *state)
 		{
 			if (env_var[key_len] == '=')
 			{
-				// Нашли! Возвращаем указатель на
-				// первый символ *после* '='
 				return (&env_var[key_len + 1]);
 			}
 		}

@@ -6,7 +6,7 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:07:18 by alisseye          #+#    #+#             */
-/*   Updated: 2025/11/15 02:25:52 by danslav1e        ###   ########.fr       */
+/*   Updated: 2025/11/19 19:42:13 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,7 @@ int					built_in_env(t_node *node, t_shell_state *state);
 int					check_overflow(unsigned long long n, char c_digit,
 						int sign);
 int					is_valid_llong(char *str);
-void				free_all_resources(t_shell_state *state);
+int				free_all_resources(t_shell_state *state);
 long long			ft_atoll(const char *str);
 int					built_in_exit(t_node *node, t_shell_state *state);
 

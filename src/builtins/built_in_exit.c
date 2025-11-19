@@ -6,7 +6,7 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/10 16:41:12 by danslav1e         #+#    #+#             */
-/*   Updated: 2025/11/15 01:36:13 by danslav1e        ###   ########.fr       */
+/*   Updated: 2025/11/19 19:41:39 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,10 @@ int	is_valid_llong(char *str)
  * (3) Any other allocated resources.
  * And also clear readline history.
  */
-void	free_all_resources(t_shell_state *state)
+int	free_all_resources(t_shell_state *state)
 {
 	(void)state;
+	return (state->last_exit_code);
 }
 
 /**

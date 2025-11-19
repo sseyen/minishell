@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:07:23 by alisseye          #+#    #+#             */
-/*   Updated: 2025/10/11 20:39:16 by alisseye         ###   ########.fr       */
+/*   Updated: 2025/11/19 20:21:37 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	state.envp = NULL;
 	state.first_node = NULL;
-	state.token_tree = NULL;
 	state.last_exit_code = 0;
 	envp_copy = init_env(envp);
 	if (!envp_copy)
