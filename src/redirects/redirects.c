@@ -6,7 +6,7 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 22:00:15 by danslav1e         #+#    #+#             */
-/*   Updated: 2025/11/19 20:17:36 by danslav1e        ###   ########.fr       */
+/*   Updated: 2025/11/19 21:01:54 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
  * @param redir The redirect token.
  * @return The file descriptor, or -1 on error.
  */
-static int	create_redirect_fd(t_redirect *redir)
+int	create_redirect_fd(t_redirect *redir)
 {
 	int	fd;
 
@@ -45,7 +45,7 @@ static int	create_redirect_fd(t_redirect *redir)
  *
  * Redirects are applied in order. The last one determines the final
 
-	* stdin/stdout. Intermediate files are created/truncated but closed immediately.
+ * stdin/stdout. Intermediate files are created/truncated but closed immediately.
  *
  * @return SUCCESS (0) or FAILURE (1).
  */

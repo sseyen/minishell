@@ -6,7 +6,7 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:07:18 by alisseye          #+#    #+#             */
-/*   Updated: 2025/11/19 19:42:13 by danslav1e        ###   ########.fr       */
+/*   Updated: 2025/11/19 21:04:12 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,9 +88,9 @@ typedef enum e_redirect_type
 typedef struct s_redirect
 {
 	t_redirect_type	type;
-	char *target;        // File name
-	int heredoc_fd;      // готовый fd для чтения heredoc (подготовлен заранее)
-	bool heredoc_quoted; // делимитер был в кавычках->тело heredoc НЕ расширять bool to_expand;
+	char			*target;
+	int				heredoc_fd;
+	bool			heredoc_quoted;
 }					t_redirect;
 
 typedef enum e_node_type
@@ -106,31 +106,23 @@ typedef struct s_node
 {
 	t_node_type		type;
 	char			**argv;
-	size_t argc; // Количество аргументов
+	size_t			argc;
 	t_redirect		*redirects;
-	size_t redirects_count; // Количество редиректов
+	size_t			redirects_count;
 	struct s_node	*left;
 	struct s_node	*right;
 	struct s_node	*child;
 }					t_node;
 
-typedef struct s_shell_state // Общая структура для отслеживания состояния шела
+typedef struct s_shell_state
 {
-	t_node *token_list;
-	char **envp;
-	t_node *first_node;
-	int last_exit_code;
+	t_node			*token_list;
+	char			**envp;
+	t_node			*first_node;
+	int				last_exit_code;
 }					t_shell_state;
 
-// error.c
-int					error_msg(char *cmd, char *arg, char *custom_msg,
-						int exit_code);
-
-// env_utils.c
-int					find_env_var_index(char **envp, char *key);
-char				*get_key_from_var(char *var);
-
-// built_ins
+// builtins
 
 // built_in_cd.c
 int					update_pwd_oldpwd(t_shell_state *state, char *old_pwd);
@@ -150,7 +142,7 @@ int					built_in_env(t_node *node, t_shell_state *state);
 int					check_overflow(unsigned long long n, char c_digit,
 						int sign);
 int					is_valid_llong(char *str);
-int				free_all_resources(t_shell_state *state);
+int					free_all_resources(t_shell_state *state);
 long long			ft_atoll(const char *str);
 int					built_in_exit(t_node *node, t_shell_state *state);
 
@@ -173,6 +165,8 @@ int					built_in_pwd(t_node *node);
 void				remove_var(int index, t_shell_state *state);
 int					built_in_unset(t_node *node, t_shell_state *state);
 
+// env
+
 // env.c
 char				**init_env(char **envp);
 void				print_env(char **envp);
@@ -183,5 +177,59 @@ char				*get_key_from_var(char *var);
 int					find_env_var_index(char **envp, char *key);
 int					set_new_env_var(t_shell_state *state, char *key,
 						char *value);
+
+// execute_bin
+
+// execute_bin.c
+char				*find_in_path(char *cmd, t_shell_state *state);
+char				*check_one_path(t_shell_state *state, char **paths,
+						char *path, char *cmd);
+void				check_path_validity(t_shell_state *state, char *path);
+void				execute_bin(t_node *node, t_shell_state *state);
+void				exit_failed_bin(t_shell_state *state, char *cmd,
+						char *path);
+
+// execute_ben_utils.c
+void				free_split_array(char **arr);
+char				*find_env_var_value(char *key, t_shell_state *state);
+
+// executor
+
+// executor.c
+bool				is_built_in(t_node *node);
+void				execute_built_in(t_node *node, t_shell_state *state);
+void				start_built_in(t_node *node, t_shell_state *state);
+void				execute_external(t_node *node, t_shell_state *state);
+void				execute_ast(t_node *node, t_shell_state *state);
+
+// subshell_or_and.c
+void				execute_subshell(t_node *node, t_shell_state *state);
+void				execute_and(t_node *node, t_shell_state *state);
+void				execute_or(t_node *node, t_shell_state *state);
+
+// pipe
+
+// pipe.c
+void				create_left_child(t_shell_state *state, t_node *node,
+						int fd[2]);
+void				create_right_child(t_shell_state *state, t_node *node,
+						int fd[2]);
+void				handle_fork_error(t_shell_state *state, int fd[2]);
+void				wait_child_processes(t_shell_state *state, pid_t left,
+						pid_t right, int fd[2]);
+void				execute_pipe(t_node *node, t_shell_state *state);
+
+// redirects
+
+// redirects.c
+int					create_redirect_fd(t_redirect *redir);
+int					apply_redirects(t_node *node);
+void				restore_stdio(int saved_stdin, int saved_stdout);
+
+// utils
+
+// error.c
+int					error_msg(char *cmd, char *arg, char *custom_msg,
+						int exit_code);
 
 #endif
