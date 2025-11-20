@@ -6,7 +6,7 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 17:22:44 by danslav1e         #+#    #+#             */
-/*   Updated: 2025/11/20 00:41:44 by danslav1e        ###   ########.fr       */
+/*   Updated: 2025/11/20 01:39:03 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,6 @@ void	execute_pipe(t_node *node, t_shell_state *state)
 	int		fd[2];
 	pid_t	left;
 	pid_t	right;
-	int		s_right;
-	int		s_left;
 
 	if (pipe(fd) == -1)
 	{

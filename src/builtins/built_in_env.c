@@ -6,7 +6,7 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/10 16:41:08 by danslav1e         #+#    #+#             */
-/*   Updated: 2025/11/15 01:07:23 by danslav1e        ###   ########.fr       */
+/*   Updated: 2025/11/20 01:38:21 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	built_in_env(t_node *node, t_shell_state *state)
 	i = 0;
 	while (state->envp[i])
 	{
-		if (ft_strchr(state->envp[i], "="))
+		if (ft_strchr(state->envp[i], '='))
 			ft_putendl_fd(state->envp[i], STDOUT_FILENO);
 		i++;
 	}

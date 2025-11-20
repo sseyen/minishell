@@ -6,7 +6,7 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/10 13:21:00 by danslav1e         #+#    #+#             */
-/*   Updated: 2025/11/15 00:42:12 by danslav1e        ###   ########.fr       */
+/*   Updated: 2025/11/20 01:37:40 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,6 @@ char	*get_cd_path(t_node *node, t_shell_state *state)
  */
 int	built_in_cd(t_node *node, t_shell_state *state)
 {
-	char	*path;
 	char	*old_pwd;
 	char	*path_to_free;
 
@@ -113,7 +112,7 @@ int	built_in_cd(t_node *node, t_shell_state *state)
 				return (error_msg("cd", NULL, "malloc error", FAILURE));
 		}
 	}
-	return (built_in_cd2(state, old_pwd, old_pwd));
+	return (built_in_cd2(node, state, old_pwd));
 }
 
 int	built_in_cd2(t_node *node, t_shell_state *state, char *old_pwd)

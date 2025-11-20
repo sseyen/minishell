@@ -6,7 +6,7 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/09 16:34:42 by danslav1e         #+#    #+#             */
-/*   Updated: 2025/11/19 20:17:52 by danslav1e        ###   ########.fr       */
+/*   Updated: 2025/11/20 01:49:46 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ void	execute_built_in(t_node *node, t_shell_state *state)
 		restore_stdio(saved_stdin, saved_stdout);
 		return ;
 	}
+	start_built_in(node, state);
 	restore_stdio(saved_stdin, saved_stdout);
 }
 

@@ -6,7 +6,7 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 21:01:15 by danslav1e         #+#    #+#             */
-/*   Updated: 2025/11/20 00:10:58 by danslav1e        ###   ########.fr       */
+/*   Updated: 2025/11/20 01:35:02 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ int	sort_env(t_shell_state *state)
 	char	**env_copy;
 	int		count;
 	int		i;
-	char	*equal_sign;
 
 	count = 0;
 	while (state->envp[count])
@@ -70,9 +69,9 @@ int	sort_env(t_shell_state *state)
 	}
 	env_copy[count] = NULL;
 	sort_envp_copy(env_copy);
-	i = 0;
-	while (env_copy[i])
-		if (!print_method(env_copy, ft_strchr(env_copy[i], '='), i++))
+	i = -1;
+	while (env_copy[++i])
+		if (!print_method(env_copy, ft_strchr(env_copy[i], '='), i))
 			return (FAILURE);
 	free(env_copy);
 	return (SUCCESS);
