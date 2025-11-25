@@ -6,7 +6,7 @@
 /*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:07:23 by alisseye          #+#    #+#             */
-/*   Updated: 2025/11/12 12:45:42 by alisseye         ###   ########.fr       */
+/*   Updated: 2025/11/21 13:04:25 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	handle_line(char *line, t_shell_state *state)
 {
 	t_token	*tokens;
 
-	if (tokenize(line, &tokens) != 0)
+	if (tokenize(line, &tokens, state) != 0)
 		return (1);
 	if (build_tree(tokens, state->token_tree) != 0)
 	{

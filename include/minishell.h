@@ -6,7 +6,7 @@
 /*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:07:18 by alisseye          #+#    #+#             */
-/*   Updated: 2025/11/12 12:19:33 by alisseye         ###   ########.fr       */
+/*   Updated: 2025/11/23 20:04:57 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,14 @@
 # include <string.h>
 # include <sys/stat.h>
 
+// SIZE_MAX
+# include <stddef.h>
+
+# include "utils.h"
+
 typedef enum e_token_type
 {
+	TOKEN_NONE = 0,
 	TOKEN_WORD,
 	TOKEN_PIPE,
 	TOKEN_REDIRECT_IN,
@@ -64,7 +70,6 @@ typedef enum e_token_type
 	TOKEN_LPAREN,
 	TOKEN_RPAREN,
 	TOKEN_EOF,
-	TOKEN_ERROR,
 }					t_token_type;
 
 typedef struct s_token
@@ -125,10 +130,11 @@ void	print_env(char **envp);
 void	free_env(char **envp);
 
 // lexer
-int		tokenize(char *line, t_token **tokens);
+int		tokenize(char *line, t_token **tokens, t_shell_state *state);
 
 // utils
 int		is_whitespace(int c);
 bool	is_operator_char(char c);
+char	*ft_strndup(const char *s1, size_t n);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 04:23:37 by alisseye          #+#    #+#             */
-/*   Updated: 2025/11/13 15:17:05 by alisseye         ###   ########.fr       */
+/*   Updated: 2025/11/23 19:42:31 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,14 @@ typedef struct s_token_data
 }				t_token_data;
 
 // Lexer
-int				tokenize(char *line, t_token **tokens);
+int				tokenize(char *line, t_token **tokens, t_shell_state *state);
 void			free_tokens(t_token *tokens);
 int				fill_tokens(char *line, t_token *tokens);
+
+// Validate
+int				validate_tokens(t_token *tokens);
+bool			is_redir_error(t_token_type prev, t_token_type curr);
+bool			is_paren_error(t_token_type prev, t_token_type curr);
 
 // Token utils
 void			set_token(t_token *token, t_token_data data);
@@ -48,5 +53,7 @@ void			skip_whitespaces(char *line, size_t *i);
 size_t			parse_word(char *line, size_t *i);
 size_t			parse_operator(char *line, size_t *i);
 size_t			count_tokens(char *line);
+bool			is_quoted(char *str);
+bool			to_expand(char *str);
 
 #endif
