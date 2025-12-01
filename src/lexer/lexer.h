@@ -6,7 +6,7 @@
 /*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 04:23:37 by alisseye          #+#    #+#             */
-/*   Updated: 2025/11/23 19:42:31 by alisseye         ###   ########.fr       */
+/*   Updated: 2025/12/01 16:21:37 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ typedef struct s_token_data
 int				tokenize(char *line, t_token **tokens, t_shell_state *state);
 void			free_tokens(t_token *tokens);
 int				fill_tokens(char *line, t_token *tokens);
+int				expand_tokens(t_token *tokens, t_shell_state *state);
 
 // Validate
 int				validate_tokens(t_token *tokens);
@@ -48,12 +49,15 @@ t_token_type	get_double_operator(char *start);
 int				create_word_token(char *line, size_t len, t_token *token);
 int				create_operator_token(char *start, size_t len, t_token *token);
 
-// Parser utils
+// Parse utils
 void			skip_whitespaces(char *line, size_t *i);
 size_t			parse_word(char *line, size_t *i);
 size_t			parse_operator(char *line, size_t *i);
 size_t			count_tokens(char *line);
 bool			is_quoted(char *str);
 bool			to_expand(char *str);
+
+// Expand utils
+
 
 #endif

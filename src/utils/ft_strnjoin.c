@@ -1,40 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strljoin.c                                      :+:      :+:    :+:   */
+/*   ft_strnjoin.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/23 19:41:17 by alisseye          #+#    #+#             */
-/*   Updated: 2025/11/23 19:41:56 by alisseye         ###   ########.fr       */
+/*   Created: 2025/11/29 17:18:30 by alisseye          #+#    #+#             */
+/*   Updated: 2025/11/29 17:19:55 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "utils.h"
 
-char	*ft_strljoin(char *s1, char *s2)
+char	*ft_strnjoin(const char *s1, const char *s2, size_t n)
 {
-	size_t	len1;
-	size_t	len2;
-	char	*joined;
+	size_t	i;
+	size_t	j;
+	char	*new_str;
 
 	if (!s1 && !s2)
 		return (NULL);
-	if (s1)
-		len1 = ft_strlen(s1);
-	else
-		len1 = 0;
-	if (s2)
-		len2 = ft_strlen(s2);
-	else
-		len2 = 0;
-	joined = malloc(len1 + len2 + 1);
-	if (!joined)
+	new_str = malloc(sizeof(char) * (ft_strlen(s1) + n + 1));
+	if (!new_str)
 		return (NULL);
-	if (s1)
-		ft_memcpy(joined, s1, len1);
-	if (s2)
-		ft_memcpy(joined + len1, s2, len2);
-	joined[len1 + len2] = '\0';
-	return (joined);
+	i = 0;
+	j = 0;
+	while (s1 && s1[i])
+	{
+		new_str[i] = s1[i];
+		i++;
+	}
+	while (s2 && j < n && s2[j])
+	{
+		new_str[i + j] = s2[j];
+		j++;
+	}
+	new_str[i + j] = '\0';
+	free(s1);
+	return (new_str);
 }

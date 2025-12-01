@@ -1,24 +1,13 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.h                                            :+:      :+:    :+:   */
+/*   expand_tokens_test.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/23 19:42:59 by alisseye          #+#    #+#             */
-/*   Updated: 2025/12/01 16:20:26 by alisseye         ###   ########.fr       */
+/*   Created: 2025/12/01 16:22:05 by alisseye          #+#    #+#             */
+/*   Updated: 2025/12/01 16:22:14 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef UTILS_H
-# define UTILS_H
-
-# include <minishell.h>
-
-char	*ft_strljoin(char *s1, char *s2);
-char	*ft_strndup(const char *s, size_t n);
-char	*ft_strnjoin(const char *s1, const char *s2, size_t n);
-bool	is_operator_char(char c);
-bool	is_whitespace(char c);
-
-#endif
+// TO BE IMPLEMENTED
