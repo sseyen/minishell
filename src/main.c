@@ -6,7 +6,7 @@
 /*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:07:23 by alisseye          #+#    #+#             */
-/*   Updated: 2025/10/11 20:39:16 by alisseye         ###   ########.fr       */
+/*   Updated: 2025/11/21 13:04:25 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,31 @@ void	exit_minishell(t_shell_state *state, int exit_code)
 	{
 		if (state->envp)
 			free_env(state->envp);
-		if (state->first_node)
-			free_tree(state->first_node);
+		if (state->token_tree)
+			free_tree(state->token_tree);
 	}
 	exit(exit_code);
+}
+
+int	handle_line(char *line, t_shell_state *state)
+{
+	t_token	*tokens;
+
+	if (tokenize(line, &tokens, state) != 0)
+		return (1);
+	if (build_tree(tokens, state->token_tree) != 0)
+	{
+		if (state->token_tree)
+			free_tree(state->token_tree);
+		state->token_tree = NULL;
+		return (1);
+	}
+	if (state->token_tree)
+		execute_tree(state);
+	if (state->token_tree)
+		free_tree(state->token_tree);
+	state->token_tree = NULL;
+	return (0);
 }
 
 int	minishell_loop(t_shell_state *state)
@@ -33,8 +54,6 @@ int	minishell_loop(t_shell_state *state)
 	while (1)
 	{
 		line = readline("minishell$ ");
-		if (!line)
-			exit_minishell(state, state->last_exit_code);
 		if (*line)
 			add_history(line);
 		if (handle_line(line, state) != 0)
@@ -52,7 +71,6 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	state.envp = NULL;
-	state.first_node = NULL;
 	state.token_tree = NULL;
 	state.last_exit_code = 0;
 	envp_copy = init_env(envp);
