@@ -36,17 +36,22 @@ TEST_DIR = tests
 TEST_OBJS_DIR = obj/tests
 
 TEST_SRCS = $(TEST_DIR)/main_test.c \
+			$(TEST_DIR)/utils/print_tokens.c \
 			$(TEST_DIR)/env/env_test.c \
 			$(TEST_DIR)/lexer/count_tokens_test.c \
 			$(TEST_DIR)/lexer/fill_tokens_test.c \
+			$(TEST_DIR)/lexer/expand_tokens_test.c \
 			$(SRCS_DIR)/env/env.c \
 			$(SRCS_DIR)/lexer/lexer.c \
 			${SRCS_DIR}/lexer/token.c \
 			${SRCS_DIR}/lexer/token_utils.c \
 			${SRCS_DIR}/lexer/parse.c \
+			$(SRCS_DIR)/lexer/expand.c \
+			${SRCS_DIR}/lexer/expand_utils.c \
 			${SRCS_DIR}/utils/is_operator_char.c \
 			${SRCS_DIR}/utils/is_whitespace.c \
-			$(SRCS_DIR)/utils/ft_strndup.c
+			$(SRCS_DIR)/utils/ft_strndup.c \
+			$(SRCS_DIR)/utils/ft_strnjoin.c
 
 TEST_OBJS = $(TEST_SRCS:%.c=$(TEST_OBJS_DIR)/%.o)
 
@@ -56,7 +61,7 @@ $(TEST): $(LIBFT) $(TEST_OBJS)
 	$(CC) $(TEST_OBJS) -L libft -lft -o $(TEST)
 
 $(TEST_OBJS_DIR)/%.o: %.c
-	@mkdir -p $(dir $@) 
+	@mkdir -p $(dir $@)
 	$(CC) $(TEST_CFLAGS) -c $< -o $@
 
 clean_test:

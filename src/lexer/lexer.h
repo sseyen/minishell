@@ -6,7 +6,7 @@
 /*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 04:23:37 by alisseye          #+#    #+#             */
-/*   Updated: 2025/12/01 16:21:37 by alisseye         ###   ########.fr       */
+/*   Updated: 2025/12/01 16:58:35 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,13 +51,18 @@ int				create_operator_token(char *start, size_t len, t_token *token);
 
 // Parse utils
 void			skip_whitespaces(char *line, size_t *i);
-size_t			parse_word(char *line, size_t *i);
-size_t			parse_operator(char *line, size_t *i);
+size_t			parse_word(char *line, size_t *i, size_t *count);
+size_t			parse_operator(char *line, size_t *i, size_t *count);
 size_t			count_tokens(char *line);
 bool			is_quoted(char *str);
 bool			to_expand(char *str);
 
 // Expand utils
-
+char			*join_strings(char *s1, char *s2, size_t from, size_t to);
+char			*parse_var(char *str, t_shell_state *state, size_t *index);
+char			*handle_var(char *token_value, size_t *from, size_t *i, \
+				t_shell_state *state);
+int				handle_eof(char *token_value, char **new_value, \
+				size_t from, size_t i);
 
 #endif

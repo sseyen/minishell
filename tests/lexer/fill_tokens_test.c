@@ -6,29 +6,11 @@
 /*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/11 14:07:05 by alisseye          #+#    #+#             */
-/*   Updated: 2025/11/13 15:21:00 by alisseye         ###   ########.fr       */
+/*   Updated: 2025/12/01 16:38:13 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "test.h"
-
-int	print_tokens(t_token *tokens)
-{
-	int		i;
-
-	i = 0;
-	while (tokens[i].type != TOKEN_ERROR && tokens[i].type != TOKEN_EOF)
-	{
-		printf("Token %d: Type=%d, Value='%s'\n", \
-				i, tokens[i].type, tokens[i].value);
-		i++;
-	}
-	if (tokens[i].type == TOKEN_EOF)
-		printf("Token %d: Type=%d, Value='EOF'\n", i, tokens[i].type);
-	else if (tokens[i].type == TOKEN_ERROR)
-		printf("Token %d: Type=%d, Value='ERROR'\n", i, tokens[i].type);
-	return (0);
-}
 
 int	test_fill_tokens(int argc, char **argv)
 {

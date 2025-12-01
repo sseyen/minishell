@@ -6,7 +6,7 @@
 /*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:07:18 by alisseye          #+#    #+#             */
-/*   Updated: 2025/11/23 20:04:57 by alisseye         ###   ########.fr       */
+/*   Updated: 2025/12/01 17:14:14 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,6 @@
 
 // SIZE_MAX
 # include <stddef.h>
-
-# include "utils.h"
 
 typedef enum e_token_type
 {
@@ -129,12 +127,16 @@ char	**init_env(char **envp);
 void	print_env(char **envp);
 void	free_env(char **envp);
 
+// env utils
+char	*get_env_value(char *key, char **envp);
+
 // lexer
 int		tokenize(char *line, t_token **tokens, t_shell_state *state);
 
 // utils
-int		is_whitespace(int c);
+bool	is_whitespace(char c);
 bool	is_operator_char(char c);
 char	*ft_strndup(const char *s1, size_t n);
+char	*ft_strnjoin(char const *s1, char const *s2, size_t n);
 
 #endif
