@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:07:18 by alisseye          #+#    #+#             */
 /*   Updated: 2025/12/01 17:14:14 by alisseye         ###   ########.fr       */
@@ -54,6 +54,9 @@
 // SIZE_MAX
 # include <stddef.h>
 
+# define SUCCESS 0
+# define FAILURE 1
+
 typedef enum e_token_type
 {
 	TOKEN_NONE = 0,
@@ -89,9 +92,9 @@ typedef enum e_redirect_type
 typedef struct s_redirect
 {
 	t_redirect_type	type;
-	char			*target;
-	int				heredoc_fd; // готовый fd для чтения heredoc (подготовлен заранее) (я пока что хз для чего конкретно он нужен, но gpt настаивает на его добавлении)
-	bool			heredoc_quoted; // делимитер был в кавычках ->тело heredoc НЕ расширять bool to_expand;
+	char			*target; // File name
+	int 			heredoc_fd;     // готовый fd для чтения heredoc (подготовлен заранее) (я пока что хз для чего конкретно он нужен, но gpt настаивает на его добавлении)
+	bool 			heredoc_quoted; // делимитер был в кавычках->тело heredoc НЕ расширять bool to_expand;
 }					t_redirect;
 
 typedef enum e_node_type
@@ -121,6 +124,47 @@ typedef struct s_shell_state // Общая структура для отсле�
 	char		**envp;
 	int			last_exit_code;
 }					t_shell_state;
+
+int					error_msg_cmd(const char *msg, const char *problem,
+						const char *error, int rnb);
+void				error_msg(const char *msg, const char *problem);
+
+// env_utils.c
+int					find_env_var_index(char **envp, char *key);
+char				*get_key_from_var(char *var);
+
+// built_ins
+
+// built_in_cd.c
+int					built_in_cd(t_node *node, t_shell_state *state);
+
+// built_in_echo.c
+bool				is_option(const char *str);
+int					built_in_echo(t_node *node);
+
+// built_in_env.c
+int					built_in_env(t_node *node, t_shell_state *state);
+
+// built_in_exit.c
+
+// built_in_export.c
+static int			add_env_var(t_shell_state *state, char *var);
+int					set_env_var(t_shell_state *state, char *var);
+static int			handle_export_args(t_node *node, t_shell_state *state);
+int					built_in_export(t_node *node, t_shell_state *state);
+
+// built_in_export_utils.c
+static void			sort_envp_copy(char **env_copy);
+static int			print_sorted_env(t_shell_state *state);
+static int			export_error(char *arg);
+int					is_valid_identifier(char *str);
+
+// built_in_pwd.c
+int					built_in_pwd(t_node *node);
+
+// built_in_unset.c
+void				remove_var(int index, t_shell_state *state);
+int					built_in_unset(t_node *node, t_shell_state *state);
 
 // env
 char	**init_env(char **envp);
