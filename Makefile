@@ -1,32 +1,53 @@
-NAME = minishell
+# Имя исполнимого файла для теста
+NAME        = test_pwd
 
-LIBFT = libft/libft.a
+# Компилятор и флаги
+CC          = cc
+CFLAGS      = -Wall -Wextra -Werror -g
 
-SRCS_DIR = src
-OBJS_DIR = obj
+# Директории
+SRC_DIR     = src
+TEST_DIR    = tests/builtins
+INC_DIR     = include
+LIBFT_DIR   = libft
 
-SRCS = $(SRCS_DIR)/main.c \
-       $(SRCS_DIR)/env/env.c
+# Библиотеки
+LIBFT       = $(LIBFT_DIR)/libft.a
+LIBS        = -L$(LIBFT_DIR) -lft -lreadline
 
-OBJS = $(SRCS:$(SRCS_DIR)/%.c=$(OBJS_DIR)/%.o)
+# Включаемые файлы (Header files)
+INCLUDES    = -I $(INC_DIR) -I $(LIBFT_DIR)
 
-CC = cc
+# Исходные файлы проекта (ИСКЛЮЧАЯ src/main.c)
+# Мы используем wildcard для автоматического поиска всех .c файлов в подпапках src
+SRCS_PROJECT = $(shell find $(SRC_DIR) -name "*.c" ! -name "main.c")
 
-CFLAGS = -Wall -Wextra -Werror -I include -I libft
+# Файл теста
+SRCS_TEST   = 
 
-# MAIN BUILD
+# Объединяем все исходники
+SRCS        = $(SRCS_PROJECT) $(SRCS_TEST)
 
-${NAME}: $(LIBFT) $(OBJS)
-	$(CC) $(OBJS) -L libft -lft -o $(NAME)
+# Объектные файлы
+OBJS        = $(SRCS:.c=.o)
 
-$(LIBFT):
-	make -s -C libft
-
-$(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c
-	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -c $< -o $@
-
+# Правила
 all: $(NAME)
+
+# Компиляция основной программы
+$(NAME): $(LIBFT) $(OBJS)
+	@echo "Compiling $(NAME)..."
+	$(CC) $(CFLAGS) $(OBJS) $(LIBS) -o $(NAME)
+	@echo "$(NAME) ready!"
+
+# Компиляция libft
+$(LIBFT):
+	@echo "Compiling libft..."
+	@make -s -C $(LIBFT_DIR)
+
+# Компиляция .c в .o
+%.o: %.c
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 # TESTS
 
@@ -36,6 +57,7 @@ TEST_DIR = tests
 TEST_OBJS_DIR = obj/tests
 
 TEST_SRCS = $(TEST_DIR)/main_test.c \
+			$(TEST_DIR)/test_pwd.c
 			$(TEST_DIR)/utils/print_tokens.c \
 			$(TEST_DIR)/env/env_test.c \
 			$(TEST_DIR)/lexer/count_tokens_test.c \
@@ -72,13 +94,14 @@ clean_test:
 # CLEAN / REBUILD
 
 clean:
-	rm -f $(OBJS)
-	rm -rf $(OBJS_DIR)
-	make clean -s -C libft
+	@echo "Cleaning objects..."
+	@rm -f $(OBJS)
+	@make -s -C $(LIBFT_DIR) clean
 
-fclean: clean clean_test
-	rm -f $(NAME)
-	make fclean -s -C libft
+fclean: clean
+	@echo "Cleaning executable..."
+	@rm -f $(NAME)
+	@make -s -C $(LIBFT_DIR) fclean
 
 re: fclean all
 

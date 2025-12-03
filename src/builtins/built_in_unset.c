@@ -6,34 +6,56 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/10 16:41:28 by danslav1e         #+#    #+#             */
-/*   Updated: 2025/11/06 19:21:44 by danslav1e        ###   ########.fr       */
+/*   Updated: 2025/11/20 01:35:56 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void remove_var(int index, t_shell_state *state)
+/**
+ * @brief
+ * Removes a variable from the `envp` array by shifting pointers.
+ */
+void	remove_var(int index, t_shell_state *state)
 {
-    while (state->envp[index])
-    {
-        state->envp[index] = state->envp[index + 1];
-        index++;
-    }
+	free(state->envp[index]);
+	while (state->envp[index + 1])
+	{
+		state->envp[index] = state->envp[index + 1];
+		index++;
+	}
+	state->envp[index] = NULL;
 }
 
-int built_in_unset(t_node *node, t_shell_state *state) //to create testing data
+/**
+ * @brief
+ * Built-in 'unset' command.
+ * Removes one or more environment variables.
+ * Validates variable names before unsetting.
+ */
+int	built_in_unset(t_node *node, t_shell_state *state)
 {
-    int index;
-    int i;
+	int	index;
+	size_t	i;
+	int	exit_code;
 
-    i = 1;
-    index = 0;
-    while (i < node->argc)
-    {
-        index = find_env_var_index(state->envp, node->argv[i]);
-        if (index != -1)
-            remove_var(index, state);
-        i++;
-    }
-    return (SUCCESS);
+	i = 1;
+	exit_code = SUCCESS;
+	while (i < node->argc)
+	{
+		if (!is_valid_identifier(node->argv[i]))
+		{
+			exit_code = error_msg("unset", node->argv[i],
+					"not a valid identifier", FAILURE);
+			i++;
+			continue ;
+		}
+		index = find_env_var_index(state->envp, node->argv[i]);
+		if (index == -2)
+			return (FAILURE);
+		else if (index != -1)
+			remove_var(index, state);
+		i++;
+	}
+	return (exit_code);
 }

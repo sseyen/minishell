@@ -5,14 +5,18 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/06 19:29:34 by danslav1e         #+#    #+#             */
-/*   Updated: 2025/11/06 20:48:24 by danslav1e        ###   ########.fr       */
+/*   Created: 2025/11/19 21:01:15 by danslav1e         #+#    #+#             */
+/*   Updated: 2025/11/20 01:35:02 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static void	sort_envp_copy(char **env_copy)
+/**
+ * @brief
+ * Sorts a string array alphabetically (bubble sort).
+ */
+void	sort_envp_copy(char **env_copy)
 {
 	int		i;
 	int		j;
@@ -40,23 +44,23 @@ static void	sort_envp_copy(char **env_copy)
 	}
 }
 
-/*
-** Создает, сортирует и печатает копию envp.
-*/
-static int	print_sorted_env(t_shell_state *state)
+/**
+ * @brief
+ * Prints the sorted environment variables in `declare -x` format.
+ * Handles 'export' with no arguments.
+ */
+int	sort_env(t_shell_state *state)
 {
 	char	**env_copy;
 	int		count;
 	int		i;
-	char	*equal_sign;
-	char	*key;
 
 	count = 0;
 	while (state->envp[count])
 		count++;
 	env_copy = (char **)malloc(sizeof(char *) * (count + 1));
 	if (!env_copy)
-		return (FAILURE); // Need error handling
+		return (error_msg("export", NULL, "malloc error", FAILURE));
 	i = 0;
 	while (i < count)
 	{
@@ -65,67 +69,63 @@ static int	print_sorted_env(t_shell_state *state)
 	}
 	env_copy[count] = NULL;
 	sort_envp_copy(env_copy);
-	i = 0;
-	while (env_copy[i])
-	{
-		// Печатаем в формате declare -x KEY="VALUE"
-		// (Эта часть немного сложная, чтобы уложиться в 25 строк,
-		// но здесь основная логика)
-		equal_sign = ft_strchr(env_copy[i], '=');
-		if (equal_sign)
-		{
-			key = ft_substr(env_copy[i], 0, equal_sign - env_copy[i]);
-			ft_putstr_fd("declare -x ", STDOUT_FILENO);
-			ft_putstr_fd(key, STDOUT_FILENO);
-			ft_putstr_fd("=\"", STDOUT_FILENO);
-			ft_putstr_fd(equal_sign + 1, STDOUT_FILENO);
-			ft_putstr_fd("\"\n", STDOUT_FILENO);
-			free(key);
-		}
-		else
-		{
-			// Для переменных без "=", e.g. 'export VAR'
-			ft_putstr_fd("declare -x ", STDOUT_FILENO);
-			ft_putstr_fd(env_copy[i], STDOUT_FILENO);
-			ft_putstr_fd("\n", STDOUT_FILENO);
-		}
-		i++;
-	}
-	free(env_copy); // Освобождаем только массив указателей, не сами строки
+	i = -1;
+	while (env_copy[++i])
+		if (!print_method(env_copy, ft_strchr(env_copy[i], '='), i))
+			return (FAILURE);
+	free(env_copy);
 	return (SUCCESS);
 }
 
-/*
-** Выводит ошибку о невалидном идентификаторе.
-*/
-static int	export_error(char *arg)
+int	print_method(char **env_copy, char *equal_sign, int i)
 {
-	ft_putstr_fd("minishell: export: `", STDERR_FILENO);
-	ft_putstr_fd(arg, STDERR_FILENO);
-	ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
-	return (FAILURE);
+	char	*key;
+
+	if (equal_sign)
+	{
+		key = ft_substr(env_copy[i], 0, equal_sign - env_copy[i]);
+		if (!key)
+			return (free(env_copy), error_msg("export", NULL, "malloc error",
+					FAILURE));
+		ft_putstr_fd("declare -x ", STDOUT_FILENO);
+		ft_putstr_fd(key, STDOUT_FILENO);
+		ft_putstr_fd("=\"", STDOUT_FILENO);
+		ft_putstr_fd(equal_sign + 1, STDOUT_FILENO);
+		ft_putstr_fd("\"\n", STDOUT_FILENO);
+		free(key);
+	}
+	else
+	{
+		ft_putstr_fd("declare -x ", STDOUT_FILENO);
+		ft_putstr_fd(env_copy[i], STDOUT_FILENO);
+		ft_putstr_fd("\n", STDOUT_FILENO);
+	}
+	return (SUCCESS);
 }
 
-/*
-** Проверяет, является ли 'str' валидным идентификатором для 'export'.
-*/
+/**
+ * @brief
+ * Checks if 'str' is a valid identifier for an env variable.
+ * (e.g., starts with letter or '_', contains only letters,
+ * numbers, or '_').
+ */
 int	is_valid_identifier(char *str)
 {
-	int i;
-	char c;
+	int		i;
+	char	c;
 
 	if (!str || !*str)
-		return (0);
+		return (false);
 	if (!(ft_isalpha(str[0]) || str[0] == '_'))
-		return (0);
+		return (false);
 	i = 1;
 	c = str[i];
 	while (c && c != '=')
 	{
 		if (!(ft_isalnum(c) || c == '_'))
-			return (0);
+			return (false);
 		i++;
 		c = str[i];
 	}
-	return (1);
+	return (true);
 }
