@@ -6,7 +6,7 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:07:18 by alisseye          #+#    #+#             */
-/*   Updated: 2025/11/20 00:41:07 by danslav1e        ###   ########.fr       */
+/*   Updated: 2025/12/01 17:14:14 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,11 +51,15 @@
 # include <string.h>
 # include <sys/stat.h>
 
+// SIZE_MAX
+# include <stddef.h>
+
 # define SUCCESS 0
 # define FAILURE 1
 
 typedef enum e_token_type
 {
+	TOKEN_NONE = 0,
 	TOKEN_WORD,
 	TOKEN_PIPE,
 	TOKEN_REDIRECT_IN,
@@ -67,7 +71,6 @@ typedef enum e_token_type
 	TOKEN_LPAREN,
 	TOKEN_RPAREN,
 	TOKEN_EOF,
-	TOKEN_ERROR,
 }					t_token_type;
 
 typedef struct s_token
@@ -75,6 +78,7 @@ typedef struct s_token
 	t_token_type	type;
 	char			*value;
 	bool			to_expand;
+	bool			quoted;
 }					t_token;
 
 typedef enum e_redirect_type
@@ -116,10 +120,9 @@ typedef struct s_node
 
 typedef struct s_shell_state
 {
-	t_node			*token_list;
-	char			**envp;
-	t_node			*first_node;
-	int				last_exit_code;
+	t_node		*token_tree;
+	char		**envp;
+	int			last_exit_code;
 }					t_shell_state;
 
 // builtins
@@ -235,5 +238,17 @@ void				restore_stdio(int saved_stdin, int saved_stdout);
 // error.c
 int					error_msg(char *cmd, char *arg, char *custom_msg,
 						int exit_code);
+
+// env utils
+char	*get_env_value(char *key, char **envp);
+
+// lexer
+int		tokenize(char *line, t_token **tokens, t_shell_state *state);
+
+// utils
+bool	is_whitespace(char c);
+bool	is_operator_char(char c);
+char	*ft_strndup(const char *s1, size_t n);
+char	*ft_strnjoin(char const *s1, char const *s2, size_t n);
 
 #endif

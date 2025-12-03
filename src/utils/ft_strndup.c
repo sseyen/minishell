@@ -1,27 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_test.c                                         :+:      :+:    :+:   */
+/*   ft_strndup.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/11 18:55:57 by alisseye          #+#    #+#             */
-/*   Updated: 2025/10/26 05:34:12 by alisseye         ###   ########.fr       */
+/*   Created: 2025/11/13 16:50:47 by alisseye          #+#    #+#             */
+/*   Updated: 2025/11/13 16:51:13 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "test.h"
+#include "minishell.h"
 
-int	test_init_env(int argc, char **argv, char **envp)
+char	*ft_strndup(const char *s1, size_t n)
 {
-	char	**envp_copy;
+	size_t	i;
+	char	*dup;
 
-	(void)argv;
-	(void)argc;
-	envp_copy = init_env(envp);
-	if (envp_copy == NULL)
-		return (1);
-	print_env(envp_copy);
-	free_env(envp_copy);
-	return (0);
+	dup = (char *)malloc(sizeof(char) * (n + 1));
+	if (!dup)
+		return (NULL);
+	i = 0;
+	while (i < n && s1[i])
+	{
+		dup[i] = s1[i];
+		i++;
+	}
+	dup[i] = '\0';
+	return (dup);
 }

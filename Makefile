@@ -23,7 +23,7 @@ INCLUDES    = -I $(INC_DIR) -I $(LIBFT_DIR)
 SRCS_PROJECT = $(shell find $(SRC_DIR) -name "*.c" ! -name "main.c")
 
 # Файл теста
-SRCS_TEST   = $(TEST_DIR)/test_pwd.c
+SRCS_TEST   = 
 
 # Объединяем все исходники
 SRCS        = $(SRCS_PROJECT) $(SRCS_TEST)
@@ -49,7 +49,50 @@ $(LIBFT):
 %.o: %.c
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
-# Очистка
+# TESTS
+
+TEST = test
+
+TEST_DIR = tests
+TEST_OBJS_DIR = obj/tests
+
+TEST_SRCS = $(TEST_DIR)/main_test.c \
+			$(TEST_DIR)/test_pwd.c
+			$(TEST_DIR)/utils/print_tokens.c \
+			$(TEST_DIR)/env/env_test.c \
+			$(TEST_DIR)/lexer/count_tokens_test.c \
+			$(TEST_DIR)/lexer/fill_tokens_test.c \
+			$(TEST_DIR)/lexer/expand_tokens_test.c \
+			$(SRCS_DIR)/env/env.c \
+			$(SRCS_DIR)/lexer/lexer.c \
+			${SRCS_DIR}/lexer/token.c \
+			${SRCS_DIR}/lexer/token_utils.c \
+			${SRCS_DIR}/lexer/parse.c \
+			$(SRCS_DIR)/lexer/expand.c \
+			${SRCS_DIR}/lexer/expand_utils.c \
+			${SRCS_DIR}/utils/is_operator_char.c \
+			${SRCS_DIR}/utils/is_whitespace.c \
+			$(SRCS_DIR)/utils/ft_strndup.c \
+			$(SRCS_DIR)/utils/ft_strnjoin.c
+
+TEST_OBJS = $(TEST_SRCS:%.c=$(TEST_OBJS_DIR)/%.o)
+
+TEST_CFLAGS = $(CFLAGS) -I tests/include -I src/lexer
+
+$(TEST): $(LIBFT) $(TEST_OBJS)
+	$(CC) $(TEST_OBJS) -L libft -lft -o $(TEST)
+
+$(TEST_OBJS_DIR)/%.o: %.c
+	@mkdir -p $(dir $@)
+	$(CC) $(TEST_CFLAGS) -c $< -o $@
+
+clean_test:
+	rm -f $(TEST_OBJS)
+	rm -rf $(TEST_OBJS_DIR)
+	rm -f $(TEST)
+
+# CLEAN / REBUILD
+
 clean:
 	@echo "Cleaning objects..."
 	@rm -f $(OBJS)
@@ -62,4 +105,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all test clean fclean re
