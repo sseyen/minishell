@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
+/*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:07:23 by alisseye          #+#    #+#             */
-/*   Updated: 2025/11/21 13:04:25 by alisseye         ###   ########.fr       */
+/*   Updated: 2025/12/03 12:44:24 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,9 @@ int	handle_line(char *line, t_shell_state *state)
 		return (1);
 	}
 	if (state->token_tree)
-		execute_tree(state);
+		execute_ast(state->token_tree, state);
 	if (state->token_tree)
-		free_tree(state->token_tree);
+		free_ast(state->token_tree);
 	state->token_tree = NULL;
 	return (0);
 }
