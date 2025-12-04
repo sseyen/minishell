@@ -6,70 +6,34 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/10 16:04:08 by danslav1e         #+#    #+#             */
-/*   Updated: 2025/11/11 22:26:14 by danslav1e        ###   ########.fr       */
+/*   Updated: 2025/12/04 02:23:51 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-// int error_msg_cmd(const char *msg, const char* problem, const char* error, int rnb) // Переделать, чтобы сразу писало в strerror
-// {
-//     char *str;
-//     char *temp;
-
-//     str = ft_strdup("minishell:");
-//     if (msg)
-//     {
-//         temp = ft_strjoin(str, " ");
-//         free(str);
-//         str = ft_strjoin(temp, msg);
-//         free(temp);
-//     }
-//     if (problem)
-//     {
-//         temp = ft_strjoin(str, " ");
-//         free(str);
-//         str = ft_strjoin(temp, problem);
-//         free(temp);
-//     }
-//     if (error)
-//     {
-//         temp = ft_strjoin(str, " ");
-//         free(str);
-//         str = ft_strjoin(temp, error);
-//         free(temp);
-//     }
-//     ft_putstr_fd(str, STDERR_FILENO);
-//     write(STDERR_FILENO, "\n", 1);
-//     free(str);
-//     return (rnb);
-// }
-
-// void error_msg(const char *msg, const char* problem) // + переделать, чтобы было двоеточие после msg
-// {
-//     char *str;
-//     char *temp;
-
-//     str = ft_strdup("minishell:");
-//     if (msg)
-//     {
-//         temp = ft_strjoin(str, " ");
-//         free(str);
-//         str = ft_strjoin(temp, msg);
-//         free(temp);
-//     }
-//     if (problem)
-//     {
-//         temp = ft_strjoin(str, " ");
-//         free(str);
-//         str = ft_strjoin(temp, problem);
-//         free(temp);
-//     }
-//     ft_putstr_fd(str, STDERR_FILENO);
-//     write(STDERR_FILENO, "\n", 1);
-//     free(str);
-// }
-
+/**
+ * @brief
+ * A universal, malloc-free error messaging function.
+ * Mirrors the `bash` format: "minishell: cmd: arg: message\n"
+ *
+ * @param cmd
+ * The command name (e.g., "cd", "export").
+ * @param arg
+ * The argument that caused the error (e.g., "file.txt", "'1a'").
+ * (Can be NULL).
+ * @param custom_msg
+ * A specific message (e.g., "command not found").
+ * (Can be NULL).
+ * @param exit_code
+ * The exit code to return.
+ *
+ * @return int
+ * Returns the `exit_code` (for `state->last_exit_code = error_msg(...)`).
+ *
+ * @note
+ * If `custom_msg` is NULL, `strerror(errno)` will be used instead.
+ */
 int	error_msg(char *cmd, char *arg, char *custom_msg, int exit_code)
 {
 	ft_putstr_fd("minishell: ", STDERR_FILENO);

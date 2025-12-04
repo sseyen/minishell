@@ -6,16 +6,20 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 19:09:45 by danslav1e         #+#    #+#             */
-/*   Updated: 2025/11/06 19:20:29 by danslav1e        ###   ########.fr       */
+/*   Updated: 2025/12/04 02:23:51 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-/*
-** Извлекает 'KEY' из строки 'KEY=VALUE'.
-** Возвращает strdup, который нужно освободить.
-*/
+/**
+ * @brief
+ * Extracts the 'KEY' from a 'KEY=VALUE' string.
+ *
+ * @return
+ * A malloc'd string containing the KEY. Must be freed.
+ * Returns NULL on malloc failure.
+ */
 char	*get_key_from_var(char *var)
 {
 	char	*equal_sign;
@@ -26,13 +30,20 @@ char	*get_key_from_var(char *var)
 		key = ft_substr(var, 0, equal_sign - var);
 	else
 		key = ft_strdup(var);
+	if (!key)
+		error_msg("export", NULL, "malloc error", FAILURE);
 	return (key);
 }
 
-/*
-** Находит индекс переменной 'key' в 'envp'.
-** Возвращает -1, если не найдено.
-*/
+/**
+ * @brief
+ * Finds the index of an environment variable 'key' in `envp`.
+ *
+ * @return
+ * The index (0 or more) if found.
+ * -1 if not found.
+ * -2 on malloc error.
+ */
 int	find_env_var_index(char **envp, char *key)
 {
 	int		i;
@@ -44,20 +55,41 @@ int	find_env_var_index(char **envp, char *key)
 	while (envp[i])
 	{
 		env_key = get_key_from_var(envp[i]);
-		if (env_key)
+		if (!env_key)
+			return (-2);
+		if (ft_strncmp(key, env_key, key_len + 1) == 0)
 		{
-			if (ft_strncmp(key, env_key, key_len + 1) == 0)
-			{
-				free(env_key);
-				return (i);
-			}
 			free(env_key);
+			return (i);
 		}
-        else
-        {
-            //stop program
-        }
+		free(env_key);
 		i++;
 	}
 	return (-1);
+}
+
+/**
+ * @brief
+ * Creates and sets a variable in envp (e.g., "PWD=/new/path").
+ * Handles malloc errors gracefully.
+ */
+int	set_new_env_var(t_shell_state *state, char *key, char *value)
+{
+	char	*temp_str;
+	char	*full_var;
+
+	temp_str = ft_strjoin(key, "=");
+	if (!temp_str)
+		return (error_msg("cd", NULL, "malloc error", FAILURE));
+	full_var = ft_strjoin(temp_str, value);
+	free(temp_str);
+	if (!full_var)
+		return (error_msg("cd", NULL, "malloc error", FAILURE));
+	if (set_env_var(state, full_var) == FAILURE)
+	{
+		free(full_var);
+		return (FAILURE);
+	}
+	free(full_var);
+	return (SUCCESS);
 }

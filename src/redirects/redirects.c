@@ -6,17 +6,20 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 22:00:15 by danslav1e         #+#    #+#             */
-/*   Updated: 2025/11/11 17:01:44 by danslav1e        ###   ########.fr       */
+/*   Updated: 2025/12/04 02:23:51 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-/*
-** Применяет один редирект.
-** Возвращает файловый дескриптор открытого файла или -1 при ошибке.
-*/
-static int	create_redirect_fd(t_redirect *redir)
+/**
+ * @brief
+ * Opens the target file with the correct flags based on redirect type.
+ *
+ * @param redir The redirect token.
+ * @return The file descriptor, or -1 on error.
+ */
+int	create_redirect_fd(t_redirect *redir)
 {
 	int	fd;
 
@@ -30,14 +33,22 @@ static int	create_redirect_fd(t_redirect *redir)
 	else if (redir->type == REDIRECT_HEREDOC)
 		fd = redir->heredoc_fd;
 	if (fd == -1)
-		perror(redir->target);
+	{
+		error_msg(redir->target, NULL, strerror(errno), FAILURE);
+	}
 	return (fd);
 }
 
-/*
-** Итерируется по всем редиректам в t_node и применяет их.
-** Возвращает SUCCESS (0) или FAILURE (1).
-*/
+/**
+ * @brief
+ * Iterates through all redirects in a node and applies them.
+ *
+ * Redirects are applied in order. The last one determines the final
+
+ * stdin/stdout. Intermediate files are created/truncated but closed immediately.
+ *
+ * @return SUCCESS (0) or FAILURE (1).
+ */
 int	apply_redirects(t_node *node)
 {
 	size_t	i;
@@ -65,9 +76,11 @@ int	apply_redirects(t_node *node)
 	return (SUCCESS);
 }
 
-/*
-** Восстанавливает STDIN и STDOUT после редиректа для built-in.
-*/
+/**
+ * @brief
+ * Restores the original STDIN and STDOUT from saved file descriptors.
+ * Used by built-ins running in the parent process.
+ */
 void	restore_stdio(int saved_stdin, int saved_stdout)
 {
 	if (saved_stdin != -1)

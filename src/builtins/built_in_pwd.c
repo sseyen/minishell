@@ -6,30 +6,28 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/10 16:41:24 by danslav1e         #+#    #+#             */
-/*   Updated: 2025/11/06 20:48:19 by danslav1e        ###   ########.fr       */
+/*   Updated: 2025/12/04 02:23:51 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
+/**
+ * @brief
+ * Built-in 'pwd' command.
+ * Prints the current working directory.
+ * Per the subject, it does not accept any options.
+ */
 int	built_in_pwd(t_node *node)
 {
 	char	*pwd;
 
 	if (node->argc != 1)
-	{
-		error_msg("pwd", "too many arguments");
-		return (FAILURE);
-	}
+		return (error_msg("pwd", NULL, "too many arguments", FAILURE));
 	pwd = getcwd(NULL, 0);
 	if (!pwd)
-	{
-		return (error_msg_cmd("pwd: error retrieving current directory",
-				"getcwd: cannot access parent directories", strerror(errno),
-				FAILURE));
-	}
-	ft_putstr_fd(pwd, STDOUT_FILENO);
-	write(STDOUT_FILENO, "\n", 1);
+		return (error_msg("pwd", NULL, NULL, FAILURE));
+	ft_putendl_fd(pwd, STDOUT_FILENO);
 	free(pwd);
 	return (SUCCESS);
 }

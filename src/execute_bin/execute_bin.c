@@ -1,69 +1,89 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   external.c                                         :+:      :+:    :+:   */
+/*   execute_bin.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/10 17:19:01 by danslav1e         #+#    #+#             */
-/*   Updated: 2025/11/11 18:22:08 by danslav1e        ###   ########.fr       */
+/*   Created: 2025/11/19 18:22:47 by danslav1e         #+#    #+#             */
+/*   Updated: 2025/12/04 02:23:51 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static char	*find_in_path(char *cmd, t_shell_state *state)
+/**
+ * @brief
+ * Searches for the command `cmd` in the directories listed in $PATH.
+ *
+ * @return
+ * A malloc'd string containing the full path to the executable.
+ * NULL if not found (or $PATH is unset).
+ * Exits the process with FAILURE on malloc error.
+ */
+char	*find_in_path(char *cmd, t_shell_state *state)
 {
 	char	**paths;
 	char	*path_env;
-	char	*temp_path;
-	char	*full_path;
 	int		i;
+	char	*path;
 
 	path_env = find_env_var_value("PATH", state);
 	if (!path_env)
-		return (NULL); // $PATH не установлен
+		return (NULL);
 	paths = ft_split(path_env, ':');
 	if (!paths)
 	{
-		perror("minishell: malloc");
-		exit(FAILURE);
+		free_all_resources(state);
+		exit(error_msg("malloc", NULL, "memory allocation failed", FAILURE));
 	}
 	i = 0;
 	while (paths[i])
 	{
-		temp_path = ft_strjoin(paths[i], "/");
-		if (!temp_path)
-		{
-			perror("minishell: malloc");
-			exit(FAILURE);
-		}
-		full_path = ft_strjoin(temp_path, cmd);
-		free(temp_path);
-		if (!full_path)
-		{
-			perror("minishell: malloc");
-			exit(FAILURE);
-		}
-		if (access(full_path, F_OK | X_OK) == 0)
-		{
-			// Нашли!
-			free_split_array(paths);
-			return (full_path);
-		}
-		free(full_path);
-		i++;
+		path = check_one_path(state, paths, paths[i++], cmd);
+		if (path)
+			return (path);
 	}
 	free_split_array(paths);
 	return (NULL);
 }
 
-/*
-** Проверяет, является ли данный путь (абсолютный или относительный)
-** исполняемым файлом.
-** Выходит (exit) с ошибкой 126, если это директория или нет прав.
-*/
-static void	check_path_validity(char *path)
+char	*check_one_path(t_shell_state *state, char **paths, char *path,
+		char *cmd)
+{
+	char	*temp_path;
+	char	*full_path;
+
+	temp_path = ft_strjoin(path, "/");
+	if (!temp_path)
+	{
+		free_split_array(paths);
+		free_all_resources(state);
+		exit(error_msg("malloc", NULL, "memory allocation failed", FAILURE));
+	}
+	full_path = ft_strjoin(temp_path, cmd);
+	free(temp_path);
+	if (!full_path)
+	{
+		free_split_array(paths);
+		free_all_resources(state);
+		exit(error_msg("malloc", NULL, "memory allocation failed", FAILURE));
+	}
+	if (access(full_path, F_OK | X_OK) == 0)
+	{
+		free_split_array(paths);
+		return (full_path);
+	}
+	free(full_path);
+	return (NULL);
+}
+
+/**
+ * @brief
+ * Checks if a given absolute/relative path is valid and executable.
+ * Exits with 126 or 127 on failure.
+ */
+void	check_path_validity(t_shell_state *state, char *path)
 {
 	struct stat	st;
 
@@ -71,31 +91,27 @@ static void	check_path_validity(char *path)
 	{
 		if (S_ISDIR(st.st_mode))
 		{
-			// Это директория
-			error_msg_cmd(path, NULL, "is a directory", 126);
-			exit(126);
+			free_all_resources(state);
+			exit(error_msg(path, NULL, "is a directory", 126));
 		}
 	}
-	// Проверяем доступ (Существует?)
 	if (access(path, F_OK) == -1)
 	{
-		// Файл не найден (для ./cmd или /bin/cmd)
-		error_msg_cmd(path, NULL, strerror(errno), 127);
-		exit(127);
+		free_all_resources(state);
+		exit(error_msg(path, NULL, strerror(errno), 127));
 	}
 	if (access(path, X_OK) == -1)
 	{
-		// Файл существует, но нет прав на исполнение
-		error_msg_cmd(path, NULL, strerror(errno), 126);
-		exit(126);
+		free_all_resources(state);
+		exit(error_msg(path, NULL, strerror(errno), 126));
 	}
 }
 
-/*
-** Основная функция запуска.
-** Эта функция вызывается *только* в дочернем процессе.
-** Она *никогда* не возвращает управление.
-*/
+/**
+ * @brief
+ * Executes an external command using `execve`.
+ * This function is called in a child process and never returns on success.
+ */
 void	execute_bin(t_node *node, t_shell_state *state)
 {
 	char	*cmd;
@@ -103,28 +119,33 @@ void	execute_bin(t_node *node, t_shell_state *state)
 
 	cmd = node->argv[0];
 	if (!cmd || !*cmd)
+	{
+		free_all_resources(state);
 		exit(SUCCESS);
+	}
 	if (ft_strchr(cmd, '/'))
 	{
-		// Случай 1: Путь указан (e.g. "/bin/ls" or "./minishell")
-		check_path_validity(cmd);
+		check_path_validity(state, cmd);
 		path = cmd;
 	}
 	else
 	{
-		// Случай 2: Имя команды (e.g. "ls") - ищем в $PATH
 		path = find_in_path(cmd, state);
 		if (!path)
 		{
-			error_msg_cmd(cmd, NULL, "command not found", 127);
-			exit(127);
+			free_all_resources(state);
+			exit(error_msg(cmd, NULL, "command not found", 127));
 		}
 	}
-	// Если мы здесь, 'path' - это валидный, исполняемый файл
 	execve(path, node->argv, state->envp);
-	// Если execve ВЕРНУЛСЯ - это 100% ошибка
-	error_msg_cmd(cmd, NULL, strerror(errno), 126);
+	exit_failed_bin(state, cmd, path);
+}
+
+void	exit_failed_bin(t_shell_state *state, char *cmd, char *path)
+{
+	error_msg(cmd, NULL, strerror(errno), 126);
 	if (path != cmd)
-		free(path); // Освобождаем path, только если мы его аллоцировали
+		free(path);
+	free_all_resources(state);
 	exit(126);
 }
