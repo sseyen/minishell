@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test_pwd.c                                         :+:      :+:    :+:   */
+/*   pwd_test.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
+/*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 01:30:58 by danslav1e         #+#    #+#             */
-/*   Updated: 2025/11/20 01:46:24 by danslav1e        ###   ########.fr       */
+/*   Updated: 2025/12/11 15:10:27 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "../include/test.h"
 
 // Структура для описания одного тест-кейса
 typedef struct s_test_case {
@@ -52,7 +52,7 @@ void	print_test_header(int index, char *desc)
 	printf("**************************************************\n");
 }
 
-int	main(int argc, char **argv, char **envp)
+int	test_pwd(int argc, char **argv, char **envp)
 {
 	t_shell_state	state;
 	t_node			*node;
