@@ -6,22 +6,11 @@
 /*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/16 23:32:21 by alisseye          #+#    #+#             */
-/*   Updated: 2025/11/23 16:28:09 by alisseye         ###   ########.fr       */
+/*   Updated: 2025/12/11 13:21:18 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
-
-bool	is_binary_operator(t_token_type type)
-{
-	return (type == TOKEN_PIPE || type == TOKEN_OR || type == TOKEN_AND);
-}
-
-bool	is_redirect_operator(t_token_type type)
-{
-	return (type == TOKEN_REDIRECT_IN || type == TOKEN_REDIRECT_OUT || \
-		type == TOKEN_REDIRECT_APPEND || type == TOKEN_REDIRECT_HEREDOC);
-}
 
 bool	is_invalid_sequence(t_token_type prev, t_token_type curr)
 {

@@ -6,7 +6,7 @@
 /*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 15:13:39 by alisseye          #+#    #+#             */
-/*   Updated: 2025/11/23 16:27:35 by alisseye         ###   ########.fr       */
+/*   Updated: 2025/12/11 14:35:33 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,14 +63,7 @@ bool	to_expand(char *str)
 	quoted = NO_QUOTE;
 	while (str[i])
 	{
-		if (str[i] == '\'' && quoted == NO_QUOTE)
-			quoted = SINGLE_QUOTE;
-		else if (str[i] == '\"' && quoted == NO_QUOTE)
-			quoted = DOUBLE_QUOTE;
-		else if (str[i] == '\'' && quoted == SINGLE_QUOTE)
-			quoted = NO_QUOTE;
-		else if (str[i] == '\"' && quoted == DOUBLE_QUOTE)
-			quoted = NO_QUOTE;
+		quoted = update_quote_state(quoted, str[i]);
 		if (str[i] == '$' && quoted != SINGLE_QUOTE)
 			return (true);
 		i++;
