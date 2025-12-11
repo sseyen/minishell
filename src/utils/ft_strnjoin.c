@@ -6,13 +6,13 @@
 /*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 17:18:30 by alisseye          #+#    #+#             */
-/*   Updated: 2025/11/29 17:19:55 by alisseye         ###   ########.fr       */
+/*   Updated: 2025/12/11 13:17:40 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "utils.h"
+#include "minishell.h"
 
-char	*ft_strnjoin(const char *s1, const char *s2, size_t n)
+char	*ft_strnjoin(char *s1, char *s2, size_t n)
 {
 	size_t	i;
 	size_t	j;
