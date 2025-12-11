@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
+/*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 19:09:45 by danslav1e         #+#    #+#             */
-/*   Updated: 2025/11/15 02:25:08 by danslav1e        ###   ########.fr       */
+/*   Updated: 2025/12/11 13:32:09 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,4 +92,20 @@ int	set_new_env_var(t_shell_state *state, char *key, char *value)
 	}
 	free(full_var);
 	return (SUCCESS);
+}
+
+char	*get_env_value(char *key, char **envp)
+{
+	int		index;
+	char	*equal;
+
+	if (!key || !envp)
+		return (NULL);
+	index = find_env_var_index(envp, key);
+	if (index < 0)
+		return (NULL);
+	equal = ft_strchr(envp[index], '=');
+	if (!equal)
+		return (ft_strdup(""));
+	return (ft_strdup(equal + 1));
 }

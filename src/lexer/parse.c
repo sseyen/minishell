@@ -6,7 +6,7 @@
 /*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 15:03:50 by alisseye          #+#    #+#             */
-/*   Updated: 2025/11/23 17:20:52 by alisseye         ###   ########.fr       */
+/*   Updated: 2025/12/11 14:35:32 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,19 @@ void	skip_whitespaces(char *line, size_t *i)
 {
 	while (line[*i] && is_whitespace(line[*i]))
 		(*i)++;
+}
+
+t_quote_type	update_quote_state(t_quote_type state, char c)
+{
+	if (c == '\'' && state == NO_QUOTE)
+		return (SINGLE_QUOTE);
+	if (c == '\'' && state == SINGLE_QUOTE)
+		return (NO_QUOTE);
+	if (c == '\"' && state == NO_QUOTE)
+		return (DOUBLE_QUOTE);
+	if (c == '\"' && state == DOUBLE_QUOTE)
+		return (NO_QUOTE);
+	return (state);
 }
 
 size_t	parse_word(char *line, size_t *i, size_t *count)
@@ -29,20 +42,13 @@ size_t	parse_word(char *line, size_t *i, size_t *count)
 		&& ((!is_whitespace(line[*i]) && !is_operator_char(line[*i])) \
 		|| in_quotes == SINGLE_QUOTE || in_quotes == DOUBLE_QUOTE))
 	{
-		if (in_quotes == NO_QUOTE && line[*i] == '"')
-			in_quotes = DOUBLE_QUOTE;
-		else if (in_quotes == NO_QUOTE && line[*i] == '\'')
-			in_quotes = SINGLE_QUOTE;
-		else if (in_quotes == DOUBLE_QUOTE && line[*i] == '"')
-			in_quotes = NO_QUOTE;
-		else if (in_quotes == SINGLE_QUOTE && line[*i] == '\'')
-			in_quotes = NO_QUOTE;
+		in_quotes = update_quote_state(in_quotes, line[*i]);
 		j++;
 		(*i)++;
 	}
 	if (in_quotes != NO_QUOTE)
 		return (SIZE_MAX);
-	if (j != 0)
+	if (count && j != 0)
 		(*count)++;
 	return (j);
 }
@@ -63,7 +69,7 @@ size_t	parse_operator(char *line, size_t *i, size_t *count)
 		if (line[*i - 1] == '(' || line[*i - 1] == ')')
 			break ;
 	}
-	if (j != 0)
+	if (count && j != 0)
 		(*count)++;
 	return (j);
 }

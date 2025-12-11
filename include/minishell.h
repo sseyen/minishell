@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
+/*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:07:18 by alisseye          #+#    #+#             */
-/*   Updated: 2025/12/01 17:14:14 by alisseye         ###   ########.fr       */
+/*   Updated: 2025/12/11 13:18:02 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -235,7 +235,6 @@ void				restore_stdio(int saved_stdin, int saved_stdout);
 
 // utils
 
-// error.c
 int					error_msg(char *cmd, char *arg, char *custom_msg,
 						int exit_code);
 
@@ -249,6 +248,6 @@ int		tokenize(char *line, t_token **tokens, t_shell_state *state);
 bool	is_whitespace(char c);
 bool	is_operator_char(char c);
 char	*ft_strndup(const char *s1, size_t n);
-char	*ft_strnjoin(char const *s1, char const *s2, size_t n);
+char	*ft_strnjoin(char *s1, char *s2, size_t n);
 
 #endif

@@ -6,42 +6,28 @@
 /*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/25 16:04:23 by alisseye          #+#    #+#             */
-/*   Updated: 2025/12/01 16:18:52 by alisseye         ###   ########.fr       */
+/*   Updated: 2025/12/11 14:35:22 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
-
-t_quote_type	handle_quote(t_quote_type quote_type, char c, size_t *i)
-{
-	t_quote_type	tar_quote_type;
-
-	tar_quote_type = quote_type;
-	if (c == '\'' && quote_type == NO_QUOTE)
-		tar_quote_type = SINGLE_QUOTE;
-	else if (c == '\'' && quote_type == SINGLE_QUOTE)
-		tar_quote_type = NO_QUOTE;
-	else if (c == '\"' && quote_type == NO_QUOTE)
-		tar_quote_type = DOUBLE_QUOTE;
-	else if (c == '\"' && quote_type == DOUBLE_QUOTE)
-		tar_quote_type = NO_QUOTE;
-	if (tar_quote_type != quote_type)
-		(*i)++;
-	return (tar_quote_type);
-}
 
 void	remove_quotes(t_token *token)
 {
 	size_t			i;
 	size_t			j;
 	t_quote_type	quote_type;
+	t_quote_type	new_quote;
 
 	i = 0;
 	j = 0;
 	quote_type = NO_QUOTE;
 	while (token->value[i])
 	{
-		quote_type = handle_quote(quote_type, token->value[i], &i);
+		new_quote = update_quote_state(quote_type, token->value[i]);
+		if (new_quote != quote_type)
+			i++;
+		quote_type = new_quote;
 		token->value[j++] = token->value[i++];
 	}
 }
