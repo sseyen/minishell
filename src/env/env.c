@@ -6,30 +6,39 @@
 /*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/11 18:36:30 by alisseye          #+#    #+#             */
-/*   Updated: 2025/12/14 19:30:48 by alisseye         ###   ########.fr       */
+/*   Updated: 2025/12/14 19:33:25 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	**init_env(char **envp)
+static size_t	env_len(char **envp)
 {
-	char	**envp_copy;
 	size_t	i;
-
-	if (!envp)
-	{
-		envp_copy = malloc(sizeof(char *));
-		if (!envp_copy)
-			return (NULL);
-		envp_copy[0] = NULL;
-		return (envp_copy);
-	}
 
 	i = 0;
 	while (envp[i])
 		i++;
-	envp_copy = malloc((i + 1) * sizeof(char *));
+	return (i);
+}
+
+static char	**alloc_empty_env(void)
+{
+	char	**envp_copy;
+
+	envp_copy = malloc(sizeof(char *));
+	if (!envp_copy)
+		return (NULL);
+	envp_copy[0] = NULL;
+	return (envp_copy);
+}
+
+static char	**dup_env(char **envp, size_t len)
+{
+	char	**envp_copy;
+	size_t	i;
+
+	envp_copy = malloc((len + 1) * sizeof(char *));
 	if (!envp_copy)
 		return (NULL);
 	i = 0;
@@ -49,16 +58,14 @@ char	**init_env(char **envp)
 	return (envp_copy);
 }
 
-void	print_env(char **envp)
+char	**init_env(char **envp)
 {
-	size_t	i;
+	size_t	len;
 
-	i = 0;
-	while (envp[i])
-	{
-		printf("%s\n", envp[i]);
-		i++;
-	}
+	if (!envp)
+		return (alloc_empty_env());
+	len = env_len(envp);
+	return (dup_env(envp, len));
 }
 
 void	free_env(char **envp)
