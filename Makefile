@@ -1,5 +1,5 @@
 # Имя исполнимого файла для теста
-NAME        = test_pwd
+NAME        = minishell
 
 # Компилятор и флаги
 CC          = cc
@@ -30,6 +30,12 @@ SRCS        = \
               src/execute_bin/execute_bin_utils.c \
               src/executor/executor.c \
               src/executor/subshell_or_and.c \
+              src/parse/build_ast.c \
+              src/parse/parse_expr.c \
+              src/parse/parse_command.c \
+              src/parse/parser_utils.c \
+              src/parse/free_ast.c \
+              src/redirects/heredoc.c \
               src/redirects/redirects.c \
               src/pipes/pipe.c \
               src/pipes/pipe_utils.c \
@@ -97,14 +103,15 @@ TEST_SRCS = $(TEST_DIR)/main_test.c \
 			$(TEST_DIR)/env/env_test.c \
 			$(TEST_DIR)/lexer/count_tokens_test.c \
 			$(TEST_DIR)/lexer/fill_tokens_test.c \
-			$(TEST_DIR)/lexer/expand_tokens_test.c
+            $(TEST_DIR)/lexer/expand_tokens_test.c \
+            $(TEST_DIR)/ast/build_ast_test.c
 
 TEST_OBJS = $(TEST_SRCS:%.c=$(TEST_OBJS_DIR)/%.o)
 
 TEST_CFLAGS = $(CFLAGS) -I tests/include -I src/lexer
 
 $(TEST): $(LIBFT) $(TEST_OBJS) $(OBJS)
-	$(CC) $(TEST_OBJS) $(OBJS) -L libft -lft -o $(TEST)
+	$(CC) $(TEST_OBJS) $(OBJS) $(LIBS) -o $(TEST)
 
 $(TEST_OBJS_DIR)/%.o: %.c
 	@mkdir -p $(dir $@)
