@@ -87,8 +87,12 @@ TEST_DIR = tests
 TEST_OBJS_DIR = obj/tests
 
 
+
 TEST_SRCS = $(TEST_DIR)/main_test.c \
-            $(TEST_DIR)/builtins/test_pwd.c \
+            $(TEST_DIR)/builtins/pwd_test.c \
+            $(TEST_DIR)/utils/print_test_header.c \
+            $(TEST_DIR)/utils/print_result.c \
+            $(TEST_DIR)/utils/print_summary.c \
             $(TEST_DIR)/utils/print_tokens.c \
 			$(TEST_DIR)/env/env_test.c \
 			$(TEST_DIR)/lexer/count_tokens_test.c \
@@ -121,7 +125,7 @@ clean:
 
 fclean: clean
 	@echo "Cleaning executable..."
-	@rm -f $(NAME)
+	@rm -f $(NAME) $(TEST)
 	@make -s -C $(LIBFT_DIR) fclean
 
 re: fclean all
