@@ -6,7 +6,7 @@
 /*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:07:23 by alisseye          #+#    #+#             */
-/*   Updated: 2025/12/14 19:26:59 by alisseye         ###   ########.fr       */
+/*   Updated: 2025/12/14 20:12:27 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,35 +27,36 @@ void	exit_minishell(t_shell_state *state, int exit_code)
 int	handle_line(char *line, t_shell_state *state)
 {
 	t_token	*tokens;
+	int		ret;
 
-	if (tokenize(line, &tokens, state) != 0)
-		return (1);
-	if (build_ast(tokens, &state->token_tree) != 0)
+	ret = tokenize(line, &tokens, state);
+	if (ret != 0)
+		return (ret);
+	ret = build_ast(tokens, &state->token_tree);
+	if (ret != 0)
 	{
 		if (state->token_tree)
 			free_ast(state->token_tree);
 		state->token_tree = NULL;
-		return (1);
+		return (ret);
 	}
 	if (state->token_tree)
 	{
-		if (prepare_heredocs(state->token_tree) != 0)
-		{
-			free_ast(state->token_tree);
-			state->token_tree = NULL;
-			return (1);
-		}
-		execute_ast(state->token_tree, state);
+		ret = prepare_heredocs(state->token_tree);
+		if (ret == 0)
+			execute_ast(state->token_tree, state);
 	}
 	if (state->token_tree)
 		free_ast(state->token_tree);
 	state->token_tree = NULL;
-	return (0);
+	return (ret);
 }
 
 int	minishell_loop(t_shell_state *state)
 {
 	char	*line;
+	int		ret;
+	size_t	i;
 
 	while (1)
 	{
@@ -64,8 +65,17 @@ int	minishell_loop(t_shell_state *state)
 			break ;
 		if (*line)
 			add_history(line);
-		if (handle_line(line, state) != 0)
-			state->last_exit_code = 1;
+		i = 0;
+		while (line[i] && is_whitespace(line[i]))
+			i++;
+		if (line[i] == '\0')
+		{
+			free(line);
+			continue ;
+		}
+		ret = handle_line(line, state);
+		if (ret != 0)
+			state->last_exit_code = ret;
 		free(line);
 	}
 	return (state->last_exit_code);

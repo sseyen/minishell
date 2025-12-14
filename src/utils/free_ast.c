@@ -6,11 +6,11 @@
 /*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/14 18:25:00 by alisseye          #+#    #+#             */
-/*   Updated: 2025/12/14 18:28:53 by alisseye         ###   ########.fr       */
+/*   Updated: 2025/12/14 20:09:23 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parse.h"
+#include "../parse/parse.h"
 
 static void	free_redirects(t_redirect *redir, size_t count)
 {
