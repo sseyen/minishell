@@ -6,7 +6,7 @@
 /*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 17:30:59 by alisseye          #+#    #+#             */
-/*   Updated: 2025/11/23 17:27:26 by alisseye         ###   ########.fr       */
+/*   Updated: 2025/12/14 19:55:07 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	tokenize(char *line, t_token **tokens, t_shell_state *state)
 	ret_code = 0;
 	count = count_tokens(line);
 	if (count == SIZE_MAX)
-		return (258);
+		return (error_msg("syntax error", NULL, "unclosed quotes", 258));
 	*tokens = malloc(sizeof(t_token) * (count + 1));
 	if (!*tokens)
 		return (1);
