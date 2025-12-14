@@ -34,7 +34,6 @@ SRCS        = \
               src/parse/parse_expr.c \
               src/parse/parse_command.c \
               src/parse/parser_utils.c \
-              src/parse/free_ast.c \
               src/redirects/heredoc.c \
               src/redirects/redirects.c \
               src/pipes/pipe.c \
@@ -50,6 +49,7 @@ SRCS        = \
               src/builtins/built_in_pwd.c \
               src/builtins/built_in_unset.c \
               src/utils/errors.c \
+              src/utils/free_ast.c \
               src/utils/is_whitespace.c \
               src/utils/is_operator_char.c \
               src/utils/ft_strndup.c \
