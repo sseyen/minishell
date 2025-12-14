@@ -6,7 +6,7 @@
 /*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:07:23 by alisseye          #+#    #+#             */
-/*   Updated: 2025/12/14 19:26:59 by alisseye         ###   ########.fr       */
+/*   Updated: 2025/12/14 20:12:27 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,24 +43,20 @@ int	handle_line(char *line, t_shell_state *state)
 	if (state->token_tree)
 	{
 		ret = prepare_heredocs(state->token_tree);
-		if (ret != 0)
-		{
-			free_ast(state->token_tree);
-			state->token_tree = NULL;
-			return (ret);
-		}
-		execute_ast(state->token_tree, state);
+		if (ret == 0)
+			execute_ast(state->token_tree, state);
 	}
 	if (state->token_tree)
 		free_ast(state->token_tree);
 	state->token_tree = NULL;
-	return (0);
+	return (ret);
 }
 
 int	minishell_loop(t_shell_state *state)
 {
 	char	*line;
 	int		ret;
+	size_t	i;
 
 	while (1)
 	{
@@ -69,6 +65,14 @@ int	minishell_loop(t_shell_state *state)
 			break ;
 		if (*line)
 			add_history(line);
+		i = 0;
+		while (line[i] && is_whitespace(line[i]))
+			i++;
+		if (line[i] == '\0')
+		{
+			free(line);
+			continue ;
+		}
 		ret = handle_line(line, state);
 		if (ret != 0)
 			state->last_exit_code = ret;
