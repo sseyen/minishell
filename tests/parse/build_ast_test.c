@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   build_ast_test.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: autogen <autogen@example.com>              +#+  +:+       +#+        */
+/*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/14 19:05:00 by autogen           #+#    #+#             */
-/*   Updated: 2025/12/14 19:05:00 by autogen          ###   ########.fr       */
+/*   Updated: 2025/12/14 19:42:51 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ static int	run_case(char *line, int (*check)(t_node *), char **envp)
 	return (ok);
 }
 
-int				test_build_ast(int argc, char **argv, char **envp)
+int	test_build_ast(int argc, char **argv, char **envp)
 {
 	int	pass;
 

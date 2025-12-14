@@ -6,7 +6,7 @@
 /*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:07:18 by alisseye          #+#    #+#             */
-/*   Updated: 2025/12/14 18:34:47 by alisseye         ###   ########.fr       */
+/*   Updated: 2025/12/14 19:41:08 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,9 +83,9 @@ typedef struct s_token
 
 typedef struct s_expand_ctx
 {
-	char	**new_value;
-	size_t	index;
-	size_t	from;
+	char			**new_value;
+	size_t			index;
+	size_t			from;
 }					t_expand_ctx;
 
 typedef enum e_redirect_type
@@ -133,8 +133,8 @@ typedef struct s_shell_state
 }					t_shell_state;
 
 // ast
-int				build_ast(t_token *tokens, t_node **root);
-void			free_ast(t_node *node);
+int					build_ast(t_token *tokens, t_node **root);
+void				free_ast(t_node *node);
 
 // builtins
 
@@ -252,15 +252,16 @@ int					error_msg(char *cmd, char *arg, char *custom_msg,
 						int exit_code);
 
 // env utils
-char	*get_env_value(char *key, char **envp);
+char				*get_env_value(char *key, char **envp);
 
 // lexer
-int		tokenize(char *line, t_token **tokens, t_shell_state *state);
+int					tokenize(char *line, t_token **tokens, \
+						t_shell_state *state);
 
 // utils
-bool	is_whitespace(char c);
-bool	is_operator_char(char c);
-char	*ft_strndup(const char *s1, size_t n);
-char	*ft_strnjoin(char *s1, char *s2, size_t n);
+bool				is_whitespace(char c);
+bool				is_operator_char(char c);
+char				*ft_strndup(const char *s1, size_t n);
+char				*ft_strnjoin(char *s1, char *s2, size_t n);
 
 #endif

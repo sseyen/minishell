@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_in_exit.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
+/*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/10 16:41:12 by danslav1e         #+#    #+#             */
-/*   Updated: 2025/11/20 01:32:11 by danslav1e        ###   ########.fr       */
+/*   Updated: 2025/12/14 19:41:35 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ int	check_overflow(unsigned long long n, char c_digit, int sign)
 		cutoff = 922337203685477580;
 		cutlim = 8;
 	}
-	if (n > cutoff || (n == cutoff && (long long unsigned int)(c_digit - '0') > cutlim))
+	if (n > cutoff || (n == cutoff \
+		&& (long long unsigned int)(c_digit - '0') > cutlim))
 		return (false);
 	return (true);
 }

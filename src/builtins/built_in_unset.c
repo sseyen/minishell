@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_in_unset.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
+/*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/10 16:41:28 by danslav1e         #+#    #+#             */
-/*   Updated: 2025/11/20 01:35:56 by danslav1e        ###   ########.fr       */
+/*   Updated: 2025/12/14 19:41:55 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@ void	remove_var(int index, t_shell_state *state)
  */
 int	built_in_unset(t_node *node, t_shell_state *state)
 {
-	int	index;
+	int		index;
 	size_t	i;
-	int	exit_code;
+	int		exit_code;
 
 	i = 1;
 	exit_code = SUCCESS;

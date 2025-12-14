@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_in_export.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
+/*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 01:40:40 by danslav1e         #+#    #+#             */
-/*   Updated: 2025/11/20 01:36:20 by danslav1e        ###   ########.fr       */
+/*   Updated: 2025/12/14 19:42:06 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,8 @@ int	set_env_var(t_shell_state *state, char *var)
 int	handle_export_args(t_node *node, t_shell_state *state)
 {
 	size_t		i;
-	int		exit_code;
-	char	*arg;
+	int			exit_code;
+	char		*arg;
 
 	i = 1;
 	exit_code = SUCCESS;
