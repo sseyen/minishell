@@ -6,7 +6,7 @@
 /*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/11 18:36:30 by alisseye          #+#    #+#             */
-/*   Updated: 2025/10/11 20:11:55 by alisseye         ###   ########.fr       */
+/*   Updated: 2025/12/14 19:30:48 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,15 @@ char	**init_env(char **envp)
 {
 	char	**envp_copy;
 	size_t	i;
+
+	if (!envp)
+	{
+		envp_copy = malloc(sizeof(char *));
+		if (!envp_copy)
+			return (NULL);
+		envp_copy[0] = NULL;
+		return (envp_copy);
+	}
 
 	i = 0;
 	while (envp[i])
