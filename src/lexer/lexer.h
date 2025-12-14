@@ -6,7 +6,7 @@
 /*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 04:23:37 by alisseye          #+#    #+#             */
-/*   Updated: 2025/12/11 14:35:23 by alisseye         ###   ########.fr       */
+/*   Updated: 2025/12/14 17:36:20 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,6 @@ bool			to_expand(char *str);
 // Expand utils
 char			*join_strings(char *s1, char *s2, size_t from, size_t to);
 char			*parse_var(char *str, t_shell_state *state, size_t *index);
-char			*handle_var(char *token_value, size_t *from, size_t *i, \
-				t_shell_state *state);
 int				handle_eof(char *token_value, char **new_value, \
 				size_t from, size_t i);
 

@@ -81,6 +81,13 @@ typedef struct s_token
 	bool			quoted;
 }					t_token;
 
+typedef struct s_expand_ctx
+{
+	char	**new_value;
+	size_t	index;
+	size_t	from;
+}					t_expand_ctx;
+
 typedef enum e_redirect_type
 {
 	REDIRECT_IN,
