@@ -1,40 +1,109 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fill_tokens_test.c                                 :+:      :+:    :+:   */
+/*   fill_tokens_test.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: autogen <autogen@example.com>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/11 14:07:05 by alisseye          #+#    #+#             */
-/*   Updated: 2025/12/01 16:38:13 by alisseye         ###   ########.fr       */
+/*   Created: 2025/12/11 18:35:00 by autogen           #+#    #+#             */
+/*   Updated: 2025/12/11 18:35:00 by autogen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "test.h"
+#include "../include/test.h"
+#include "../../src/lexer/lexer.h"
+
+static t_token	*alloc_tokens(char *line, size_t *count)
+{
+	t_token	*tokens;
+
+	*count = count_tokens(line);
+	tokens = malloc(sizeof(t_token) * (*count + 1));
+	if (!tokens)
+		return (NULL);
+	ft_memset(tokens, 0, sizeof(t_token) * (*count + 1));
+	set_token(&tokens[*count], (t_token_data){TOKEN_EOF, NULL, false, false});
+	if (fill_tokens(line, tokens) != 0)
+	{
+		free_tokens(tokens);
+		return (NULL);
+	}
+	return (tokens);
+}
+
+static int	check_tokens(char *line, t_token_type *expected, size_t exp_count)
+{
+	t_token	*tokens;
+	size_t	count;
+	size_t	i;
+	int		ok;
+
+	tokens = alloc_tokens(line, &count);
+	if (!tokens)
+	{
+		print_result(0);
+		return (0);
+	}
+	ok = 1;
+	i = 0;
+	while (i < exp_count)
+	{
+		if (tokens[i].type != expected[i])
+			ok = 0;
+		i++;
+	}
+	print_result(ok);
+	free_tokens(tokens);
+	return (ok);
+}
 
 int	test_fill_tokens(int argc, char **argv)
 {
-	t_token	*tokens;
-	size_t	token_count;
+	int				pass;
+	t_token_type	exp1[4];
+	t_token_type	exp2[4];
+	t_token_type	exp3[11];
+	t_token_type	exp4[8];
 
 	(void)argc;
-	printf("Fill Tokens Test:\n");
-	printf("Input: %s\n", argv[2]);
-	token_count = count_tokens(argv[2]);
-	tokens = malloc(sizeof(t_token) * (token_count + 1));
-	if (!tokens)
-		return (printf("Memory allocation failed\n"), 1);
-	set_token(&tokens[token_count], \
-				(t_token_data){TOKEN_EOF, NULL, false, false});
-	if (fill_tokens(argv[2], tokens) != 0)
-	{
-		printf("fill_tokens failed\n");
-		free(tokens);
-		return (1);
-	}
-	printf("Output Tokens:\n");
-	print_tokens(tokens);
-	printf("Fill Tokens Test Completed Successfully\n");
-	free_tokens(tokens);
+	(void)argv;
+	pass = 0;
+	printf("\n[INIT] Testing fill_tokens...\n");
+	print_test_header(0, "Words and pipe");
+	exp1[0] = TOKEN_WORD;
+	exp1[1] = TOKEN_WORD;
+	exp1[2] = TOKEN_PIPE;
+	exp1[3] = TOKEN_WORD;
+	pass += check_tokens("echo hello | wc", exp1, 4);
+	print_test_header(1, "Redirect operator");
+	exp2[0] = TOKEN_WORD;
+	exp2[1] = TOKEN_WORD;
+	exp2[2] = TOKEN_REDIRECT_OUT;
+	exp2[3] = TOKEN_WORD;
+	pass += check_tokens("ls -l > out", exp2, 4);
+	print_test_header(2, "Mixed operators");
+	exp3[0] = TOKEN_WORD;
+	exp3[1] = TOKEN_WORD;
+	exp3[2] = TOKEN_REDIRECT_APPEND;
+	exp3[3] = TOKEN_WORD;
+	exp3[4] = TOKEN_PIPE;
+	exp3[5] = TOKEN_OR;
+	exp3[6] = TOKEN_AND;
+	exp3[7] = TOKEN_WORD;
+	exp3[8] = TOKEN_LPAREN;
+	exp3[9] = TOKEN_RPAREN;
+	exp3[10] = TOKEN_WORD;
+	pass += check_tokens("cmd1 cmd2 >> file | || && cmd3 ( ) cmd4", exp3, 11);
+	print_test_header(3, "Sequential redirects without operands");
+	exp4[0] = TOKEN_WORD;
+	exp4[1] = TOKEN_WORD;
+	exp4[2] = TOKEN_REDIRECT_APPEND;
+	exp4[3] = TOKEN_REDIRECT_OUT;
+	exp4[4] = TOKEN_PIPE;
+	exp4[5] = TOKEN_AND;
+	exp4[6] = TOKEN_OR;
+	exp4[7] = TOKEN_WORD;
+	pass += check_tokens("word word>>> | && || word", exp4, 8);
+	print_summary(4, pass);
 	return (0);
 }
