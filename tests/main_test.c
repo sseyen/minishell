@@ -6,7 +6,7 @@
 /*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 05:15:32 by alisseye          #+#    #+#             */
-/*   Updated: 2025/12/11 15:10:41 by alisseye         ###   ########.fr       */
+/*   Updated: 2025/12/14 18:09:22 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ int	main(int argc, char **argv, char **envp)
 		return (test_fill_tokens(argc, argv));
 	else if (ft_strncmp(argv[1], "expand_tokens", 14) == 0)
 		return (test_expand_tokens(argc, argv, envp));
+	else if (ft_strncmp(argv[1], "build_ast", 10) == 0)
+		return (test_build_ast(argc, argv, envp));
 	else if (ft_strncmp(argv[1], "pwd", 4) == 0)
 		return (test_pwd(argc, argv, envp));
 	else

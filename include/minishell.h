@@ -6,7 +6,7 @@
 /*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:07:18 by alisseye          #+#    #+#             */
-/*   Updated: 2025/12/11 13:18:02 by alisseye         ###   ########.fr       */
+/*   Updated: 2025/12/14 18:34:47 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,10 @@ typedef struct s_shell_state
 	int			last_exit_code;
 }					t_shell_state;
 
+// ast
+int				build_ast(t_token *tokens, t_node **root);
+void			free_ast(t_node *node);
+
 // builtins
 
 // built_in_cd.c
@@ -187,6 +191,7 @@ char				*get_key_from_var(char *var);
 int					find_env_var_index(char **envp, char *key);
 int					set_new_env_var(t_shell_state *state, char *key,
 						char *value);
+void				free_tokens(t_token *tokens);
 
 // execute_bin
 
@@ -239,6 +244,7 @@ void				kill_first_process(t_shell_state *state, int fd[2],
 int					create_redirect_fd(t_redirect *redir);
 int					apply_redirects(t_node *node);
 void				restore_stdio(int saved_stdin, int saved_stdout);
+int					prepare_heredocs(t_node *node);
 
 // utils
 

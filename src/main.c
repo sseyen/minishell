@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
+/*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:07:23 by alisseye          #+#    #+#             */
-/*   Updated: 2025/11/21 13:04:25 by alisseye         ###   ########.fr       */
+/*   Updated: 2025/12/14 19:26:59 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,12 @@
 
 void	exit_minishell(t_shell_state *state, int exit_code)
 {
-	size_t	i;
-
 	if (state)
 	{
 		if (state->envp)
 			free_env(state->envp);
 		if (state->token_tree)
-			free_tree(state->token_tree);
+			free_ast(state->token_tree);
 	}
 	exit(exit_code);
 }
@@ -32,17 +30,25 @@ int	handle_line(char *line, t_shell_state *state)
 
 	if (tokenize(line, &tokens, state) != 0)
 		return (1);
-	if (build_tree(tokens, state->token_tree) != 0)
+	if (build_ast(tokens, &state->token_tree) != 0)
 	{
 		if (state->token_tree)
-			free_tree(state->token_tree);
+			free_ast(state->token_tree);
 		state->token_tree = NULL;
 		return (1);
 	}
 	if (state->token_tree)
-		execute_tree(state);
+	{
+		if (prepare_heredocs(state->token_tree) != 0)
+		{
+			free_ast(state->token_tree);
+			state->token_tree = NULL;
+			return (1);
+		}
+		execute_ast(state->token_tree, state);
+	}
 	if (state->token_tree)
-		free_tree(state->token_tree);
+		free_ast(state->token_tree);
 	state->token_tree = NULL;
 	return (0);
 }
@@ -54,6 +60,8 @@ int	minishell_loop(t_shell_state *state)
 	while (1)
 	{
 		line = readline("minishell$ ");
+		if (!line)
+			break ;
 		if (*line)
 			add_history(line);
 		if (handle_line(line, state) != 0)

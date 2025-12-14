@@ -6,7 +6,7 @@
 /*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 19:09:45 by danslav1e         #+#    #+#             */
-/*   Updated: 2025/12/11 13:32:09 by alisseye         ###   ########.fr       */
+/*   Updated: 2025/12/14 19:32:52 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,4 +108,16 @@ char	*get_env_value(char *key, char **envp)
 	if (!equal)
 		return (ft_strdup(""));
 	return (ft_strdup(equal + 1));
+}
+
+void	print_env(char **envp)
+{
+	size_t	i;
+
+	i = 0;
+	while (envp[i])
+	{
+		printf("%s\n", envp[i]);
+		i++;
+	}
 }
