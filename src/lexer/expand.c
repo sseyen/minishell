@@ -6,71 +6,100 @@
 /*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/25 16:04:23 by alisseye          #+#    #+#             */
-/*   Updated: 2025/12/01 16:18:52 by alisseye         ###   ########.fr       */
+/*   Updated: 2025/12/14 17:36:23 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 
-t_quote_type	handle_quote(t_quote_type quote_type, char c, size_t *i)
-{
-	t_quote_type	tar_quote_type;
-
-	tar_quote_type = quote_type;
-	if (c == '\'' && quote_type == NO_QUOTE)
-		tar_quote_type = SINGLE_QUOTE;
-	else if (c == '\'' && quote_type == SINGLE_QUOTE)
-		tar_quote_type = NO_QUOTE;
-	else if (c == '\"' && quote_type == NO_QUOTE)
-		tar_quote_type = DOUBLE_QUOTE;
-	else if (c == '\"' && quote_type == DOUBLE_QUOTE)
-		tar_quote_type = NO_QUOTE;
-	if (tar_quote_type != quote_type)
-		(*i)++;
-	return (tar_quote_type);
-}
-
 void	remove_quotes(t_token *token)
 {
-	size_t			i;
-	size_t			j;
+	size_t			r;
+	size_t			w;
 	t_quote_type	quote_type;
+	t_quote_type	new_quote;
 
-	i = 0;
-	j = 0;
+	r = 0;
+	w = 0;
 	quote_type = NO_QUOTE;
-	while (token->value[i])
+	while (token->value[r])
 	{
-		quote_type = handle_quote(quote_type, token->value[i], &i);
-		token->value[j++] = token->value[i++];
+		new_quote = update_quote_state(quote_type, token->value[r]);
+		if (new_quote != quote_type)
+		{
+			quote_type = new_quote;
+			r++;
+			continue ;
+		}
+		quote_type = new_quote;
+		token->value[w++] = token->value[r++];
 	}
+	token->value[w] = '\0';
+}
+
+static int	process_dollar(t_token *token, t_shell_state *state,
+							t_expand_ctx *ctx)
+{
+	char	*temp;
+	char	*var_value;
+	size_t	start;
+
+	start = ctx->index;
+	ctx->index++;
+	temp = join_strings(*(ctx->new_value), token->value, ctx->from, start);
+	if (!temp)
+		return (1);
+	var_value = parse_var(&token->value[ctx->index], state, &ctx->index);
+	if (!var_value)
+	{
+		free(temp);
+		return (1);
+	}
+	ctx->from = ctx->index;
+	temp = join_strings(temp, var_value, 0, ft_strlen(var_value));
+	free(var_value);
+	if (!temp)
+		return (1);
+	*(ctx->new_value) = temp;
+	return (0);
+}
+
+static int	walk_value(t_token *token, t_shell_state *state, char **new_value)
+{
+	t_expand_ctx	ctx;
+	t_quote_type	quote;
+
+	ctx.index = 0;
+	ctx.from = 0;
+	ctx.new_value = new_value;
+	quote = NO_QUOTE;
+	while (token->value[ctx.index])
+	{
+		quote = update_quote_state(quote, token->value[ctx.index]);
+		if (token->value[ctx.index] == '$' && quote != SINGLE_QUOTE)
+		{
+			if (process_dollar(token, state, &ctx) != 0)
+				return (1);
+			continue ;
+		}
+		ctx.index++;
+	}
+	if (handle_eof(token->value, new_value, ctx.from, ctx.index) != 0)
+		return (1);
+	return (0);
 }
 
 int	expand_str(t_token *token, t_shell_state *state)
 {
 	char	*new_value;
-	char	*temp;
-	size_t	i;
-	size_t	from;
 
-	i = 0;
-	from = 0;
 	new_value = NULL;
-	temp = NULL;
-	while (token->value[i])
+	if (walk_value(token, state, &new_value) != 0)
+		return (1);
+	if (new_value)
 	{
-		if (token->value[i] == '$')
-		{
-			temp = handle_var(token->value, &from, &i, state);
-			if (!temp)
-				return (1);
-			free(new_value);
-			new_value = temp;
-		}
-		i++;
-		if (!token->value[i])
-			if (handle_eof(token->value, &new_value, from, i) != 0)
-				return (1);
+		free(token->value);
+		token->value = new_value;
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:07:23 by alisseye          #+#    #+#             */
-/*   Updated: 2025/12/04 02:18:34 by danslav1e        ###   ########.fr       */
+/*   Updated: 2025/12/27 16:28:00 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,12 @@
 
 void	exit_minishell(t_shell_state *state, int exit_code)
 {
-	size_t	i;
-
 	if (state)
 	{
 		if (state->envp)
 			free_env(state->envp);
 		if (state->token_tree)
-			free_tree(state->token_tree);
+			free_ast(state->token_tree);
 	}
 	exit(exit_code);
 }
@@ -29,35 +27,55 @@ void	exit_minishell(t_shell_state *state, int exit_code)
 int	handle_line(char *line, t_shell_state *state)
 {
 	t_token	*tokens;
+	int		ret;
 
-	if (tokenize(line, &tokens, state) != 0)
-		return (1);
-	if (build_tree(tokens, state->token_tree) != 0)
+	ret = tokenize(line, &tokens, state);
+	if (ret != 0)
+		return (ret);
+	ret = build_ast(tokens, &state->token_tree);
+	if (ret != 0)
 	{
 		if (state->token_tree)
-			free_tree(state->token_tree);
+			free_ast(state->token_tree);
 		state->token_tree = NULL;
-		return (1);
+		return (ret);
 	}
 	if (state->token_tree)
-		execute_tree(state);
+	{
+		ret = prepare_heredocs(state->token_tree);
+		if (ret == 0)
+			execute_ast(state->token_tree, state);
+	}
 	if (state->token_tree)
-		free_tree(state->token_tree);
+		free_ast(state->token_tree);
 	state->token_tree = NULL;
-	return (0);
+	return (ret);
 }
 
 int	minishell_loop(t_shell_state *state)
 {
 	char	*line;
+	int		ret;
+	size_t	i;
 
 	while (1)
 	{
 		line = readline("minishell$ ");
+		if (!line)
+			break ;
 		if (*line)
 			add_history(line);
-		if (handle_line(line, state) != 0)
-			state->last_exit_code = 1;
+		i = 0;
+		while (line[i] && is_whitespace(line[i]))
+			i++;
+		if (line[i] == '\0')
+		{
+			free(line);
+			continue ;
+		}
+		ret = handle_line(line, state);
+		if (ret != 0)
+			state->last_exit_code = ret;
 		free(line);
 	}
 	return (state->last_exit_code);

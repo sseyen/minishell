@@ -6,11 +6,11 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/10 16:04:08 by danslav1e         #+#    #+#             */
-/*   Updated: 2025/12/04 02:23:51 by danslav1e        ###   ########.fr       */
+/*   Updated: 2025/12/27 16:18:28 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "minishell.h"
 
 /**
  * @brief

@@ -6,7 +6,7 @@
 /*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 15:11:12 by alisseye          #+#    #+#             */
-/*   Updated: 2025/11/23 16:30:00 by alisseye         ###   ########.fr       */
+/*   Updated: 2025/12/11 13:19:34 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,11 @@ int	create_token(char *line, size_t *i, t_token *token)
 	size_t	len;
 
 	start = *i;
-	len = parse_word(line, i);
+	len = parse_word(line, i, NULL);
 	if (len > 0)
 		return (create_word_token(&line[start], len, token));
 	start = *i;
-	len = parse_operator(line, i);
+	len = parse_operator(line, i, NULL);
 	if (len > 0)
 		return (create_operator_token(&line[start], len, token));
 	return (1);

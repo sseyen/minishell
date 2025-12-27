@@ -6,7 +6,7 @@
 /*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 04:23:37 by alisseye          #+#    #+#             */
-/*   Updated: 2025/12/01 16:58:35 by alisseye         ###   ########.fr       */
+/*   Updated: 2025/12/14 17:36:20 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,15 @@ void			free_tokens(t_token *tokens);
 int				fill_tokens(char *line, t_token *tokens);
 int				expand_tokens(t_token *tokens, t_shell_state *state);
 
+// Parse
+t_quote_type	update_quote_state(t_quote_type state, char c);
+
 // Validate
 int				validate_tokens(t_token *tokens);
 bool			is_redir_error(t_token_type prev, t_token_type curr);
 bool			is_paren_error(t_token_type prev, t_token_type curr);
+bool			is_binary_operator(t_token_type type);
+bool			is_redirect_operator(t_token_type type);
 
 // Token utils
 void			set_token(t_token *token, t_token_data data);
@@ -60,8 +65,6 @@ bool			to_expand(char *str);
 // Expand utils
 char			*join_strings(char *s1, char *s2, size_t from, size_t to);
 char			*parse_var(char *str, t_shell_state *state, size_t *index);
-char			*handle_var(char *token_value, size_t *from, size_t *i, \
-				t_shell_state *state);
 int				handle_eof(char *token_value, char **new_value, \
 				size_t from, size_t i);
 
