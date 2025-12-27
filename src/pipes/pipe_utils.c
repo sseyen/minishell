@@ -6,7 +6,7 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 00:39:46 by danslav1e         #+#    #+#             */
-/*   Updated: 2025/11/20 00:41:13 by danslav1e        ###   ########.fr       */
+/*   Updated: 2025/12/04 02:48:35 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,5 +40,5 @@ void	kill_first_process(t_shell_state *state, int fd[2], pid_t left)
 {
 	kill(left, SIGTERM);
 	waitpid(left, NULL, 0);
-	return (handle_fork_error(state, fd));
+	handle_fork_error(state, fd);
 }

@@ -6,7 +6,7 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/09 16:34:42 by danslav1e         #+#    #+#             */
-/*   Updated: 2025/12/04 02:23:51 by danslav1e        ###   ########.fr       */
+/*   Updated: 2025/12/04 02:47:35 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,10 @@ void	execute_built_in(t_node *node, t_shell_state *state)
 	saved_stdin = dup(STDIN_FILENO);
 	if (saved_stdout == -1 || saved_stdin == -1)
 	{
+		if (saved_stdout != -1)
+			close(saved_stdout);
+		if (saved_stdin != -1)
+			close(saved_stdin);
 		state->last_exit_code = FAILURE;
 		error_msg("dup", NULL, strerror(errno), FAILURE);
 		return ;
