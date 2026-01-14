@@ -6,7 +6,7 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:07:18 by alisseye          #+#    #+#             */
-/*   Updated: 2025/12/27 16:14:45 by danslav1e        ###   ########.fr       */
+/*   Updated: 2026/01/14 18:44:46 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@
 # include <stdbool.h>
 # include <string.h>
 # include <sys/stat.h>
+# include <stdint.h>
 
 // SIZE_MAX
 # include <stddef.h>
@@ -127,7 +128,7 @@ typedef struct s_node
 
 typedef struct s_shell_state
 {
-	t_node *token_list;
+	t_node *token_tree;
 	char **envp;
 	t_node *first_node;
 	int last_exit_code;
