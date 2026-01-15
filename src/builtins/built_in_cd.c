@@ -6,7 +6,7 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/10 13:21:00 by danslav1e         #+#    #+#             */
-/*   Updated: 2025/12/04 02:24:18 by danslav1e        ###   ########.fr       */
+/*   Updated: 2026/01/14 22:12:57 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,9 +133,10 @@ int	built_in_cd2(t_node *node, t_shell_state *state, char *old_pwd)
 	if (chdir(path) != 0)
 	{
 		free(old_pwd);
+		error_msg("cd", path, NULL, FAILURE);
 		if (path_to_free)
 			free(path_to_free);
-		return (error_msg("cd", path, NULL, FAILURE));
+		return (FAILURE);
 	}
 	if (path_to_free)
 		free(path_to_free);

@@ -6,7 +6,7 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/10 16:41:12 by danslav1e         #+#    #+#             */
-/*   Updated: 2025/12/27 16:16:18 by danslav1e        ###   ########.fr       */
+/*   Updated: 2026/01/15 01:02:08 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	is_valid_llong(char *str)
 	{
 		if (!ft_isdigit(str[i]))
 			return (false);
-		if (check_overflow(n, str[i], sign))
+		if (!check_overflow(n, str[i], sign))
 			return (false);
 		n = n * 10 + (str[i] - '0');
 		i++;

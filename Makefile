@@ -104,7 +104,8 @@ TEST_SRCS = $(TEST_DIR)/main_test.c \
 			$(TEST_DIR)/lexer/count_tokens_test.c \
 			$(TEST_DIR)/lexer/fill_tokens_test.c \
             $(TEST_DIR)/lexer/expand_tokens_test.c \
-            $(TEST_DIR)/ast/build_ast_test.c
+            $(TEST_DIR)/ast/build_ast_test.c \
+            $(TEST_DIR)/ast/print_ast.c
 
 TEST_OBJS = $(TEST_SRCS:%.c=$(TEST_OBJS_DIR)/%.o)
 

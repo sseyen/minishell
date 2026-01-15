@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   test.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 05:19:38 by alisseye          #+#    #+#             */
-/*   Updated: 2025/12/14 18:09:19 by alisseye         ###   ########.fr       */
+/*   Updated: 2026/01/14 19:18:35 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ int		test_fill_tokens(int argc, char **argv);
 int		test_expand_tokens(int argc, char **argv, char **envp);
 int		test_pwd(int argc, char **argv, char **envp);
 int		test_build_ast(int argc, char **argv, char **envp);
+void	print_ast(t_node *root);
 
 // Utils
 int		print_tokens(t_token *tokens);
