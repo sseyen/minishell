@@ -32,6 +32,7 @@ int	fill_tokens(char *line, t_token *tokens)
 {
 	size_t	i;
 	size_t	tok_index;
+	int		ret_code;
 
 	i = 0;
 	tok_index = 0;
@@ -40,8 +41,9 @@ int	fill_tokens(char *line, t_token *tokens)
 		skip_whitespaces(line, &i);
 		if (!line[i])
 			break ;
-		if (create_token(line, &i, &tokens[tok_index]) != 0)
-			return (1);
+		ret_code = create_token(line, &i, &tokens[tok_index]);
+		if (ret_code != 0)
+			return (ret_code);
 		tok_index++;
 	}
 	return (0);

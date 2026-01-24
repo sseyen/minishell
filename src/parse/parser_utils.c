@@ -12,13 +12,6 @@
 
 #include "parse.h"
 
-/**
- * @brief Count tokens until TOKEN_EOF or TOKEN_NONE sentinel.
- *
- * @param tokens Token array.
- *
- * @return Number of usable tokens.
- */
 static size_t	count_len(t_token *tokens)
 {
 	size_t	len;
@@ -29,14 +22,6 @@ static size_t	count_len(t_token *tokens)
 	return (len);
 }
 
-/**
- * @brief Initialize parser state from a token array.
- *
- * @param parser Parser state to fill.
- * @param tokens Token array.
- *
- * @return 0 on success, 1 when arguments are NULL.
- */
 int	init_parser(t_parser *parser, t_token *tokens)
 {
 	if (!parser || !tokens)
@@ -47,13 +32,6 @@ int	init_parser(t_parser *parser, t_token *tokens)
 	return (0);
 }
 
-/**
- * @brief Allocate and zero a parser AST node of the given type.
- *
- * @param type AST node type.
- *
- * @return Node pointer or NULL on allocation failure.
- */
 t_node	*new_node(t_node_type type)
 {
 	t_node	*node;
@@ -63,40 +41,4 @@ t_node	*new_node(t_node_type type)
 		return (NULL);
 	node->type = type;
 	return (node);
-}
-
-bool	is_redir(t_token_type type)
-{
-	return (type == TOKEN_REDIRECT_IN || type == TOKEN_REDIRECT_OUT
-		|| type == TOKEN_REDIRECT_APPEND || type == TOKEN_REDIRECT_HEREDOC);
-}
-
-t_redirect_type	redir_type(t_token_type tok)
-{
-	if (tok == TOKEN_REDIRECT_IN)
-		return (REDIRECT_IN);
-	if (tok == TOKEN_REDIRECT_OUT)
-		return (REDIRECT_OUT);
-	if (tok == TOKEN_REDIRECT_APPEND)
-		return (REDIRECT_APPEND);
-	return (REDIRECT_HEREDOC);
-}
-
-int	fill_redirect(t_parser *p, t_redirect *dst)
-{
-	t_token	*target;
-
-	if (p->idx + 1 >= p->len)
-		return (1);
-	target = &p->tokens[p->idx + 1];
-	if (target->type != TOKEN_WORD || !target->value)
-		return (1);
-	dst->type = redir_type(p->tokens[p->idx].type);
-	dst->target = ft_strdup(target->value);
-	dst->heredoc_fd = -1;
-	dst->heredoc_quoted = target->quoted;
-	if (!dst->target)
-		return (1);
-	p->idx += 2;
-	return (0);
 }
