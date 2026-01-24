@@ -59,6 +59,8 @@ int	test_count_tokens(int argc, char **argv)
 	passed += run_case("echo||<<>>file", 5);
 	print_test_header(11, "Many consecutive operators");
 	passed += run_case("echo|||||<<>>file", 7);
-	print_summary(12, passed);
+	print_test_header(12, "Complex command with subshells and redirection");
+	passed += run_case("(ls -l && echo \"---\" && cat file) > output.txt", 12);
+	print_summary(13, passed);
 	return (0);
 }
