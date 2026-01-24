@@ -6,7 +6,7 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/09 16:34:42 by danslav1e         #+#    #+#             */
-/*   Updated: 2025/12/04 02:47:35 by danslav1e        ###   ########.fr       */
+/*   Updated: 2026/01/24 18:50:33 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,17 +51,14 @@ bool	is_built_in(t_node *node)
  */
 void	execute_built_in(t_node *node, t_shell_state *state)
 {
-	int	saved_stdout;
-	int	saved_stdin;
-
-	saved_stdout = dup(STDOUT_FILENO);
-	saved_stdin = dup(STDIN_FILENO);
-	if (saved_stdout == -1 || saved_stdin == -1)
+	state->saved_fd[0] = dup(STDOUT_FILENO);
+	state->saved_fd[1] = dup(STDIN_FILENO);
+	if (state->saved_fd[0] == -1 || state->saved_fd[1] == -1)
 	{
-		if (saved_stdout != -1)
-			close(saved_stdout);
-		if (saved_stdin != -1)
-			close(saved_stdin);
+		if (state->saved_fd[0] != -1)
+			close(state->saved_fd[0]);
+		if (state->saved_fd[1] != -1)
+			close(state->saved_fd[1]);
 		state->last_exit_code = FAILURE;
 		error_msg("dup", NULL, strerror(errno), FAILURE);
 		return ;
@@ -69,11 +66,11 @@ void	execute_built_in(t_node *node, t_shell_state *state)
 	if (apply_redirects(node) == FAILURE)
 	{
 		state->last_exit_code = FAILURE;
-		restore_stdio(saved_stdin, saved_stdout);
+		restore_stdio(state->saved_fd[1], state->saved_fd[0]);
 		return ;
 	}
 	start_built_in(node, state);
-	restore_stdio(saved_stdin, saved_stdout);
+	restore_stdio(state->saved_fd[1], state->saved_fd[0]);
 }
 
 void	start_built_in(t_node *node, t_shell_state *state)
@@ -115,8 +112,8 @@ void	execute_external(t_node *node, t_shell_state *state)
 	{
 		if (apply_redirects(node) == FAILURE)
 		{
-			free_all_resources(state);
-			exit(FAILURE);
+			state->last_exit_code = FAILURE;
+			exit_minishell(state);
 		}
 		execute_bin(node, state);
 	}

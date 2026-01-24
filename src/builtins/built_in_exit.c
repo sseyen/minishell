@@ -6,7 +6,7 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/10 16:41:12 by danslav1e         #+#    #+#             */
-/*   Updated: 2026/01/15 01:02:08 by danslav1e        ###   ########.fr       */
+/*   Updated: 2026/01/24 18:40:19 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,13 +77,26 @@ int	is_valid_llong(char *str)
  * This function should free all allocated memory for:
  * (1) The AST (t_node tree)
  * (2) The `envp` copy
- * (3) Any other allocated resources.
- * And also clear readline history.
+ * 
+ * Clear readline history.
+ * 
+ * Close opened saved file descriptors.
  */
-int	free_all_resources(t_shell_state *state)
+void	exit_minishell(t_shell_state *state)
 {
-	(void)state;
-	return (state->last_exit_code);
+	if (state->saved_fd[0] > -1)
+		close(state->saved_fd[0]);
+	if (state->saved_fd[1] > -1)
+		close(state->saved_fd[1]);
+	if (state)
+	{
+		if (state->envp)
+			free_env(state->envp);
+		if (state->token_tree)
+			free_ast(state->token_tree);
+	}
+	rl_clear_history();
+	exit(state->last_exit_code);
 }
 
 /**
@@ -120,13 +133,10 @@ long long	ft_atoll(const char *str)
  */
 int	built_in_exit(t_node *node, t_shell_state *state)
 {
-	unsigned char	exit_code;
-
 	if (node->argc == 1)
 	{
 		ft_putendl_fd("exit", STDOUT_FILENO);
-		free_all_resources(state);
-		exit(state->last_exit_code);
+		exit_minishell(state);
 	}
 	if (!is_valid_llong(node->argv[1]))
 	{
@@ -136,7 +146,7 @@ int	built_in_exit(t_node *node, t_shell_state *state)
 	if (node->argc > 2)
 		return (error_msg("exit", NULL, "too many arguments", FAILURE));
 	ft_putendl_fd("exit", STDOUT_FILENO);
-	exit_code = (unsigned char)ft_atoll(node->argv[1]);
-	free_all_resources(state);
-	exit(exit_code);
+	state->last_exit_code = (unsigned char)ft_atoll(node->argv[1]);
+	exit_minishell(state);
+	return (state->last_exit_code);
 }

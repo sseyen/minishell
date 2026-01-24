@@ -6,7 +6,7 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 17:22:44 by danslav1e         #+#    #+#             */
-/*   Updated: 2025/12/04 02:23:51 by danslav1e        ###   ########.fr       */
+/*   Updated: 2026/01/24 18:53:46 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,7 @@ void	create_left_child(t_shell_state *state, t_node *node, int fd[2])
 	close(fd[1]);
 	close(fd[0]);
 	execute_ast(node->left, state);
-	free_all_resources(state);
-	exit(state->last_exit_code);
+	exit_minishell(state);
 }
 
 /**
@@ -38,8 +37,7 @@ void	create_right_child(t_shell_state *state, t_node *node, int fd[2])
 	close(fd[1]);
 	close(fd[0]);
 	execute_ast(node->right, state);
-	free_all_resources(state);
-	exit(state->last_exit_code);
+	exit_minishell(state);
 }
 
 /**

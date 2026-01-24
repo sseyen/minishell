@@ -6,23 +6,11 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:07:23 by alisseye          #+#    #+#             */
-/*   Updated: 2025/12/27 16:28:00 by danslav1e        ###   ########.fr       */
+/*   Updated: 2026/01/24 20:33:38 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	exit_minishell(t_shell_state *state, int exit_code)
-{
-	if (state)
-	{
-		if (state->envp)
-			free_env(state->envp);
-		if (state->token_tree)
-			free_ast(state->token_tree);
-	}
-	exit(exit_code);
-}
 
 int	handle_line(char *line, t_shell_state *state)
 {
@@ -91,9 +79,11 @@ int	main(int argc, char **argv, char **envp)
 	state.envp = NULL;
 	state.token_tree = NULL;
 	state.last_exit_code = 0;
+	state.saved_fd[0] = -1;
+	state.saved_fd[1] = -1;
 	envp_copy = init_env(envp);
 	if (!envp_copy)
-		exit_minishell(&state, 1);
+		exit(FAILURE);
 	state.envp = envp_copy;
 	return (minishell_loop(&state));
 }

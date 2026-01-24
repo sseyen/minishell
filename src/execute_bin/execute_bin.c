@@ -6,7 +6,7 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 18:22:47 by danslav1e         #+#    #+#             */
-/*   Updated: 2025/12/04 02:44:38 by danslav1e        ###   ########.fr       */
+/*   Updated: 2026/01/24 18:50:07 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,9 @@ char	*find_in_path(char *cmd, t_shell_state *state)
 	paths = ft_split(path_env, ':');
 	if (!paths)
 	{
-		free_all_resources(state);
-		exit(error_msg("malloc", NULL, "memory allocation failed", FAILURE));
+		state->last_exit_code = error_msg("malloc", NULL,
+				"memory allocation failed", FAILURE);
+		exit_minishell(state);
 	}
 	i = 0;
 	while (paths[i])
@@ -58,16 +59,18 @@ char	*check_one_path(t_shell_state *state, char **paths, char *path,
 	if (!temp_path)
 	{
 		free_split_array(paths);
-		free_all_resources(state);
-		exit(error_msg("malloc", NULL, "memory allocation failed", FAILURE));
+		state->last_exit_code = error_msg("malloc", NULL,
+				"memory allocation failed", FAILURE);
+		exit_minishell(state);
 	}
 	full_path = ft_strjoin(temp_path, cmd);
 	free(temp_path);
 	if (!full_path)
 	{
 		free_split_array(paths);
-		free_all_resources(state);
-		exit(error_msg("malloc", NULL, "memory allocation failed", FAILURE));
+		state->last_exit_code = error_msg("malloc", NULL,
+				"memory allocation failed", FAILURE);
+		exit_minishell(state);
 	}
 	if (access(full_path, F_OK | X_OK) == 0)
 	{
@@ -91,19 +94,19 @@ void	check_path_validity(t_shell_state *state, char *path)
 	{
 		if (S_ISDIR(st.st_mode))
 		{
-			free_all_resources(state);
-			exit(error_msg(path, NULL, "is a directory", 126));
+			state->last_exit_code = error_msg(path, NULL, "is a directory", 126);
+			exit_minishell(state);
 		}
 	}
 	if (access(path, F_OK) == -1)
 	{
-		free_all_resources(state);
-		exit(error_msg(path, NULL, strerror(errno), 127));
+		state->last_exit_code = error_msg(path, NULL, strerror(errno), 127);
+		exit_minishell(state);
 	}
 	if (access(path, X_OK) == -1)
 	{
-		free_all_resources(state);
-		exit(error_msg(path, NULL, strerror(errno), 126));
+		state->last_exit_code = error_msg(path, NULL, strerror(errno), 126);
+		exit_minishell(state);
 	}
 }
 
@@ -120,8 +123,8 @@ void	execute_bin(t_node *node, t_shell_state *state)
 	cmd = node->argv[0];
 	if (!cmd || !*cmd)
 	{
-		free_all_resources(state);
-		exit(SUCCESS);
+		state->last_exit_code = SUCCESS;
+		exit_minishell(state);
 	}
 	if (ft_strchr(cmd, '/'))
 	{
@@ -133,8 +136,8 @@ void	execute_bin(t_node *node, t_shell_state *state)
 		path = find_in_path(cmd, state);
 		if (!path)
 		{
-			free_all_resources(state);
-			exit(error_msg(cmd, NULL, "command not found", 127));
+			state->last_exit_code = error_msg(cmd, NULL, "command not found", 127);
+			exit_minishell(state);
 		}
 	}
 	execve(path, node->argv, state->envp);
@@ -146,6 +149,6 @@ void	exit_failed_bin(t_shell_state *state, char *cmd, char *path)
 	error_msg(cmd, NULL, strerror(errno), 126);
 	if (path != cmd)
 		free(path);
-	free_all_resources(state);
-	exit(126);
+	state->last_exit_code = 126;
+	exit_minishell(state);
 }

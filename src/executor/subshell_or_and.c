@@ -6,7 +6,7 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/11 18:35:53 by danslav1e         #+#    #+#             */
-/*   Updated: 2025/12/04 02:23:51 by danslav1e        ###   ########.fr       */
+/*   Updated: 2026/01/24 18:52:05 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,11 @@ void	execute_subshell(t_node *node, t_shell_state *state)
 	{
 		if (apply_redirects(node) == FAILURE)
 		{
-			free_all_resources(state);
-			exit(FAILURE);
+			state->last_exit_code = FAILURE;
+			exit_minishell(state);
 		}
 		execute_ast(node->child, state);
-		exit(free_all_resources(state));
+		exit_minishell(state);
 	}
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))

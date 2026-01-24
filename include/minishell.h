@@ -6,7 +6,7 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:07:18 by alisseye          #+#    #+#             */
-/*   Updated: 2026/01/14 18:44:46 by danslav1e        ###   ########.fr       */
+/*   Updated: 2026/01/24 18:55:00 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,15 +48,17 @@
 # include <errno.h>
 # include <fcntl.h> // Библиотеки, которые ты забыл включить
 # include <stdbool.h>
+# include <stdint.h>
 # include <string.h>
 # include <sys/stat.h>
-# include <stdint.h>
 
 // SIZE_MAX
 # include <stddef.h>
 
 # define SUCCESS 0
 # define FAILURE 1
+
+extern int			g_signal;
 
 typedef enum e_token_type
 {
@@ -128,10 +130,11 @@ typedef struct s_node
 
 typedef struct s_shell_state
 {
-	t_node *token_tree;
-	char **envp;
-	t_node *first_node;
-	int last_exit_code;
+	t_node			*token_tree;
+	char			**envp;
+	t_node			*first_node;
+	int				saved_fd[2];
+	int				last_exit_code;
 }					t_shell_state;
 
 // ast
@@ -158,7 +161,7 @@ int					built_in_env(t_node *node, t_shell_state *state);
 int					check_overflow(unsigned long long n, char c_digit,
 						int sign);
 int					is_valid_llong(char *str);
-int					free_all_resources(t_shell_state *state);
+void				exit_minishell(t_shell_state *state);
 long long			ft_atoll(const char *str);
 int					built_in_exit(t_node *node, t_shell_state *state);
 
@@ -257,7 +260,7 @@ int					error_msg(char *cmd, char *arg, char *custom_msg,
 char				*get_env_value(char *key, char **envp);
 
 // lexer
-int					tokenize(char *line, t_token **tokens, \
+int					tokenize(char *line, t_token **tokens,
 						t_shell_state *state);
 
 // utils
