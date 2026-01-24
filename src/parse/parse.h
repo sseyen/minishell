@@ -35,5 +35,8 @@ int				init_parser(t_parser *parser, t_token *tokens);
 t_node			*parse_command(t_parser *parser);
 t_node			*parse_expr(t_parser *parser);
 t_node			*new_node(t_node_type type);
+bool			is_redir(t_token_type type);
+t_redirect_type	redir_type(t_token_type tok);
+int			fill_redirect(t_parser *p, t_redirect *dst);
 
 #endif

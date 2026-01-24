@@ -13,24 +13,6 @@
 #include "parse.h"
 
 /**
- * @brief Map token type to redirect enum.
- *
- * @param tok Token type from lexer.
- *
- * @return Corresponding t_redirect_type.
- */
-static t_redirect_type	redir_type(t_token_type tok)
-{
-	if (tok == TOKEN_REDIRECT_IN)
-		return (REDIRECT_IN);
-	if (tok == TOKEN_REDIRECT_OUT)
-		return (REDIRECT_OUT);
-	if (tok == TOKEN_REDIRECT_APPEND)
-		return (REDIRECT_APPEND);
-	return (REDIRECT_HEREDOC);
-}
-
-/**
  * @brief Append a redirect target to the command node.
  *
  * @param p Parser state (idx advanced on success).
@@ -41,22 +23,10 @@ static t_redirect_type	redir_type(t_token_type tok)
  */
 static int	add_redirect(struct s_parser *p, t_node *node, size_t *ri)
 {
-	t_token	*target;
-
-	if (p->idx + 1 >= p->len)
-		return (1);
-	target = &p->tokens[p->idx + 1];
-	if (target->type != TOKEN_WORD || !target->value)
-		return (1);
-	node->redirects[*ri].type = redir_type(p->tokens[p->idx].type);
-	node->redirects[*ri].target = ft_strdup(target->value);
-	node->redirects[*ri].heredoc_fd = -1;
-	node->redirects[*ri].heredoc_quoted = target->quoted;
-	if (!node->redirects[*ri].target)
+	if (fill_redirect(p, &node->redirects[*ri]) != 0)
 		return (1);
 	(*ri)++;
 	node->redirects_count = *ri;
-	p->idx += 2;
 	return (0);
 }
 

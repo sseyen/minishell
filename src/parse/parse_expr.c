@@ -12,6 +12,36 @@
 
 #include "parse.h"
 
+static int	append_redirect(t_parser *p, t_node *node, size_t *ri)
+{
+	if (fill_redirect(p, &node->redirects[*ri]) != 0)
+		return (1);
+	(*ri)++;
+	node->redirects_count = *ri;
+	return (0);
+}
+
+static int	parse_suffix_redirects(t_parser *p, t_node *node)
+{
+	size_t	ri;
+	size_t	cap;
+
+	ri = node->redirects_count;
+	while (p->idx < p->len && is_redir(p->tokens[p->idx].type))
+	{
+		if (!node->redirects)
+		{
+			cap = (p->len - p->idx) + 1;
+			node->redirects = ft_calloc(cap, sizeof(t_redirect));
+			if (!node->redirects)
+				return (1);
+		}
+		if (append_redirect(p, node, &ri) != 0)
+			return (1);
+	}
+	return (0);
+}
+
 /**
  * @brief Parse a command or parenthesized subshell.
  *
@@ -38,9 +68,16 @@ static t_node	*parse_primary(t_parser *p)
 		if (!node)
 			return (free_ast(child), NULL);
 		node->child = child;
+		if (parse_suffix_redirects(p, node) != 0)
+			return (free_ast(node), NULL);
 		return (node);
 	}
-	return (parse_command(p));
+	node = parse_command(p);
+	if (!node)
+		return (NULL);
+	if (parse_suffix_redirects(p, node) != 0)
+		return (free_ast(node), NULL);
+	return (node);
 }
 
 /**
