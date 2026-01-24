@@ -83,6 +83,22 @@ static int	run_case(char *line, int (*check)(t_node *), char **envp)
 	return (ok);
 }
 
+static int	check_subshell_redir(t_node *tree)
+{
+	if (!tree || tree->type != NODE_SUBSHELL)
+		return (0);
+	if (!match_cmd(tree->child, "echo", "test"))
+		return (0);
+	if (tree->redirects_count != 1)
+		return (0);
+	if (tree->redirects[0].type != REDIRECT_OUT)
+		return (0);
+	if (ft_strncmp(tree->redirects[0].target, "out.txt",
+			ft_strlen("out.txt") + 1) != 0)
+		return (0);
+	return (1);
+}
+
 int	test_build_ast(int argc, char **argv, char **envp)
 {
 	int	pass;
@@ -99,6 +115,8 @@ int	test_build_ast(int argc, char **argv, char **envp)
 	pass += run_case("false || echo ok", check_or, envp);
 	print_test_header(3, "Subshell and");
 	pass += run_case("(echo hi) && ls", check_subshell, envp);
-	print_summary(4, pass);
+	print_test_header(4, "Subshell with redirection");
+	pass += run_case("(echo test) > out.txt", check_subshell_redir, envp);
+	print_summary(5, pass);
 	return (0);
 }

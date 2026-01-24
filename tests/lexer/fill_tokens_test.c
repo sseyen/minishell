@@ -64,6 +64,7 @@ int	test_fill_tokens(int argc, char **argv)
 	t_token_type	exp2[4];
 	t_token_type	exp3[11];
 	t_token_type	exp4[8];
+	t_token_type	exp5[12];
 
 	(void)argc;
 	(void)argv;
@@ -104,6 +105,20 @@ int	test_fill_tokens(int argc, char **argv)
 	exp4[6] = TOKEN_OR;
 	exp4[7] = TOKEN_WORD;
 	pass += check_tokens("word word>>> | && || word", exp4, 8);
-	print_summary(4, pass);
+	print_test_header(4, "Complex command with subshells and redirection");
+	exp5[0] = TOKEN_LPAREN;
+	exp5[1] = TOKEN_WORD;
+	exp5[2] = TOKEN_WORD;
+	exp5[3] = TOKEN_AND;
+	exp5[4] = TOKEN_WORD;
+	exp5[5] = TOKEN_WORD;
+	exp5[6] = TOKEN_AND;
+	exp5[7] = TOKEN_WORD;
+	exp5[8] = TOKEN_WORD;
+	exp5[9] = TOKEN_RPAREN;
+	exp5[10] = TOKEN_REDIRECT_OUT;
+	exp5[11] = TOKEN_WORD;
+	pass += check_tokens("(ls -l && echo \"---\" && cat file) > output.txt", exp5, 12);
+	print_summary(5, pass);
 	return (0);
 }
