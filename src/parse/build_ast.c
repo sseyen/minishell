@@ -6,20 +6,28 @@
 /*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/14 17:54:55 by alisseye          #+#    #+#             */
-/*   Updated: 2025/12/14 18:26:27 by alisseye         ###   ########.fr       */
+/*   Updated: 2026/01/24 12:40:00 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parse.h"
 
-/**
- * @brief Entry point to parse the token stream into an AST.
- *
- * @param tokens Token array terminated by TOKEN_EOF.
- * @param root Output parameter receiving the built tree on success.
- *
- * @return 0 on success, 1 on allocation or parse failure.
- */
+static int	handle_parse_failure(t_token *tokens, t_node *tree,
+							 t_parser *parser)
+{
+	int	ret;
+
+	if (!tree)
+		ret = error_msg("syntax error", NULL, "invalid syntax", 258);
+	else
+	{
+		ret = syntax_error_token(NULL, parser->tokens[parser->idx].type);
+		free_ast(tree);
+	}
+	free_tokens(tokens);
+	return (ret);
+}
+
 int	build_ast(t_token *tokens, t_node **root)
 {
 	t_parser	parser;
@@ -31,12 +39,7 @@ int	build_ast(t_token *tokens, t_node **root)
 		return (1);
 	tree = parse_expr(&parser);
 	if (!tree || parser.idx != parser.len)
-	{
-		if (tree)
-			free_ast(tree);
-		free_tokens(tokens);
-		return (1);
-	}
+		return (handle_parse_failure(tokens, tree, &parser));
 	*root = tree;
 	free_tokens(tokens);
 	return (0);

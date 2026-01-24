@@ -33,12 +33,21 @@ int	create_word_token(char *line, size_t len, t_token *token)
 
 int	create_operator_token(char *start, size_t len, t_token *token)
 {
+	char	tok[8];
+
 	if (len == 1)
 		token->type = get_single_operator(start);
 	else if (len == 2)
 		token->type = get_double_operator(start);
 	if (token->type == TOKEN_NONE)
-		return (1);
+	{
+		if (len >= sizeof(tok))
+			len = sizeof(tok) - 1;
+		ft_bzero(tok, sizeof(tok));
+		ft_memcpy(tok, start, len);
+		tok[len] = '\0';
+		return (syntax_error_token(tok, TOKEN_NONE));
+	}
 	return (0);
 }
 
@@ -46,6 +55,7 @@ int	create_token(char *line, size_t *i, t_token *token)
 {
 	size_t	start;
 	size_t	len;
+	char	tok[2];
 
 	start = *i;
 	len = parse_word(line, i, NULL);
@@ -55,5 +65,8 @@ int	create_token(char *line, size_t *i, t_token *token)
 	len = parse_operator(line, i, NULL);
 	if (len > 0)
 		return (create_operator_token(&line[start], len, token));
-	return (1);
+	ft_bzero(tok, sizeof(tok));
+	tok[0] = line[*i];
+	tok[1] = '\0';
+	return (syntax_error_token(tok, TOKEN_NONE));
 }

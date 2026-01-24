@@ -252,6 +252,7 @@ int					prepare_heredocs(t_node *node);
 
 int					error_msg(char *cmd, char *arg, char *custom_msg,
 						int exit_code);
+int					syntax_error_token(const char *tok, t_token_type type);
 
 // env utils
 char				*get_env_value(char *key, char **envp);
