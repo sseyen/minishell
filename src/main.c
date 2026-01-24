@@ -16,10 +16,17 @@ void	exit_minishell(t_shell_state *state, int exit_code)
 {
 	if (state)
 	{
-		if (state->envp)
-			free_env(state->envp);
 		if (state->token_tree)
+		{
 			free_ast(state->token_tree);
+			state->token_tree = NULL;
+		}
+		if (state->envp)
+		{
+			free_env(state->envp);
+			state->envp = NULL;
+		}
+		rl_clear_history();
 	}
 	exit(exit_code);
 }
@@ -95,5 +102,7 @@ int	main(int argc, char **argv, char **envp)
 	if (!envp_copy)
 		exit_minishell(&state, 1);
 	state.envp = envp_copy;
-	return (minishell_loop(&state));
+	state.last_exit_code = minishell_loop(&state);
+	exit_minishell(&state, state.last_exit_code);
+	return (0);
 }
