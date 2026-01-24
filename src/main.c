@@ -6,7 +6,7 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:07:23 by alisseye          #+#    #+#             */
-/*   Updated: 2026/01/24 20:33:38 by danslav1e        ###   ########.fr       */
+/*   Updated: 2026/01/24 23:13:04 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,5 +85,7 @@ int	main(int argc, char **argv, char **envp)
 	if (!envp_copy)
 		exit(FAILURE);
 	state.envp = envp_copy;
-	return (minishell_loop(&state));
+	state.last_exit_code = minishell_loop(&state);
+	exit_minishell(&state, state.last_exit_code);
+	return (0);
 }
