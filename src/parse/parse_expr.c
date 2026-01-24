@@ -63,7 +63,7 @@ t_node	*parse_primary(t_parser *p)
  * @return Resulting subtree or NULL on failure.
  */
 /**
- * @brief Top-level expression parser handling OR precedence.
+ * @brief Top-level expression parser: && and || share precedence, left-to-right.
  *
  * @param p Parser state.
  *
@@ -74,17 +74,22 @@ t_node	*parse_expr(t_parser *p)
 	t_node	*left;
 	t_node	*right;
 	t_node	*node;
+	t_token	tok;
 
-	left = parse_and(p);
+	left = parse_pipe(p);
 	if (!left)
 		return (NULL);
-	while (p->idx < p->len && p->tokens[p->idx].type == TOKEN_OR)
+	while (p->idx < p->len && (p->tokens[p->idx].type == TOKEN_AND
+			|| p->tokens[p->idx].type == TOKEN_OR))
 	{
-		p->idx++;
-		right = parse_and(p);
+		tok = p->tokens[p->idx++];
+		right = parse_pipe(p);
 		if (!right)
 			return (free_ast(left), NULL);
-		node = new_node(NODE_OR);
+		if (tok.type == TOKEN_AND)
+			node = new_node(NODE_AND);
+		else
+			node = new_node(NODE_OR);
 		if (!node)
 			return (free_ast(left), free_ast(right), NULL);
 		node->left = left;
