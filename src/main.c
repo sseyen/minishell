@@ -6,11 +6,13 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:07:23 by alisseye          #+#    #+#             */
-/*   Updated: 2026/01/24 23:14:13 by danslav1e        ###   ########.fr       */
+/*   Updated: 2026/01/25 22:20:24 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int g_signal = 0;
 
 int	handle_line(char *line, t_shell_state *state)
 {
@@ -48,8 +50,19 @@ int	minishell_loop(t_shell_state *state)
 
 	while (1)
 	{
+		setup_signals_interactive();
+		g_signal = 0;
 		line = readline("minishell$ ");
+		if (g_signal == 130)
+		{
+			state->last_exit_code = 130;
+			g_signal = 0;
+		}
 		if (!line)
+		{
+			ft_putchar_fd("exit\n", STDOUT_FILENO);
+			break ;
+		}
 			break ;
 		if (*line)
 			add_history(line);
@@ -81,6 +94,7 @@ int	main(int argc, char **argv, char **envp)
 	state.last_exit_code = 0;
 	state.saved_fd[0] = -1;
 	state.saved_fd[1] = -1;
+	state.is_child = 0;
 	envp_copy = init_env(envp);
 	if (!envp_copy)
 		exit(FAILURE);

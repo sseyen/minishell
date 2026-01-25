@@ -6,7 +6,7 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/09 16:34:42 by danslav1e         #+#    #+#             */
-/*   Updated: 2026/01/24 18:50:33 by danslav1e        ###   ########.fr       */
+/*   Updated: 2026/01/25 22:24:53 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,9 @@ void	execute_external(t_node *node, t_shell_state *state)
 {
 	pid_t	pid;
 	int		status;
+	int sig;
 
+	settup_signals_exec();
 	pid = fork();
 	if (pid == -1)
 	{
@@ -121,7 +123,14 @@ void	execute_external(t_node *node, t_shell_state *state)
 	if (WIFEXITED(status))
 		state->last_exit_code = WEXITSTATUS(status);
 	else if (WIFSIGNALED(status))
-		state->last_exit_code = 128 + WTERMSIG(status);
+	{
+		sig = WTERMSIG(status);
+        state->last_exit_code = 128 + sig;
+        if (sig == SIGINT)
+            write(STDOUT_FILENO, "\n", 1);
+        else if (sig == SIGQUIT)
+            ft_putendl_fd("Quit: 3", STDOUT_FILENO);
+	}
 }
 
 /**

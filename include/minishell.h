@@ -6,7 +6,7 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:07:18 by alisseye          #+#    #+#             */
-/*   Updated: 2026/01/24 18:55:00 by danslav1e        ###   ########.fr       */
+/*   Updated: 2026/01/25 22:21:38 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,7 @@ typedef struct s_shell_state
 	char			**envp;
 	t_node			*first_node;
 	int				saved_fd[2];
+	int				is_child;
 	int				last_exit_code;
 }					t_shell_state;
 
@@ -269,5 +270,11 @@ bool				is_whitespace(char c);
 bool				is_operator_char(char c);
 char				*ft_strndup(const char *s1, size_t n);
 char				*ft_strnjoin(char *s1, char *s2, size_t n);
+
+// signals
+void				setup_signals_interactive(void);
+void				setup_signals_exec(void);
+void				setup_signals_heredoc(void);
+void				setup_signals_child(void);
 
 #endif

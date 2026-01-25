@@ -6,7 +6,7 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 18:22:47 by danslav1e         #+#    #+#             */
-/*   Updated: 2026/01/24 18:50:07 by danslav1e        ###   ########.fr       */
+/*   Updated: 2026/01/25 00:17:17 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,8 @@ void	check_path_validity(t_shell_state *state, char *path)
 	{
 		if (S_ISDIR(st.st_mode))
 		{
-			state->last_exit_code = error_msg(path, NULL, "is a directory", 126);
+			state->last_exit_code = error_msg(path, NULL, "is a directory",
+					126);
 			exit_minishell(state);
 		}
 	}
@@ -136,7 +137,8 @@ void	execute_bin(t_node *node, t_shell_state *state)
 		path = find_in_path(cmd, state);
 		if (!path)
 		{
-			state->last_exit_code = error_msg(cmd, NULL, "command not found", 127);
+			state->last_exit_code = error_msg(cmd, NULL, "command not found",
+					127);
 			exit_minishell(state);
 		}
 	}

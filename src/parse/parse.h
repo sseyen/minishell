@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/14 18:08:27 by alisseye          #+#    #+#             */
-/*   Updated: 2025/12/14 18:53:02 by alisseye         ###   ########.fr       */
+/*   Updated: 2026/01/25 00:20:32 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@
 
 typedef struct s_cmd_ctx
 {
-	size_t	argv_cap;
-	size_t	redir_cap;
-	size_t	ai;
-	size_t	ri;
-	int		status;
+	size_t		argv_cap;
+	size_t		redir_cap;
+	size_t		ai;
+	size_t		ri;
+	int			status;
 }				t_cmd_ctx;
 
 typedef struct s_parser
@@ -40,7 +40,7 @@ t_node			*parse_and(t_parser *parser);
 t_node			*new_node(t_node_type type);
 bool			is_redir(t_token_type type);
 t_redirect_type	redir_type(t_token_type tok);
-int			fill_redirect(t_parser *p, t_redirect *dst);
-int			parse_suffix_redirects(t_parser *p, t_node *node);
+int				fill_redirect(t_parser *p, t_redirect *dst);
+int				parse_suffix_redirects(t_parser *p, t_node *node);
 
 #endif

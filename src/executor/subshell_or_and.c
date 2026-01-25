@@ -6,7 +6,7 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/11 18:35:53 by danslav1e         #+#    #+#             */
-/*   Updated: 2026/01/24 18:52:05 by danslav1e        ###   ########.fr       */
+/*   Updated: 2026/01/25 00:24:54 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ void	execute_subshell(t_node *node, t_shell_state *state)
 	}
 	if (pid == 0)
 	{
+		state->is_child = 1;
 		if (apply_redirects(node) == FAILURE)
 		{
 			state->last_exit_code = FAILURE;

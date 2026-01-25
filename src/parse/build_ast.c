@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   build_ast.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/14 17:54:55 by alisseye          #+#    #+#             */
-/*   Updated: 2026/01/24 12:40:00 by alisseye         ###   ########.fr       */
+/*   Updated: 2026/01/25 00:19:21 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parse.h"
 
 static int	handle_parse_failure(t_token *tokens, t_node *tree,
-							 t_parser *parser)
+		t_parser *parser)
 {
 	int	ret;
 

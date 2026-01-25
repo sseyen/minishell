@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_error.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/24 12:20:00 by alisseye          #+#    #+#             */
-/*   Updated: 2026/01/24 12:20:00 by alisseye         ###   ########.fr       */
+/*   Updated: 2026/01/25 00:14:39 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static const char	*token_repr(t_token_type type)
 	return ("newline");
 }
 
-int		syntax_error_token(const char *tok, t_token_type type)
+int	syntax_error_token(const char *tok, t_token_type type)
 {
 	char		msg[64];
 	const char	*repr;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_expr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/14 18:55:40 by alisseye          #+#    #+#             */
-/*   Updated: 2025/12/14 18:52:04 by alisseye         ###   ########.fr       */
+/*   Updated: 2026/01/25 00:19:57 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,7 @@ static t_node	*parse_paren(t_parser *p)
 
 	p->idx++;
 	child = parse_expr(p);
-	if (!child || p->idx >= p->len
-		|| p->tokens[p->idx].type != TOKEN_RPAREN)
+	if (!child || p->idx >= p->len || p->tokens[p->idx].type != TOKEN_RPAREN)
 		return (free_ast(child), NULL);
 	p->idx++;
 	node = new_node(NODE_SUBSHELL);
@@ -63,7 +62,8 @@ t_node	*parse_primary(t_parser *p)
  * @return Resulting subtree or NULL on failure.
  */
 /**
- * @brief Top-level expression parser: && and || share precedence, left-to-right.
+ * @brief Top-level expression parser: && and || share precedence,
+	left-to-right.
  *
  * @param p Parser state.
  *

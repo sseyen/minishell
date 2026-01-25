@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   validate_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 23:29:43 by alisseye          #+#    #+#             */
-/*   Updated: 2025/12/11 13:21:21 by alisseye         ###   ########.fr       */
+/*   Updated: 2026/01/25 00:23:09 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ bool	is_binary_operator(t_token_type type)
 
 bool	is_redirect_operator(t_token_type type)
 {
-	return (type == TOKEN_REDIRECT_IN || type == TOKEN_REDIRECT_OUT || \
-		type == TOKEN_REDIRECT_APPEND || type == TOKEN_REDIRECT_HEREDOC);
+	return (type == TOKEN_REDIRECT_IN || type == TOKEN_REDIRECT_OUT
+		|| type == TOKEN_REDIRECT_APPEND || type == TOKEN_REDIRECT_HEREDOC);
 }
 
 bool	is_redir_error(t_token_type prev, t_token_type curr)
@@ -36,8 +36,8 @@ bool	is_redir_error(t_token_type prev, t_token_type curr)
 
 bool	is_paren_error(t_token_type prev, t_token_type curr)
 {
-	if (curr == TOKEN_RPAREN && (is_binary_operator(prev) || \
-		prev == TOKEN_LPAREN))
+	if (curr == TOKEN_RPAREN && (is_binary_operator(prev)
+			|| prev == TOKEN_LPAREN))
 		return (true);
 	if (curr == TOKEN_LPAREN && (prev == TOKEN_WORD || prev == TOKEN_RPAREN))
 		return (true);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 15:03:50 by alisseye          #+#    #+#             */
-/*   Updated: 2025/12/11 14:35:32 by alisseye         ###   ########.fr       */
+/*   Updated: 2026/01/25 00:18:31 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,9 @@ size_t	parse_word(char *line, size_t *i, size_t *count)
 
 	j = 0;
 	in_quotes = NO_QUOTE;
-	while (line[*i] \
-		&& ((!is_whitespace(line[*i]) && !is_operator_char(line[*i])) \
-		|| in_quotes == SINGLE_QUOTE || in_quotes == DOUBLE_QUOTE))
+	while (line[*i] && ((!is_whitespace(line[*i])
+				&& !is_operator_char(line[*i])) || in_quotes == SINGLE_QUOTE
+			|| in_quotes == DOUBLE_QUOTE))
 	{
 		in_quotes = update_quote_state(in_quotes, line[*i]);
 		j++;

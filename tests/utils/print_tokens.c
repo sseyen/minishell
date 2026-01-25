@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_tokens.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 16:38:26 by alisseye          #+#    #+#             */
-/*   Updated: 2025/12/01 16:38:32 by alisseye         ###   ########.fr       */
+/*   Updated: 2026/01/25 00:13:45 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 
 int	print_tokens(t_token *tokens)
 {
-	int		i;
+	int	i;
 
 	i = 0;
 	while (tokens[i].type != TOKEN_NONE && tokens[i].type != TOKEN_EOF)
 	{
-		printf("Token %d: Type=%d, Value='%s'\n", \
-				i, tokens[i].type, tokens[i].value);
+		printf("Token %d: Type=%d, Value='%s'\n", i, tokens[i].type,
+			tokens[i].value);
 		i++;
 	}
 	if (tokens[i].type == TOKEN_EOF)

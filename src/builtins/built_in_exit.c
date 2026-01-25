@@ -6,7 +6,7 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/10 16:41:12 by danslav1e         #+#    #+#             */
-/*   Updated: 2026/01/24 18:40:19 by danslav1e        ###   ########.fr       */
+/*   Updated: 2026/01/25 00:22:33 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ int	check_overflow(unsigned long long n, char c_digit, int sign)
 		cutoff = 922337203685477580;
 		cutlim = 8;
 	}
-	if (n > cutoff || (n == cutoff \
-		&& (long long unsigned int)(c_digit - '0') > cutlim))
+	if (n > cutoff || (n == cutoff && (long long unsigned int)(c_digit
+				- '0') > cutlim))
 		return (false);
 	return (true);
 }
@@ -77,9 +77,9 @@ int	is_valid_llong(char *str)
  * This function should free all allocated memory for:
  * (1) The AST (t_node tree)
  * (2) The `envp` copy
- * 
+ *
  * Clear readline history.
- * 
+ *
  * Close opened saved file descriptors.
  */
 void	exit_minishell(t_shell_state *state)
@@ -145,7 +145,8 @@ int	built_in_exit(t_node *node, t_shell_state *state)
 	}
 	if (node->argc > 2)
 		return (error_msg("exit", NULL, "too many arguments", FAILURE));
-	ft_putendl_fd("exit", STDOUT_FILENO);
+	if (state->is_child == 0)
+		ft_putendl_fd("exit", STDOUT_FILENO);
 	state->last_exit_code = (unsigned char)ft_atoll(node->argv[1]);
 	exit_minishell(state);
 	return (state->last_exit_code);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 15:36:47 by alisseye          #+#    #+#             */
-/*   Updated: 2025/12/14 17:36:22 by alisseye         ###   ########.fr       */
+/*   Updated: 2026/01/25 00:19:09 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,7 @@ char	*parse_var(char *str, t_shell_state *state, size_t *index)
 	return (var_value);
 }
 
-int	handle_eof(char *token_value, char **new_value, \
-	size_t from, size_t i)
+int	handle_eof(char *token_value, char **new_value, size_t from, size_t i)
 {
 	char	*temp;
 
