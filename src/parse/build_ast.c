@@ -17,13 +17,13 @@
  * Handles parse failure: prints error, frees tree and tokens.
  */
 static int	handle_parse_failure(t_token *tokens, t_node *tree,
-		t_parser *parser)
+	t_parser *parser)
 {
 	int	ret;
 
 	if (!tree)
 		ret = error_msg("syntax error", NULL, "invalid syntax",
-			SYNTAX_ERROR);
+				SYNTAX_ERROR);
 	else
 	{
 		ret = syntax_error_token(NULL, parser->tokens[parser->idx].type);

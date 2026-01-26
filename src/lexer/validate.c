@@ -23,7 +23,7 @@ static int	finalize_validation(t_token_type prev, int paren)
 		return (syntax_error_token(NULL, TOKEN_NONE));
 	if (paren != 0)
 		return (error_msg("syntax error", NULL, "unclosed parenthesis",
-			SYNTAX_ERROR));
+				SYNTAX_ERROR));
 	return (0);
 }
 

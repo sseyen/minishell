@@ -100,7 +100,7 @@ int	tokenize(char *line, t_token **tokens, t_shell_state *state)
 	count = count_tokens(line);
 	if (count == SIZE_MAX)
 		return (error_msg("syntax error", NULL, "unclosed quotes",
-			SYNTAX_ERROR));
+				SYNTAX_ERROR));
 	*tokens = malloc(sizeof(t_token) * (count + 1));
 	if (!*tokens)
 		return (1);
