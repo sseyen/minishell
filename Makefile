@@ -24,15 +24,15 @@ MAIN        = src/main.c
 # MAIN object (built separately so it won't be included in tests)
 MAIN_OBJ    = $(OBJ_DIR)/$(MAIN:.c=.o)
 
-# Объединяем все исходники (отсортировано по подсистемам)
+# Source files
 SRCS        = \
-              src/handle_line.c \
               src/execute_bin/execute_bin.c \
               src/execute_bin/execute_bin_utils.c \
               src/executor/executor.c \
               src/executor/executor_utils.c \
               src/executor/subshell_or_and.c \
               src/parse/build_ast.c \
+              src/parse/handle_line.c \
               src/parse/parse_expr.c \
               src/parse/parse_expr_utils.c \
               src/parse/parse_command.c \
