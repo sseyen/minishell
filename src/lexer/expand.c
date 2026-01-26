@@ -3,15 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/25 16:04:23 by alisseye          #+#    #+#             */
-/*   Updated: 2025/12/14 17:36:23 by alisseye         ###   ########.fr       */
+/*   Updated: 2026/01/26 01:52:07 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 
+/**
+ * @brief
+ * Removes quote characters from a token value in-place.
+ * Tracks quote state to handle nested quotes correctly.
+ */
 void	remove_quotes(t_token *token)
 {
 	size_t			r;
@@ -37,6 +42,11 @@ void	remove_quotes(t_token *token)
 	token->value[w] = '\0';
 }
 
+/**
+ * @brief
+ * Processes a $ variable expansion.
+ * Joins text before $ with expanded variable value.
+ */
 static int	process_dollar(t_token *token, t_shell_state *state,
 							t_expand_ctx *ctx)
 {
@@ -64,6 +74,11 @@ static int	process_dollar(t_token *token, t_shell_state *state,
 	return (0);
 }
 
+/**
+ * @brief
+ * Walks through token value expanding all $ variables.
+ * Respects single quotes (no expansion inside).
+ */
 static int	walk_value(t_token *token, t_shell_state *state, char **new_value)
 {
 	t_expand_ctx	ctx;
@@ -89,6 +104,12 @@ static int	walk_value(t_token *token, t_shell_state *state, char **new_value)
 	return (0);
 }
 
+/**
+ * @brief
+ * Expands all variables in a single token.
+ *
+ * @return 0 on success, 1 on malloc failure.
+ */
 int	expand_str(t_token *token, t_shell_state *state)
 {
 	char	*new_value;
@@ -104,6 +125,12 @@ int	expand_str(t_token *token, t_shell_state *state)
 	return (0);
 }
 
+/**
+ * @brief
+ * Expands variables and removes quotes from all tokens.
+ *
+ * @return 0 on success, 1 on error.
+ */
 int	expand_tokens(t_token *tokens, t_shell_state *state)
 {
 	size_t	i;

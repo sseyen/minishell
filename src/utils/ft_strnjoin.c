@@ -3,15 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strnjoin.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 17:18:30 by alisseye          #+#    #+#             */
-/*   Updated: 2025/12/14 16:58:18 by alisseye         ###   ########.fr       */
+/*   Updated: 2026/01/26 01:52:07 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * @brief
+ * Helper to copy characters from src to dst at given position.
+ */
 static void	copy_part(char *dst, char *src, size_t *pos, size_t limit)
 {
 	size_t	j;
@@ -25,6 +29,15 @@ static void	copy_part(char *dst, char *src, size_t *pos, size_t limit)
 	*pos += j;
 }
 
+/**
+ * @brief
+ * Joins s1 with first n characters of s2. Frees s1.
+ *
+ * @param s1 First string (freed after join).
+ * @param s2 Second string.
+ * @param n Number of characters from s2 to append.
+ * @return Newly allocated joined string.
+ */
 char	*ft_strnjoin(char *s1, char *s2, size_t n)
 {
 	char	*new_str;

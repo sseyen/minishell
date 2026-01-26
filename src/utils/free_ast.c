@@ -3,15 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   free_ast.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/14 18:25:00 by alisseye          #+#    #+#             */
-/*   Updated: 2025/12/14 20:09:23 by alisseye         ###   ########.fr       */
+/*   Updated: 2026/01/26 01:52:07 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../parse/parse.h"
 
+/**
+ * @brief
+ * Frees redirect array, closes heredoc file descriptors.
+ */
 static void	free_redirects(t_redirect *redir, size_t count)
 {
 	size_t	i;
@@ -27,6 +31,13 @@ static void	free_redirects(t_redirect *redir, size_t count)
 	}
 }
 
+/**
+ * @brief
+ * Recursively frees an AST and all its resources.
+ * Frees argv, redirects, and child nodes.
+ *
+ * @param node Root node to free.
+ */
 void	free_ast(t_node *node)
 {
 	size_t	i;

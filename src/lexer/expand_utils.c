@@ -6,12 +6,16 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 15:36:47 by alisseye          #+#    #+#             */
-/*   Updated: 2026/01/25 00:19:09 by danslav1e        ###   ########.fr       */
+/*   Updated: 2026/01/26 01:52:07 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 
+/**
+ * @brief
+ * Joins s1 with substring of s2 (from..to). Frees s1.
+ */
 char	*join_strings(char *s1, char *s2, size_t from, size_t to)
 {
 	char	*temp;
@@ -22,6 +26,16 @@ char	*join_strings(char *s1, char *s2, size_t from, size_t to)
 	return (temp);
 }
 
+/**
+ * @brief
+ * Parses variable name after $ and returns its value.
+ * Handles $? for exit code.
+ *
+ * @param str String starting at variable name.
+ * @param state Shell state.
+ * @param index Updated with characters consumed.
+ * @return Allocated value string.
+ */
 char	*parse_var(char *str, t_shell_state *state, size_t *index)
 {
 	size_t	i;
@@ -47,6 +61,10 @@ char	*parse_var(char *str, t_shell_state *state, size_t *index)
 	return (var_value);
 }
 
+/**
+ * @brief
+ * Appends remaining text after last variable expansion.
+ */
 int	handle_eof(char *token_value, char **new_value, size_t from, size_t i)
 {
 	char	*temp;

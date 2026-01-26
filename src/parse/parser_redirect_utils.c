@@ -3,21 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   parser_redirect_utils.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/24 12:00:00 by alisseye          #+#    #+#             */
-/*   Updated: 2026/01/24 12:00:00 by alisseye         ###   ########.fr       */
+/*   Updated: 2026/01/26 01:52:07 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parse.h"
 
+/**
+ * @brief
+ * Checks if token type is a redirect operator.
+ */
 bool	is_redir(t_token_type type)
 {
 	return (type == TOKEN_REDIRECT_IN || type == TOKEN_REDIRECT_OUT
 		|| type == TOKEN_REDIRECT_APPEND || type == TOKEN_REDIRECT_HEREDOC);
 }
 
+/**
+ * @brief
+ * Converts token type to redirect type enum.
+ */
 t_redirect_type	redir_type(t_token_type tok)
 {
 	if (tok == TOKEN_REDIRECT_IN)
@@ -29,6 +37,11 @@ t_redirect_type	redir_type(t_token_type tok)
 	return (REDIRECT_HEREDOC);
 }
 
+/**
+ * @brief
+ * Fills a redirect struct from current parser position.
+ * Advances parser index by 2 (operator + target).
+ */
 int	fill_redirect(t_parser *p, t_redirect *dst)
 {
 	t_token	*target;

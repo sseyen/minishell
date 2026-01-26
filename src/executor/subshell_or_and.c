@@ -6,7 +6,7 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/11 18:35:53 by danslav1e         #+#    #+#             */
-/*   Updated: 2026/01/25 00:24:54 by danslav1e        ###   ########.fr       */
+/*   Updated: 2026/01/26 01:52:06 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,36 @@
 
 /**
  * @brief
- * Executes a subshell (commands inside parentheses).
+ * Child process handler for subshell execution.
+ * Sets up signals, applies redirects, and executes child AST.
+ */
+static void	subshell_child(t_node *node, t_shell_state *state)
+{
+	setup_signals_child();
+	state->is_child = 1;
+	if (apply_redirects(node) == FAILURE)
+	{
+		state->last_exit_code = FAILURE;
+		exit_minishell(state);
+	}
+	execute_ast(node->child, state);
+	exit_minishell(state);
+}
+
+/**
+ * @brief
+ * Executes a subshell node in a forked child process.
+ * Parent waits for child and captures exit status.
  *
- * Creates a child process (fork) to isolate the subshell's environment.
- * Redirects are applied to the subshell process itself.
- * The parent waits for the subshell to finish and updates the exit code.
- *
- * @param node The AST node representing the subshell.
- * @param state The shell state.
+ * @param node Subshell node.
+ * @param state Shell state.
  */
 void	execute_subshell(t_node *node, t_shell_state *state)
 {
 	pid_t	pid;
 	int		status;
 
+	setup_signals_exec();
 	pid = fork();
 	if (pid == -1)
 	{
@@ -36,21 +52,12 @@ void	execute_subshell(t_node *node, t_shell_state *state)
 		return ;
 	}
 	if (pid == 0)
-	{
-		state->is_child = 1;
-		if (apply_redirects(node) == FAILURE)
-		{
-			state->last_exit_code = FAILURE;
-			exit_minishell(state);
-		}
-		execute_ast(node->child, state);
-		exit_minishell(state);
-	}
+		subshell_child(node, state);
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
 		state->last_exit_code = WEXITSTATUS(status);
 	else if (WIFSIGNALED(status))
-		state->last_exit_code = 128 + WTERMSIG(status);
+		handle_child_signal(status, state);
 }
 
 /**
@@ -79,7 +86,7 @@ void	execute_and(t_node *node, t_shell_state *state)
 void	execute_or(t_node *node, t_shell_state *state)
 {
 	execute_ast(node->left, state);
-	if (state->last_exit_code != SUCCESS)
+	if (state->last_exit_code != SUCCESS && state->last_exit_code < 128)
 	{
 		execute_ast(node->right, state);
 	}

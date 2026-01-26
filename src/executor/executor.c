@@ -6,7 +6,7 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/09 16:34:42 by danslav1e         #+#    #+#             */
-/*   Updated: 2026/01/25 22:24:53 by danslav1e        ###   ########.fr       */
+/*   Updated: 2026/01/26 01:52:06 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,8 @@
  * @brief
  * Checks if a command node represents a built-in command.
  *
- * @param node
- * The AST node to check.
- * @return
- * `true` if argv[0] matches a built-in name (echo, cd, pwd, etc.),
- * `false` otherwise.
+ * @param node Command node to check.
+ * @return true if built-in, false otherwise.
  */
 bool	is_built_in(t_node *node)
 {
@@ -45,9 +42,11 @@ bool	is_built_in(t_node *node)
 
 /**
  * @brief
- * Executes a built-in command in the parent process.
- * Saves STDIN/STDOUT, applies redirects, runs the command,
- * and restores STDIN/STDOUT.
+ * Executes a built-in command with redirect handling.
+ * Saves and restores stdio file descriptors around execution.
+ *
+ * @param node Command node containing the built-in.
+ * @param state Shell state.
  */
 void	execute_built_in(t_node *node, t_shell_state *state)
 {
@@ -73,36 +72,35 @@ void	execute_built_in(t_node *node, t_shell_state *state)
 	restore_stdio(state->saved_fd[1], state->saved_fd[0]);
 }
 
-void	start_built_in(t_node *node, t_shell_state *state)
+/**
+ * @brief
+ * Child process handler for external commands.
+ * Applies redirects and executes the binary.
+ */
+static void	external_child(t_node *node, t_shell_state *state)
 {
-	if (ft_strncmp(node->argv[0], "echo", 5) == 0)
-		state->last_exit_code = built_in_echo(node);
-	else if (ft_strncmp(node->argv[0], "cd", 3) == 0)
-		state->last_exit_code = built_in_cd(node, state);
-	else if (ft_strncmp(node->argv[0], "pwd", 4) == 0)
-		state->last_exit_code = built_in_pwd(node);
-	else if (ft_strncmp(node->argv[0], "export", 7) == 0)
-		state->last_exit_code = built_in_export(node, state);
-	else if (ft_strncmp(node->argv[0], "unset", 6) == 0)
-		state->last_exit_code = built_in_unset(node, state);
-	else if (ft_strncmp(node->argv[0], "env", 4) == 0)
-		state->last_exit_code = built_in_env(node, state);
-	else if (ft_strncmp(node->argv[0], "exit", 5) == 0)
-		state->last_exit_code = built_in_exit(node, state);
+	if (apply_redirects(node) == FAILURE)
+	{
+		state->last_exit_code = FAILURE;
+		exit_minishell(state);
+	}
+	execute_bin(node, state);
 }
 
 /**
  * @brief
- * Executes an external command (binary) in a child process.
- * Forks, applies redirects in the child, and execs.
+ * Forks and executes an external command.
+ * Parent waits for child and captures exit status.
+ *
+ * @param node Command node to execute.
+ * @param state Shell state.
  */
 void	execute_external(t_node *node, t_shell_state *state)
 {
 	pid_t	pid;
 	int		status;
-	int sig;
 
-	settup_signals_exec();
+	setup_signals_exec();
 	pid = fork();
 	if (pid == -1)
 	{
@@ -111,33 +109,21 @@ void	execute_external(t_node *node, t_shell_state *state)
 		return ;
 	}
 	if (pid == 0)
-	{
-		if (apply_redirects(node) == FAILURE)
-		{
-			state->last_exit_code = FAILURE;
-			exit_minishell(state);
-		}
-		execute_bin(node, state);
-	}
+		external_child(node, state);
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
 		state->last_exit_code = WEXITSTATUS(status);
 	else if (WIFSIGNALED(status))
-	{
-		sig = WTERMSIG(status);
-        state->last_exit_code = 128 + sig;
-        if (sig == SIGINT)
-            write(STDOUT_FILENO, "\n", 1);
-        else if (sig == SIGQUIT)
-            ft_putendl_fd("Quit: 3", STDOUT_FILENO);
-	}
+		handle_child_signal(status, state);
 }
 
 /**
  * @brief
- * The main recursive execution dispatcher.
- * Traverses the AST and calls the appropriate execution function
- * based on the node type.
+ * Recursively executes an AST node based on its type.
+ * Dispatches to appropriate handler for each node type.
+ *
+ * @param node AST node to execute.
+ * @param state Shell state.
  */
 void	execute_ast(t_node *node, t_shell_state *state)
 {

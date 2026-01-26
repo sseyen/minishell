@@ -6,7 +6,7 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 19:09:45 by danslav1e         #+#    #+#             */
-/*   Updated: 2025/12/27 16:18:20 by danslav1e        ###   ########.fr       */
+/*   Updated: 2026/01/26 01:52:06 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,14 @@ int	set_new_env_var(t_shell_state *state, char *key, char *value)
 	return (SUCCESS);
 }
 
+/**
+ * @brief
+ * Gets the value of an environment variable.
+ *
+ * @param key Variable name to look up.
+ * @param envp Environment array.
+ * @return Newly allocated value string or NULL if not found.
+ */
 char	*get_env_value(char *key, char **envp)
 {
 	int		index;
@@ -110,6 +118,10 @@ char	*get_env_value(char *key, char **envp)
 	return (ft_strdup(equal + 1));
 }
 
+/**
+ * @brief
+ * Prints all environment variables to stdout.
+ */
 void	print_env(char **envp)
 {
 	size_t	i;

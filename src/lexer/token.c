@@ -3,15 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 15:11:12 by alisseye          #+#    #+#             */
-/*   Updated: 2025/12/11 13:19:34 by alisseye         ###   ########.fr       */
+/*   Updated: 2026/01/26 01:52:07 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 
+/**
+ * @brief
+ * Initializes a token with given data.
+ */
 void	set_token(t_token *token, t_token_data data)
 {
 	token->type = data.type;
@@ -20,6 +24,12 @@ void	set_token(t_token *token, t_token_data data)
 	token->quoted = data.quoted;
 }
 
+/**
+ * @brief
+ * Creates a WORD token from a string.
+ *
+ * @return 0 on success, 1 on malloc failure.
+ */
 int	create_word_token(char *line, size_t len, t_token *token)
 {
 	token->type = TOKEN_WORD;
@@ -31,6 +41,12 @@ int	create_word_token(char *line, size_t len, t_token *token)
 	return (0);
 }
 
+/**
+ * @brief
+ * Creates an operator token (|, ||, &&, redirects, parens).
+ *
+ * @return 0 on success, 258 on unknown operator.
+ */
 int	create_operator_token(char *start, size_t len, t_token *token)
 {
 	char	tok[8];
@@ -51,6 +67,11 @@ int	create_operator_token(char *start, size_t len, t_token *token)
 	return (0);
 }
 
+/**
+ * @brief
+ * Creates a token from current position in line.
+ * Dispatches to word or operator token creation.
+ */
 int	create_token(char *line, size_t *i, t_token *token)
 {
 	size_t	start;

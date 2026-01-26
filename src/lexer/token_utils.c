@@ -3,15 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   token_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 15:13:39 by alisseye          #+#    #+#             */
-/*   Updated: 2025/12/11 14:35:33 by alisseye         ###   ########.fr       */
+/*   Updated: 2026/01/26 01:52:07 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 
+/**
+ * @brief
+ * Returns token type for single-char operators.
+ */
 t_token_type	get_single_operator(char *start)
 {
 	if (start[0] == '>')
@@ -27,6 +31,10 @@ t_token_type	get_single_operator(char *start)
 	return (TOKEN_NONE);
 }
 
+/**
+ * @brief
+ * Returns token type for double-char operators (||, &&, >>, <<).
+ */
 t_token_type	get_double_operator(char *start)
 {
 	if (start[0] == '>' && start[1] == '>')
@@ -40,6 +48,10 @@ t_token_type	get_double_operator(char *start)
 	return (TOKEN_NONE);
 }
 
+/**
+ * @brief
+ * Checks if a string contains quote characters.
+ */
 bool	is_quoted(char *str)
 {
 	size_t	i;
@@ -54,6 +66,11 @@ bool	is_quoted(char *str)
 	return (false);
 }
 
+/**
+ * @brief
+ * Checks if string contains $ that needs expansion.
+ * Ignores $ inside single quotes.
+ */
 bool	to_expand(char *str)
 {
 	size_t			i;

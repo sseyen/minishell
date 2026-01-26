@@ -3,15 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 17:30:59 by alisseye          #+#    #+#             */
-/*   Updated: 2025/12/14 19:55:07 by alisseye         ###   ########.fr       */
+/*   Updated: 2026/01/26 01:52:07 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 
+/**
+ * @brief
+ * Frees a token array and all token values.
+ */
 void	free_tokens(t_token *tokens)
 {
 	size_t	i;
@@ -28,6 +32,12 @@ void	free_tokens(t_token *tokens)
 	free(tokens);
 }
 
+/**
+ * @brief
+ * Parses a command line and fills token array.
+ *
+ * @return 0 on success, error code otherwise.
+ */
 int	fill_tokens(char *line, t_token *tokens)
 {
 	size_t	i;
@@ -49,6 +59,12 @@ int	fill_tokens(char *line, t_token *tokens)
 	return (0);
 }
 
+/**
+ * @brief
+ * Processes tokens: fills, validates, and expands variables.
+ *
+ * @return 0 on success, 1 or 258 on error.
+ */
 int	process_tokens(char *line, t_token *tokens, t_shell_state *state)
 {
 	int	ret_code;
@@ -65,6 +81,16 @@ int	process_tokens(char *line, t_token *tokens, t_shell_state *state)
 	return (0);
 }
 
+/**
+ * @brief
+ * Main tokenizer entry point.
+ * Counts, allocates, fills, validates, and expands tokens.
+ *
+ * @param line Input command line.
+ * @param tokens Output token array pointer.
+ * @param state Shell state for variable expansion.
+ * @return 0 on success, error code otherwise.
+ */
 int	tokenize(char *line, t_token **tokens, t_shell_state *state)
 {
 	size_t			count;

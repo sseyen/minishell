@@ -26,9 +26,11 @@ MAIN_OBJ    = $(OBJ_DIR)/$(MAIN:.c=.o)
 
 # Объединяем все исходники (отсортировано по подсистемам)
 SRCS        = \
+              src/handle_line.c \
               src/execute_bin/execute_bin.c \
               src/execute_bin/execute_bin_utils.c \
               src/executor/executor.c \
+              src/executor/executor_utils.c \
               src/executor/subshell_or_and.c \
               src/parse/build_ast.c \
               src/parse/parse_expr.c \
@@ -37,6 +39,7 @@ SRCS        = \
               src/parse/parser_utils.c \
               src/parse/parser_redirect_utils.c \
               src/redirects/heredoc.c \
+              src/redirects/heredoc_utils.c \
               src/redirects/redirects.c \
               src/pipes/pipe.c \
               src/pipes/pipe_utils.c \
@@ -57,6 +60,8 @@ SRCS        = \
               src/utils/is_operator_char.c \
               src/utils/ft_strndup.c \
               src/utils/ft_strnjoin.c \
+              src/signals/signals.c \
+              src/signals/signals_utils.c \
               src/lexer/lexer.c \
               src/lexer/parse.c \
               src/lexer/token.c \

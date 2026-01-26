@@ -6,7 +6,7 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:07:18 by alisseye          #+#    #+#             */
-/*   Updated: 2026/01/25 22:21:38 by danslav1e        ###   ########.fr       */
+/*   Updated: 2026/01/26 01:52:06 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,6 +199,9 @@ int					set_new_env_var(t_shell_state *state, char *key,
 						char *value);
 void				free_tokens(t_token *tokens);
 
+// handle_line.c
+int					handle_line(char *line, t_shell_state *state);
+
 // execute_bin
 
 // execute_bin.c
@@ -207,12 +210,13 @@ char				*check_one_path(t_shell_state *state, char **paths,
 						char *path, char *cmd);
 void				check_path_validity(t_shell_state *state, char *path);
 void				execute_bin(t_node *node, t_shell_state *state);
-void				exit_failed_bin(t_shell_state *state, char *cmd,
-						char *path);
 
-// execute_ben_utils.c
+// execute_bin_utils.c
 void				free_split_array(char **arr);
 char				*find_env_var_value(char *key, t_shell_state *state);
+void				malloc_exit_path(t_shell_state *state, char **paths);
+void				exit_failed_bin(t_shell_state *state, char *cmd,
+						char *path);
 
 // executor
 
@@ -222,6 +226,7 @@ void				execute_built_in(t_node *node, t_shell_state *state);
 void				start_built_in(t_node *node, t_shell_state *state);
 void				execute_external(t_node *node, t_shell_state *state);
 void				execute_ast(t_node *node, t_shell_state *state);
+void				handle_child_signal(int status, t_shell_state *state);
 
 // subshell_or_and.c
 void				execute_subshell(t_node *node, t_shell_state *state);
@@ -251,6 +256,13 @@ int					create_redirect_fd(t_redirect *redir);
 int					apply_redirects(t_node *node);
 void				restore_stdio(int saved_stdin, int saved_stdout);
 int					prepare_heredocs(t_node *node);
+
+// heredoc_utils.c
+bool				is_heredoc_delimiter(t_redirect *redir, char *line);
+int					write_heredoc_line(int fd, char *line);
+int					heredoc_signal_cleanup(int stdin_copy, int fd[2],
+						char *line);
+int					heredoc_write_error(int stdin_copy, int fd[2], char *line);
 
 // utils
 

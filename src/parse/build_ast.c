@@ -6,12 +6,16 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/14 17:54:55 by alisseye          #+#    #+#             */
-/*   Updated: 2026/01/25 00:19:21 by danslav1e        ###   ########.fr       */
+/*   Updated: 2026/01/26 01:52:07 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parse.h"
 
+/**
+ * @brief
+ * Handles parse failure: prints error, frees tree and tokens.
+ */
 static int	handle_parse_failure(t_token *tokens, t_node *tree,
 		t_parser *parser)
 {
@@ -28,6 +32,15 @@ static int	handle_parse_failure(t_token *tokens, t_node *tree,
 	return (ret);
 }
 
+/**
+ * @brief
+ * Main entry point for AST construction.
+ * Parses tokens into an executable AST tree.
+ *
+ * @param tokens Array of tokens from lexer.
+ * @param root Output pointer for AST root.
+ * @return 0 on success, error code otherwise.
+ */
 int	build_ast(t_token *tokens, t_node **root)
 {
 	t_parser	parser;

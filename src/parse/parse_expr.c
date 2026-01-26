@@ -6,12 +6,17 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/14 18:55:40 by alisseye          #+#    #+#             */
-/*   Updated: 2026/01/25 00:19:57 by danslav1e        ###   ########.fr       */
+/*   Updated: 2026/01/26 01:52:06 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parse.h"
 
+/**
+ * @brief
+ * Parses a parenthesized subshell expression.
+ * Creates a NODE_SUBSHELL with child expression.
+ */
 static t_node	*parse_paren(t_parser *p)
 {
 	t_node	*child;
@@ -32,11 +37,9 @@ static t_node	*parse_paren(t_parser *p)
 }
 
 /**
- * @brief Parse a command or parenthesized subshell.
- *
- * @param p Parser state.
- *
- * @return Subtree or NULL on syntax/alloc failure.
+ * @brief
+ * Parses a primary expression (command or subshell).
+ * Handles suffix redirects.
  */
 t_node	*parse_primary(t_parser *p)
 {
@@ -55,25 +58,33 @@ t_node	*parse_primary(t_parser *p)
 }
 
 /**
- * @brief Parse left-associative chains of commands joined by |.
- *
- * @param p Parser state.
- *
- * @return Resulting subtree or NULL on failure.
+ * @brief
+ * Creates an AND or OR node connecting left and right subtrees.
  */
+static t_node	*create_logic_node(t_token tok, t_node *left, t_node *right)
+{
+	t_node	*node;
+
+	if (tok.type == TOKEN_AND)
+		node = new_node(NODE_AND);
+	else
+		node = new_node(NODE_OR);
+	if (!node)
+		return (free_ast(left), free_ast(right), NULL);
+	node->left = left;
+	node->right = right;
+	return (node);
+}
+
 /**
- * @brief Top-level expression parser: && and || share precedence,
-	left-to-right.
- *
- * @param p Parser state.
- *
- * @return Root of the parsed tree or NULL on failure.
+ * @brief
+ * Parses full expression with && and || operators.
+ * Builds AST with correct precedence.
  */
 t_node	*parse_expr(t_parser *p)
 {
 	t_node	*left;
 	t_node	*right;
-	t_node	*node;
 	t_token	tok;
 
 	left = parse_pipe(p);
@@ -86,15 +97,9 @@ t_node	*parse_expr(t_parser *p)
 		right = parse_pipe(p);
 		if (!right)
 			return (free_ast(left), NULL);
-		if (tok.type == TOKEN_AND)
-			node = new_node(NODE_AND);
-		else
-			node = new_node(NODE_OR);
-		if (!node)
-			return (free_ast(left), free_ast(right), NULL);
-		node->left = left;
-		node->right = right;
-		left = node;
+		left = create_logic_node(tok, left, right);
+		if (!left)
+			return (NULL);
 	}
 	return (left);
 }

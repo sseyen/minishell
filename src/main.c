@@ -6,47 +6,63 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 13:07:23 by alisseye          #+#    #+#             */
-/*   Updated: 2026/01/25 22:20:24 by danslav1e        ###   ########.fr       */
+/*   Updated: 2026/01/26 01:52:06 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int g_signal = 0;
+int	g_signal = 0;
 
-int	handle_line(char *line, t_shell_state *state)
+/**
+ * @brief
+ * Checks if a line consists only of whitespace characters.
+ *
+ * @param line The input line to check.
+ * @return 1 if empty/whitespace-only, 0 otherwise.
+ */
+static int	is_empty_line(char *line)
 {
-	t_token	*tokens;
-	int		ret;
+	size_t	i;
 
-	ret = tokenize(line, &tokens, state);
-	if (ret != 0)
-		return (ret);
-	ret = build_ast(tokens, &state->token_tree);
-	if (ret != 0)
-	{
-		if (state->token_tree)
-			free_ast(state->token_tree);
-		state->token_tree = NULL;
-		return (ret);
-	}
-	if (state->token_tree)
-	{
-		ret = prepare_heredocs(state->token_tree);
-		if (ret == 0)
-			execute_ast(state->token_tree, state);
-	}
-	if (state->token_tree)
-		free_ast(state->token_tree);
-	state->token_tree = NULL;
-	return (ret);
+	i = 0;
+	while (line[i] && is_whitespace(line[i]))
+		i++;
+	return (line[i] == '\0');
 }
 
+/**
+ * @brief
+ * Processes a single input line: adds to history, parses,
+ * and executes. Updates exit code on failure.
+ *
+ * @param line The input line.
+ * @param state Shell state.
+ */
+static void	process_line(char *line, t_shell_state *state)
+{
+	int	ret;
+
+	if (*line)
+		add_history(line);
+	if (is_empty_line(line))
+		return ;
+	ret = handle_line(line, state);
+	if (ret != 0)
+		state->last_exit_code = ret;
+}
+
+/**
+ * @brief
+ * Main read-eval-print loop for the shell.
+ * Reads lines with readline, handles signals, and processes input.
+ *
+ * @param state Shell state.
+ * @return Last exit code when loop terminates.
+ */
 int	minishell_loop(t_shell_state *state)
 {
 	char	*line;
-	int		ret;
-	size_t	i;
 
 	while (1)
 	{
@@ -60,28 +76,36 @@ int	minishell_loop(t_shell_state *state)
 		}
 		if (!line)
 		{
-			ft_putchar_fd("exit\n", STDOUT_FILENO);
+			ft_putstr_fd("exit\n", STDOUT_FILENO);
 			break ;
 		}
-			break ;
-		if (*line)
-			add_history(line);
-		i = 0;
-		while (line[i] && is_whitespace(line[i]))
-			i++;
-		if (line[i] == '\0')
-		{
-			free(line);
-			continue ;
-		}
-		ret = handle_line(line, state);
-		if (ret != 0)
-			state->last_exit_code = ret;
+		process_line(line, state);
 		free(line);
 	}
 	return (state->last_exit_code);
 }
 
+/**
+ * @brief
+ * Initializes the shell state structure with default values.
+ *
+ * @param state Shell state to initialize.
+ */
+static void	init_state(t_shell_state *state)
+{
+	state->envp = NULL;
+	state->token_tree = NULL;
+	state->last_exit_code = 0;
+	state->saved_fd[0] = -1;
+	state->saved_fd[1] = -1;
+	state->is_child = 0;
+}
+
+/**
+ * @brief
+ * Entry point of minishell.
+ * Initializes environment, runs the main loop, and exits.
+ */
 int	main(int argc, char **argv, char **envp)
 {
 	char			**envp_copy;
@@ -89,12 +113,7 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-	state.envp = NULL;
-	state.token_tree = NULL;
-	state.last_exit_code = 0;
-	state.saved_fd[0] = -1;
-	state.saved_fd[1] = -1;
-	state.is_child = 0;
+	init_state(&state);
 	envp_copy = init_env(envp);
 	if (!envp_copy)
 		exit(FAILURE);

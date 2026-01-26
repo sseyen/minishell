@@ -3,15 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   validate.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/16 23:32:21 by alisseye          #+#    #+#             */
-/*   Updated: 2025/12/14 19:55:07 by alisseye         ###   ########.fr       */
+/*   Updated: 2026/01/26 01:52:07 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 
+/**
+ * @brief
+ * Checks for errors at end of token stream.
+ * Validates no trailing operators and balanced parens.
+ */
 static int	finalize_validation(t_token_type prev, int paren)
 {
 	if (is_binary_operator(prev) || is_redirect_operator(prev))
@@ -21,6 +26,10 @@ static int	finalize_validation(t_token_type prev, int paren)
 	return (0);
 }
 
+/**
+ * @brief
+ * Checks if two consecutive token types form an invalid sequence.
+ */
 bool	is_invalid_sequence(t_token_type prev, t_token_type curr)
 {
 	if (prev == TOKEN_NONE && is_binary_operator(curr))
@@ -34,6 +43,12 @@ bool	is_invalid_sequence(t_token_type prev, t_token_type curr)
 	return (false);
 }
 
+/**
+ * @brief
+ * Validates token syntax (operator sequence, parentheses balance).
+ *
+ * @return 0 on success, 258 on syntax error.
+ */
 int	validate_tokens(t_token *tokens)
 {
 	size_t			i;

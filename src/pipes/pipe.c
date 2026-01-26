@@ -6,7 +6,7 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 17:22:44 by danslav1e         #+#    #+#             */
-/*   Updated: 2026/01/24 18:53:46 by danslav1e        ###   ########.fr       */
+/*   Updated: 2026/01/25 23:20:28 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
  */
 void	create_left_child(t_shell_state *state, t_node *node, int fd[2])
 {
+	setup_signals_child();
 	dup2(fd[1], STDOUT_FILENO);
 	close(fd[1]);
 	close(fd[0]);
@@ -33,6 +34,7 @@ void	create_left_child(t_shell_state *state, t_node *node, int fd[2])
  */
 void	create_right_child(t_shell_state *state, t_node *node, int fd[2])
 {
+	setup_signals_child();
 	dup2(fd[0], STDIN_FILENO);
 	close(fd[1]);
 	close(fd[0]);
@@ -52,6 +54,7 @@ void	execute_pipe(t_node *node, t_shell_state *state)
 	pid_t	left;
 	pid_t	right;
 
+	setup_signals_exec();
 	if (pipe(fd) == -1)
 	{
 		error_msg("pipe", NULL, strerror(errno), FAILURE);

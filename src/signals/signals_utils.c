@@ -1,11 +1,11 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signals.c                                          :+:      :+:    :+:   */
+/*   signals_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/25 00:41:16 by danslav1e         #+#    #+#             */
+/*   Created: 2026/01/26 00:00:00 by danslav1e         #+#    #+#             */
 /*   Updated: 2026/01/26 01:52:06 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -14,51 +14,47 @@
 
 /**
  * @brief
- * Signal handler for SIGINT in interactive mode.
- * Sets g_signal to 130, prints newline, and redisplays prompt.
+ * Signal handler for SIGINT during heredoc input.
+ * Closes stdin to interrupt readline and sets g_signal to 130.
  */
-static void	handler_interactive(int sig)
+static void	handler_heredoc(int sig)
 {
 	(void)sig;
 	g_signal = 130;
 	write(STDOUT_FILENO, "\n", 1);
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
+	close(STDIN_FILENO);
 }
 
 /**
  * @brief
- * Sets up signal handlers for the interactive prompt.
- * SIGINT: custom handler to redisplay prompt.
+ * Sets up signal handlers for heredoc input.
+ * SIGINT: closes stdin to exit readline.
  * SIGQUIT: ignored.
  */
-void	setup_signals_interactive(void)
+void	setup_signals_heredoc(void)
 {
 	struct sigaction	sa;
 
 	ft_bzero(&sa, sizeof(sa));
-	sa.sa_handler = handler_interactive;
+	sa.sa_handler = handler_heredoc;
 	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = 0;
 	sigaction(SIGINT, &sa, NULL);
 	sa.sa_handler = SIG_IGN;
-	sigemptyset(&sa.sa_mask);
-	sa.sa_flags = 0;
 	sigaction(SIGQUIT, &sa, NULL);
 }
 
 /**
  * @brief
- * Sets up signal handlers before fork/exec.
- * Parent ignores SIGINT and SIGQUIT while waiting for child.
+ * Restores default signal handlers in child process.
+ * Both SIGINT and SIGQUIT are reset to SIG_DFL.
  */
-void	setup_signals_exec(void)
+void	setup_signals_child(void)
 {
 	struct sigaction	sa;
 
 	ft_bzero(&sa, sizeof(sa));
-	sa.sa_handler = SIG_IGN;
+	sa.sa_handler = SIG_DFL;
 	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = 0;
 	sigaction(SIGINT, &sa, NULL);

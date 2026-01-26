@@ -6,18 +6,28 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 15:03:50 by alisseye          #+#    #+#             */
-/*   Updated: 2026/01/25 00:18:31 by danslav1e        ###   ########.fr       */
+/*   Updated: 2026/01/26 01:52:07 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 
+/**
+ * @brief
+ * Advances index past whitespace characters.
+ */
 void	skip_whitespaces(char *line, size_t *i)
 {
 	while (line[*i] && is_whitespace(line[*i]))
 		(*i)++;
 }
 
+/**
+ * @brief
+ * Updates quote state machine based on current character.
+ *
+ * @return New quote state.
+ */
 t_quote_type	update_quote_state(t_quote_type state, char c)
 {
 	if (c == '\'' && state == NO_QUOTE)
@@ -31,6 +41,12 @@ t_quote_type	update_quote_state(t_quote_type state, char c)
 	return (state);
 }
 
+/**
+ * @brief
+ * Parses a word token (handles quotes).
+ *
+ * @return Word length, SIZE_MAX if unclosed quotes.
+ */
 size_t	parse_word(char *line, size_t *i, size_t *count)
 {
 	size_t			j;
@@ -53,6 +69,12 @@ size_t	parse_word(char *line, size_t *i, size_t *count)
 	return (j);
 }
 
+/**
+ * @brief
+ * Parses an operator token (|, ||, &&, <, >, etc.).
+ *
+ * @return Operator length.
+ */
 size_t	parse_operator(char *line, size_t *i, size_t *count)
 {
 	size_t	j;
@@ -74,6 +96,12 @@ size_t	parse_operator(char *line, size_t *i, size_t *count)
 	return (j);
 }
 
+/**
+ * @brief
+ * Counts total tokens in a command line for allocation.
+ *
+ * @return Token count, SIZE_MAX on unclosed quotes.
+ */
 size_t	count_tokens(char *line)
 {
 	size_t	count;

@@ -3,15 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   parse_expr_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/24 12:02:00 by alisseye          #+#    #+#             */
-/*   Updated: 2026/01/24 12:02:00 by alisseye         ###   ########.fr       */
+/*   Updated: 2026/01/26 01:52:07 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parse.h"
 
+/**
+ * @brief
+ * Appends a redirect to node's redirect array.
+ */
 static int	append_redirect(t_parser *p, t_node *node, size_t *ri)
 {
 	if (fill_redirect(p, &node->redirects[*ri]) != 0)
@@ -21,6 +25,11 @@ static int	append_redirect(t_parser *p, t_node *node, size_t *ri)
 	return (0);
 }
 
+/**
+ * @brief
+ * Parses redirects appearing after command/subshell.
+ * Allocates redirect array if needed.
+ */
 int	parse_suffix_redirects(t_parser *p, t_node *node)
 {
 	size_t	ri;
@@ -42,6 +51,10 @@ int	parse_suffix_redirects(t_parser *p, t_node *node)
 	return (0);
 }
 
+/**
+ * @brief
+ * Creates a binary node (PIPE/AND/OR) with left and right children.
+ */
 static t_node	*join_binary(t_node *left, t_node *right, t_node_type type)
 {
 	t_node	*node;
@@ -54,6 +67,10 @@ static t_node	*join_binary(t_node *left, t_node *right, t_node_type type)
 	return (node);
 }
 
+/**
+ * @brief
+ * Parses pipe expressions (cmd1 | cmd2 | ...).
+ */
 t_node	*parse_pipe(t_parser *p)
 {
 	t_node	*left;
@@ -75,6 +92,10 @@ t_node	*parse_pipe(t_parser *p)
 	return (left);
 }
 
+/**
+ * @brief
+ * Parses AND expressions (cmd1 && cmd2 && ...).
+ */
 t_node	*parse_and(t_parser *p)
 {
 	t_node	*left;

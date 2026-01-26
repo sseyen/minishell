@@ -6,7 +6,7 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 18:22:47 by danslav1e         #+#    #+#             */
-/*   Updated: 2026/01/25 00:17:17 by danslav1e        ###   ########.fr       */
+/*   Updated: 2026/01/26 01:52:06 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,11 @@
 
 /**
  * @brief
- * Searches for the command `cmd` in the directories listed in $PATH.
+ * Searches for an executable in PATH directories.
  *
- * @return
- * A malloc'd string containing the full path to the executable.
- * NULL if not found (or $PATH is unset).
- * Exits the process with FAILURE on malloc error.
+ * @param cmd Command name to search for.
+ * @param state Shell state containing envp.
+ * @return Full path to executable or NULL if not found.
  */
 char	*find_in_path(char *cmd, t_shell_state *state)
 {
@@ -49,6 +48,16 @@ char	*find_in_path(char *cmd, t_shell_state *state)
 	return (NULL);
 }
 
+/**
+ * @brief
+ * Checks if command exists in a single PATH directory.
+ *
+ * @param state Shell state.
+ * @param paths Array of PATH directories to free on success.
+ * @param path Single directory to check.
+ * @param cmd Command name.
+ * @return Full path if found, NULL otherwise.
+ */
 char	*check_one_path(t_shell_state *state, char **paths, char *path,
 		char *cmd)
 {
@@ -57,21 +66,11 @@ char	*check_one_path(t_shell_state *state, char **paths, char *path,
 
 	temp_path = ft_strjoin(path, "/");
 	if (!temp_path)
-	{
-		free_split_array(paths);
-		state->last_exit_code = error_msg("malloc", NULL,
-				"memory allocation failed", FAILURE);
-		exit_minishell(state);
-	}
+		malloc_exit_path(state, paths);
 	full_path = ft_strjoin(temp_path, cmd);
 	free(temp_path);
 	if (!full_path)
-	{
-		free_split_array(paths);
-		state->last_exit_code = error_msg("malloc", NULL,
-				"memory allocation failed", FAILURE);
-		exit_minishell(state);
-	}
+		malloc_exit_path(state, paths);
 	if (access(full_path, F_OK | X_OK) == 0)
 	{
 		free_split_array(paths);
@@ -83,8 +82,11 @@ char	*check_one_path(t_shell_state *state, char **paths, char *path,
 
 /**
  * @brief
- * Checks if a given absolute/relative path is valid and executable.
- * Exits with 126 or 127 on failure.
+ * Validates a path for execution.
+ * Exits with error if path is directory, not found, or not executable.
+ *
+ * @param state Shell state.
+ * @param path Path to validate.
  */
 void	check_path_validity(t_shell_state *state, char *path)
 {
@@ -113,44 +115,48 @@ void	check_path_validity(t_shell_state *state, char *path)
 
 /**
  * @brief
- * Executes an external command using `execve`.
- * This function is called in a child process and never returns on success.
+ * Resolves command to its full path.
+ * Returns cmd if it contains '/', otherwise searches PATH.
+ */
+static char	*resolve_cmd_path(char *cmd, t_shell_state *state)
+{
+	char	*path;
+
+	if (ft_strchr(cmd, '/'))
+	{
+		check_path_validity(state, cmd);
+		return (cmd);
+	}
+	path = find_in_path(cmd, state);
+	if (!path)
+	{
+		state->last_exit_code = error_msg(cmd, NULL, "command not found", 127);
+		exit_minishell(state);
+	}
+	return (path);
+}
+
+/**
+ * @brief
+ * Executes an external binary via execve.
+ * Resolves path, sets up signals, and replaces process.
+ *
+ * @param node Command node containing argv.
+ * @param state Shell state.
  */
 void	execute_bin(t_node *node, t_shell_state *state)
 {
 	char	*cmd;
 	char	*path;
 
+	setup_signals_child();
 	cmd = node->argv[0];
 	if (!cmd || !*cmd)
 	{
 		state->last_exit_code = SUCCESS;
 		exit_minishell(state);
 	}
-	if (ft_strchr(cmd, '/'))
-	{
-		check_path_validity(state, cmd);
-		path = cmd;
-	}
-	else
-	{
-		path = find_in_path(cmd, state);
-		if (!path)
-		{
-			state->last_exit_code = error_msg(cmd, NULL, "command not found",
-					127);
-			exit_minishell(state);
-		}
-	}
+	path = resolve_cmd_path(cmd, state);
 	execve(path, node->argv, state->envp);
 	exit_failed_bin(state, cmd, path);
-}
-
-void	exit_failed_bin(t_shell_state *state, char *cmd, char *path)
-{
-	error_msg(cmd, NULL, strerror(errno), 126);
-	if (path != cmd)
-		free(path);
-	state->last_exit_code = 126;
-	exit_minishell(state);
 }
