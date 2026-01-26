@@ -22,8 +22,7 @@ int	built_in_pwd(t_node *node)
 {
 	char	*pwd;
 
-	if (node->argc != 1)
-		return (error_msg("pwd", NULL, "too many arguments", FAILURE));
+	(void)node;
 	pwd = getcwd(NULL, 0);
 	if (!pwd)
 		return (error_msg("pwd", NULL, NULL, FAILURE));
