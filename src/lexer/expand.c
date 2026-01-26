@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
+/*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/25 16:04:23 by alisseye          #+#    #+#             */
-/*   Updated: 2026/01/26 01:52:07 by danslav1e        ###   ########.fr       */
+/*   Updated: 2026/01/26 21:30:43 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,6 +143,12 @@ int	expand_tokens(t_token *tokens, t_shell_state *state)
 				return (1);
 		if (tokens[i].quoted)
 			remove_quotes(&tokens[i]);
+		if (tokens[i].type == TOKEN_WORD && tokens[i].value
+			&& tokens[i].value[0] == '\0')
+		{
+			remove_token(&tokens[i], tokens, i);
+			continue ;
+		}
 		i++;
 	}
 	return (0);

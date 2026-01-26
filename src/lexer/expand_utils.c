@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
+/*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 15:36:47 by alisseye          #+#    #+#             */
-/*   Updated: 2026/01/26 01:52:07 by danslav1e        ###   ########.fr       */
+/*   Updated: 2026/01/26 21:30:30 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ char	*parse_var(char *str, t_shell_state *state, size_t *index)
 	char	*var_value;
 
 	i = 0;
+	if (str[i] == '\0' || is_whitespace(str[i]))
+		return (ft_strdup("$"));
 	if (str[i] == '?')
 	{
 		(*index)++;
