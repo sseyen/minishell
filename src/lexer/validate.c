@@ -74,10 +74,7 @@ int	validate_tokens(t_token *tokens)
 	while (tokens[i].type != TOKEN_NONE && tokens[i].type != TOKEN_EOF)
 	{
 		if (is_invalid_sequence(prev, tokens[i].type))
-		{
-			// remove_token(&tokens[i], tokens, i);
 			return (syntax_error_token(NULL, tokens[i].type));
-		}
 		if (tokens[i].type == TOKEN_LPAREN)
 			paren++;
 		else if (tokens[i].type == TOKEN_RPAREN)
