@@ -12,6 +12,20 @@
 
 #include "lexer.h"
 
+void	remove_token(t_token *token, t_token *token_list, size_t index)
+{
+	size_t	i;
+
+	if (token->value)
+		free(token->value);
+	i = index;
+	while (token_list[i].type != TOKEN_NONE && token_list[i].type != TOKEN_EOF)
+	{
+		token_list[i] = token_list[i + 1];
+		i++;
+	}
+}
+
 /**
  * @brief
  * Joins s1 with substring of s2 (from..to). Frees s1.
