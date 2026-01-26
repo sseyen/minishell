@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
+/*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 17:30:59 by alisseye          #+#    #+#             */
-/*   Updated: 2026/01/26 01:52:07 by danslav1e        ###   ########.fr       */
+/*   Updated: 2026/01/26 19:52:38 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	fill_tokens(char *line, t_token *tokens)
  * @brief
  * Processes tokens: fills, validates, and expands variables.
  *
- * @return 0 on success, 1 or 258 on error.
+ * @return 0 on success, 1 or SYNTAX_ERROR on error.
  */
 int	process_tokens(char *line, t_token *tokens, t_shell_state *state)
 {
@@ -74,7 +74,7 @@ int	process_tokens(char *line, t_token *tokens, t_shell_state *state)
 		return (ret_code);
 	ret_code = validate_tokens(tokens);
 	if (ret_code != 0)
-		return (258);
+		return (SYNTAX_ERROR);
 	ret_code = expand_tokens(tokens, state);
 	if (ret_code != 0)
 		return (1);
@@ -99,7 +99,8 @@ int	tokenize(char *line, t_token **tokens, t_shell_state *state)
 	ret_code = 0;
 	count = count_tokens(line);
 	if (count == SIZE_MAX)
-		return (error_msg("syntax error", NULL, "unclosed quotes", 258));
+		return (error_msg("syntax error", NULL, "unclosed quotes",
+			SYNTAX_ERROR));
 	*tokens = malloc(sizeof(t_token) * (count + 1));
 	if (!*tokens)
 		return (1);

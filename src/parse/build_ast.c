@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   build_ast.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
+/*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/14 17:54:55 by alisseye          #+#    #+#             */
-/*   Updated: 2026/01/26 01:52:07 by danslav1e        ###   ########.fr       */
+/*   Updated: 2026/01/26 19:52:38 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ static int	handle_parse_failure(t_token *tokens, t_node *tree,
 	int	ret;
 
 	if (!tree)
-		ret = error_msg("syntax error", NULL, "invalid syntax", 258);
+		ret = error_msg("syntax error", NULL, "invalid syntax",
+			SYNTAX_ERROR);
 	else
 	{
 		ret = syntax_error_token(NULL, parser->tokens[parser->idx].type);

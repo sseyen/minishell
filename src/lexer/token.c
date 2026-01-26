@@ -45,7 +45,7 @@ int	create_word_token(char *line, size_t len, t_token *token)
  * @brief
  * Creates an operator token (|, ||, &&, redirects, parens).
  *
- * @return 0 on success, 258 on unknown operator.
+ * @return 0 on success, SYNTAX_ERROR on unknown operator.
  */
 int	create_operator_token(char *start, size_t len, t_token *token)
 {

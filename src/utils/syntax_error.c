@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_error.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
+/*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/24 12:20:00 by alisseye          #+#    #+#             */
-/*   Updated: 2026/01/26 01:52:06 by danslav1e        ###   ########.fr       */
+/*   Updated: 2026/01/26 19:52:38 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static const char	*token_repr(t_token_type type)
  *
  * @param tok Token string (NULL to use type representation).
  * @param type Token type.
- * @return 258 (syntax error exit code).
+ * @return SYNTAX_ERROR (bash-compatible syntax error exit code).
  */
 int	syntax_error_token(const char *tok, t_token_type type)
 {
@@ -58,5 +58,5 @@ int	syntax_error_token(const char *tok, t_token_type type)
 	ft_strlcpy(msg, "near unexpected token `", sizeof(msg));
 	ft_strlcat(msg, repr, sizeof(msg));
 	ft_strlcat(msg, "'", sizeof(msg));
-	return (error_msg("syntax error", NULL, msg, 258));
+	return (error_msg("syntax error", NULL, msg, SYNTAX_ERROR));
 }

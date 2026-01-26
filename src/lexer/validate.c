@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   validate.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
+/*   By: alisseye <alisseye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/16 23:32:21 by alisseye          #+#    #+#             */
-/*   Updated: 2026/01/26 01:52:07 by danslav1e        ###   ########.fr       */
+/*   Updated: 2026/01/26 19:52:38 by alisseye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ static int	finalize_validation(t_token_type prev, int paren)
 	if (is_binary_operator(prev) || is_redirect_operator(prev))
 		return (syntax_error_token(NULL, TOKEN_NONE));
 	if (paren != 0)
-		return (error_msg("syntax error", NULL, "unclosed parenthesis", 258));
+		return (error_msg("syntax error", NULL, "unclosed parenthesis",
+			SYNTAX_ERROR));
 	return (0);
 }
 
@@ -47,7 +48,7 @@ bool	is_invalid_sequence(t_token_type prev, t_token_type curr)
  * @brief
  * Validates token syntax (operator sequence, parentheses balance).
  *
- * @return 0 on success, 258 on syntax error.
+ * @return 0 on success, SYNTAX_ERROR on syntax error.
  */
 int	validate_tokens(t_token *tokens)
 {
