@@ -44,6 +44,18 @@ bool	is_invalid_sequence(t_token_type prev, t_token_type curr)
 	return (false);
 }
 
+void	remove_tokens(t_token *token, size_t index)
+{
+	while (token[index].type != TOKEN_NONE && token[index].type != TOKEN_EOF)
+	{
+		if (token[index].value)
+			free(token[index].value);
+		token[index].type = TOKEN_NONE;
+		index++;
+		printf("Removed token at index: %zu\n", index - 1);
+	}
+}
+
 /**
  * @brief
  * Validates token syntax (operator sequence, parentheses balance).
@@ -62,7 +74,10 @@ int	validate_tokens(t_token *tokens)
 	while (tokens[i].type != TOKEN_NONE && tokens[i].type != TOKEN_EOF)
 	{
 		if (is_invalid_sequence(prev, tokens[i].type))
+		{
+			// remove_token(&tokens[i], tokens, i);
 			return (syntax_error_token(NULL, tokens[i].type));
+		}
 		if (tokens[i].type == TOKEN_LPAREN)
 			paren++;
 		else if (tokens[i].type == TOKEN_RPAREN)

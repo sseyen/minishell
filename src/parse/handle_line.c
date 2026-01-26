@@ -48,6 +48,8 @@ int	handle_line(char *line, t_shell_state *state)
 	ret = tokenize(line, &tokens, state);
 	if (ret != 0)
 		return (ret);
+	if (!tokens)
+		return (0);
 	ret = build_ast(tokens, &state->token_tree);
 	if (ret != 0)
 	{

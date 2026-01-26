@@ -107,11 +107,12 @@ int	tokenize(char *line, t_token **tokens, t_shell_state *state)
 	ft_memset(*tokens, 0, sizeof(t_token) * (count + 1));
 	set_token(&(*tokens)[count], (t_token_data){TOKEN_EOF, NULL, false, false});
 	ret_code = process_tokens(line, *tokens, state);
-	if (ret_code != 0)
+	if (ret_code != 0 || (*tokens)[0].type == TOKEN_EOF)
 	{
 		free_tokens(*tokens);
 		*tokens = NULL;
-		return (ret_code);
+		if (ret_code != 0)
+			return (ret_code);
 	}
 	return (0);
 }

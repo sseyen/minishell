@@ -57,7 +57,8 @@ char	*parse_var(char *str, t_shell_state *state, size_t *index)
 	char	*var_value;
 
 	i = 0;
-	if (str[i] == '\0' || is_whitespace(str[i]))
+	if (str[i] == '\0' || is_whitespace(str[i])
+		|| str[i] == '"' || str[i] == '\'')
 		return (ft_strdup("$"));
 	if (str[i] == '?')
 	{

@@ -96,7 +96,7 @@ void	check_path_validity(t_shell_state *state, char *path)
 	{
 		if (S_ISDIR(st.st_mode))
 		{
-			state->last_exit_code = error_msg(path, NULL, "is a directory",
+			state->last_exit_code = error_msg(path, NULL, "Is a directory",
 					126);
 			exit_minishell(state);
 		}

@@ -45,8 +45,6 @@ int	built_in_unset(t_node *node, t_shell_state *state)
 	{
 		if (!is_valid_identifier(node->argv[i]))
 		{
-			exit_code = error_msg("unset", node->argv[i],
-					"not a valid identifier", FAILURE);
 			i++;
 			continue ;
 		}
