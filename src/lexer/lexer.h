@@ -65,7 +65,8 @@ bool				is_quoted(char *str);
 bool				to_expand(char *str);
 
 // Expand utils
-void				remove_token(t_token *token, t_token *token_list, size_t index);
+void				remove_token(t_token *token, t_token *token_list,
+						size_t index);
 char				*join_strings(char *s1, char *s2, size_t from, size_t to);
 char				*parse_var(char *str, t_shell_state *state, size_t *index);
 int					handle_eof(char *token_value, char **new_value, size_t from,
