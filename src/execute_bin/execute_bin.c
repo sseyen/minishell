@@ -121,11 +121,21 @@ void	check_path_validity(t_shell_state *state, char *path)
 static char	*resolve_cmd_path(char *cmd, t_shell_state *state)
 {
 	char	*path;
+	char	*path_env;
 
 	if (ft_strchr(cmd, '/'))
 	{
 		check_path_validity(state, cmd);
 		return (cmd);
+	}
+	path_env = find_env_var_value("PATH", state);
+	if (!path_env || !*path_env)
+	{
+		if (access(cmd, F_OK) == 0)
+		{
+			check_path_validity(state, cmd);
+			return (cmd);
+		}
 	}
 	path = find_in_path(cmd, state);
 	if (!path)
