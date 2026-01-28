@@ -13,16 +13,16 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-// readline, rl_clear_history, rl_on_new_line,
-// rl_replace_line, rl_redisplay, add_history
-# include <readline/history.h>
-# include <readline/readline.h>
-
 // printf, perror, strerror
 # include <stdio.h>
 
 // malloc, free, getenv
 # include <stdlib.h>
+
+// readline, rl_clear_history, rl_on_new_line,
+// rl_replace_line, rl_redisplay, add_history
+# include <readline/history.h>
+# include <readline/readline.h>
 
 // write, access, open, read, close,
 // unlink, dup, dup2, execve, getcwd, chdir,
