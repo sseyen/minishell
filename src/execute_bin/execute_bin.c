@@ -6,7 +6,7 @@
 /*   By: danslav1e <danslav1e@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 18:22:47 by danslav1e         #+#    #+#             */
-/*   Updated: 2026/01/26 01:52:06 by danslav1e        ###   ########.fr       */
+/*   Updated: 2026/01/28 17:00:02 by danslav1e        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,6 +155,12 @@ void	execute_bin(t_node *node, t_shell_state *state)
 	{
 		state->last_exit_code = SUCCESS;
 		exit_minishell(state);
+	}
+	if (access(cmd, F_OK | X_OK) == 0)
+	{
+		check_path_validity(state, cmd);
+		execve(cmd, node->argv, state->envp);
+		exit_failed_bin(state, cmd, cmd);
 	}
 	path = resolve_cmd_path(cmd, state);
 	execve(path, node->argv, state->envp);
