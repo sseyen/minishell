@@ -156,7 +156,7 @@ void	execute_bin(t_node *node, t_shell_state *state)
 		state->last_exit_code = SUCCESS;
 		exit_minishell(state);
 	}
-	if (access(cmd, F_OK | X_OK) == 0)
+	if (ft_strchr(cmd, '/'))
 	{
 		check_path_validity(state, cmd);
 		execve(cmd, node->argv, state->envp);
