@@ -1,27 +1,27 @@
-# Имя исполнимого файла для теста
+# Executable
 NAME        = minishell
 
-# Компилятор и флаги
+# Compiler and flags
 CC          = cc
 CFLAGS      = -Wall -Wextra -Werror -g  -I include
 
-# Директории
+# Directories
 SRC_DIR     = src
 TEST_DIR    = tests/builtins
 INC_DIR     = include
 LIBFT_DIR   = libft
 OBJ_DIR     = obj
 
-# Библиотеки
+# Libraries
 LIBFT       = $(LIBFT_DIR)/libft.a
 LIBS        = -L$(LIBFT_DIR) -lft -lreadline
 
-# Включаемые файлы (Header files)
+# Includes
 INCLUDES    = -I $(INC_DIR) -I $(LIBFT_DIR)
 
 MAIN        = src/main.c
 
-# MAIN object (built separately so it won't be included in tests)
+# Main object file
 MAIN_OBJ    = $(OBJ_DIR)/$(MAIN:.c=.o)
 
 # Source files
@@ -71,67 +71,27 @@ SRCS        = \
               src/lexer/expand.c \
               src/lexer/expand_utils.c
 
-# Объектные файлы в отдельной папке `obj/`, сохраняя относительные пути
+# Object files
 OBJS        = $(SRCS:%.c=$(OBJ_DIR)/%.o)
 
-# Правила
+# Rules
 all: $(NAME)
 
-# Компиляция основной программы
+# Target to build the executable
 $(NAME): $(LIBFT) $(OBJS) $(MAIN_OBJ)
 	@echo "Compiling $(NAME)..."
 	$(CC) $(CFLAGS) $(MAIN_OBJ) $(OBJS) $(LIBS) -o $(NAME)
 	@echo "$(NAME) ready!"
 
-# Компиляция libft
+# Libft compilation
 $(LIBFT):
 	@echo "Compiling libft..."
 	@make -s -C $(LIBFT_DIR)
 
-# Компиляция .c в obj/%.o (создаёт директории при необходимости)
+# Compilation of .c to obj/%.o
 $(OBJ_DIR)/%.o: %.c
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
-
-# TESTS
-
-TEST = test
-
-TEST_DIR = tests
-TEST_OBJS_DIR = obj/tests
-
-
-
-TEST_SRCS = $(TEST_DIR)/main_test.c \
-            $(TEST_DIR)/builtins/pwd_test.c \
-            $(TEST_DIR)/utils/print_test_header.c \
-            $(TEST_DIR)/utils/print_result.c \
-            $(TEST_DIR)/utils/print_summary.c \
-            $(TEST_DIR)/utils/print_tokens.c \
-			$(TEST_DIR)/env/env_test.c \
-			$(TEST_DIR)/lexer/count_tokens_test.c \
-			$(TEST_DIR)/lexer/fill_tokens_test.c \
-            $(TEST_DIR)/lexer/expand_tokens_test.c \
-            $(TEST_DIR)/ast/build_ast_test.c \
-            $(TEST_DIR)/ast/print_ast.c
-
-TEST_OBJS = $(TEST_SRCS:%.c=$(TEST_OBJS_DIR)/%.o)
-
-TEST_CFLAGS = $(CFLAGS) -I tests/include -I src/lexer
-
-$(TEST): $(LIBFT) $(TEST_OBJS) $(OBJS)
-	$(CC) $(TEST_OBJS) $(OBJS) $(LIBS) -o $(TEST)
-
-$(TEST_OBJS_DIR)/%.o: %.c
-	@mkdir -p $(dir $@)
-	$(CC) $(TEST_CFLAGS) -c $< -o $@
-
-clean_test:
-	rm -f $(TEST_OBJS)
-	rm -rf $(TEST_OBJS_DIR)
-	rm -f $(TEST)
-
-# CLEAN / REBUILD
 
 clean:
 	@echo "Cleaning objects..."
